@@ -208,11 +208,18 @@ int main(int argc, char** argv)
 	//	grid, the number of boxes (and robots), and the number of doors.
 	//	You are going to have to extract these.  For the time being,
 	//	I hard code-some values
+	//WARNING ROBOTS = BOXES or Seg fault
+	//16-16-3-4 were default values
+	/*
 	numRows = 16;
 	numCols = 16;
 	numDoors = 3;
 	numBoxes = 4;
-
+	*/
+	numRows = atoi(argv[1]);
+	numCols = atoi(argv[2]);
+	numDoors = atoi(argv[3]);
+	numBoxes = atoi(argv[4]);
 #if CSC412_FP_USE_GUI
 	//	Even though we extracted the relevant information from the argument
 	//	list, I still need to pass argc and argv to the front-end init
