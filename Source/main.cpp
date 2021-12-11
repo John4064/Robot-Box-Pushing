@@ -1,6 +1,7 @@
 //
 //  main.cpp
 //  Final Project CSC412
+// John Parkhurst and David Shawver
 //
 //  Created by Jean-Yves Hervé on 2018-12-05, Rev. 2021-12-01
 //	This is public domain code.  By all means appropriate it and change is to your
@@ -10,6 +11,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 //
 //
 #include "guiChoice.h"
@@ -221,7 +223,7 @@ int main(int argc, char** argv)
 	
 	//	Now we can do application-level initialization
 	initializeApplication();
-
+	
 #if CSC412_FP_USE_GUI
 	//	Now we enter the main loop of the program and to a large extend
 	//	"lose control" over its execution.  The callback functions that 
@@ -252,6 +254,13 @@ int main(int argc, char** argv)
 //	This is a part that you have to edit and add to.
 //
 //==================================================================================
+
+
+
+
+
+
+
 
 
 void initializeApplication(void)
