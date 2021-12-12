@@ -7,6 +7,14 @@
 //	This is public domain code.  By all means appropriate it and change is to your
 //	heart's content.
 
+
+/* Tasks:
+
+	John:
+		-- Add in error handling e.g., number of doors should not exceed 3.
+
+
+*/
 #include <string>
 #include <vector>
 #include <cstdio>
@@ -41,10 +49,13 @@ void doorRandomPlacement();
 void boxRandomPlacement();
 void assignDoors();
 
+template <typename T>
+void printVector(T vec);
+
 // Utility functions
 void printObjectPlacements();
 bool checkIfPairExists(pair<uint, uint> randPair, vector<pair<uint, uint>*> vec);
-bool checkIfNumExistsInVec(int unum, vector<uint> vec);
+bool checkIfNumExistsInVec(uint unum, vector<uint> vec);
 
 //==================================================================================
 //	Application-level global variables
@@ -62,12 +73,12 @@ bool checkIfNumExistsInVec(int unum, vector<uint> vec);
 //	Don't rename any of these variables
 //-------------------------------------
 //	The state grid and its dimensions (arguments to the program)
-int** grid;
-int numRows = -1;	//	height of the grid
-int numCols = -1;	//	width
-int numBoxes = -1;	//	also the number of robots
-int numDoors = -1;	//	The number of doors.
-int& numRobots = numBoxes;
+uint** grid;
+uint numRows = -1;	//	height of the grid
+uint numCols = -1;	//	width
+uint numBoxes = -1;	//	also the number of robots
+uint numDoors = -1;	//	The number of doors.
+uint& numRobots = numBoxes;
 
 int numLiveThreads = 0;		//	the number of live robot threads
 
@@ -215,12 +226,11 @@ int main(int argc, char** argv)
 
 	numRows = atoi(argv[1]);
 	numCols = atoi(argv[2]);
-	numDoors = atoi(argv[3]);
-	numBoxes = atoi(argv[4]);
-	
+	numBoxes = atoi(argv[3]);
+	numDoors = atoi(argv[4]);
 
 	// abort program if these values do not match
-	assert (numBoxes == numRows);
+	assert (numBoxes == numRobots);
 
 
 #if CSC412_FP_USE_GUI
@@ -245,7 +255,7 @@ int main(int argc, char** argv)
 	//	Free allocated resource before leaving (not absolutely needed, but
 	//	just nicer.  Also, if you crash there, you know something is wrong
 	//	in your code.
-	for (int i=0; i< numRows; i++)
+	for (uint i=0; i< numRows; i++)
 		delete []grid[i];
 	delete []grid;
 	for (int k=0; k<MAX_NUM_MESSAGES; k++)
@@ -268,15 +278,14 @@ int main(int argc, char** argv)
 
 void initializeApplication(void)
 {
+	//	seed the pseudo-random generator
+	srand((unsigned int) time(NULL));
 
 		robotRandomPlacement();
 		doorRandomPlacement();
 		boxRandomPlacement();
 		printObjectPlacements();
 		assignDoors();
-
-		
-		exit(9);
 
 
 	//	Allocate the grid
@@ -289,12 +298,12 @@ void initializeApplication(void)
 	// How we represent directions and orientations with respect to these objects also seems very
 	// important.
 
-	grid = new int*[numRows];
-	for (int i=0; i<numRows; i++)
-		grid[i] = new int [numCols];
+	grid = new uint*[numRows];
+	for (uint i=0; i<numRows; i++)
+		grid[i] = new uint [numCols];
 	
 	message = (char**) malloc(MAX_NUM_MESSAGES*sizeof(char*));
-	for (int k=0; k<MAX_NUM_MESSAGES; k++)
+	for (uint k=0; k<MAX_NUM_MESSAGES; k++)
 		message[k] = (char*) malloc((MAX_LENGTH_MESSAGE+1)*sizeof(char));
 		
 	//---------------------------------------------------------------
@@ -302,8 +311,6 @@ void initializeApplication(void)
 	//	I initialize the grid's pixels to have something to look at
 	//---------------------------------------------------------------
 	
-	//	seed the pseudo-random generator
-	srand((unsigned int) time(NULL));
 
 	//	normally, here I would initialize the location of my doors, boxes,
 	//	and robots, and create threads (not necessarily in that order).
@@ -317,7 +324,7 @@ void initializeApplication(void)
 		// randomly assign a door as destination for a robot-box pair.
 
 void boxRandomPlacement(){
-	for(uint i = 0; i < numDoors; i++){
+	for(uint i = 0; i < numBoxes; i++){
 		while(true){
 			uint boxRow = (random() % (numRows - 2))+1;
 			uint boxCol = (random() % (numCols - 2))+1;
@@ -346,7 +353,7 @@ void robotRandomPlacement(){
 }
 
 void doorRandomPlacement(){
-	for(int i = 0; i < numDoors; i++){
+	for(uint i = 0; i < numDoors; i++){
 		while(true){
 			uint doorRow = random() % numRows;
 			uint doorCol = random() % numCols;
@@ -362,42 +369,29 @@ void doorRandomPlacement(){
 
 void printObjectPlacements(){
 	cout << "Door locations:" << endl;
-	for(int i=0; i < doorLoc.size(); i++){
+	for(uint i=0; i < doorLoc.size(); i++){
 		cout <<"\t"<< doorLoc[i]->first << ", "<<doorLoc[i]->second<< endl;
 	}
 	cout << endl;
 	cout << "Robot locations:" << endl;
-	for(int i=0; i < robotLoc.size(); i++){
+	for(uint i=0; i < robotLoc.size(); i++){
 		cout <<"\t"<< robotLoc[i]->first << ", "<<robotLoc[i]->second<< endl;
 	}
 	cout << endl;
 	cout << "Box locations:" << endl;
-	for(int i=0; i < boxLoc.size(); i++){
+	for(uint i=0; i < boxLoc.size(); i++){
 		cout <<"\t"<< boxLoc[i]->first << ", "<<boxLoc[i]->second<< endl;
 	}
 	cout << endl;
 }
 
-bool checkIfPairExists(pair<int, int> randPair, vector<pair<uint, uint>*> vec){
+bool checkIfPairExists(pair<uint, uint> randPair, vector<pair<uint, uint>*> vec){
 	for(auto it = vec.begin(); it!=vec.end(); it++){ 
 		if((*it)->first == randPair.first && (*it)->second == randPair.second){ 
 			return true; 
 		}
 	}
 	return false;
-}
-
-void assignDoors(){
-	for (int i=0; i < robotLoc.size() && i < doorLoc.size(); i++){
-		bool numWorked = false;
-		while (numWorked == false)
-		uint randomDoor = random() % doorLoc.size();
-		if (!checkIfNumExistsInVec(randomDoor, doorAssign)){
-			doorAssign.push_back(randomDoor);
-			break;
-		}	
-	}
-	printVector(doorAssign);
 }
 
 bool checkIfNumExistsInVec(uint num, vector<uint> vec){
@@ -409,3 +403,27 @@ bool checkIfNumExistsInVec(uint num, vector<uint> vec){
     return result;
 }
 
+
+void assignDoors(){
+	for (uint i=0; i < robotLoc.size() && i < doorLoc.size(); i++){
+		bool numWorked = false;
+		while (numWorked == false){
+		uint randomDoor = random() % doorLoc.size();
+			if (!checkIfNumExistsInVec(randomDoor, doorAssign)){
+				doorAssign.push_back(randomDoor);
+				break;
+			}	
+		}
+	printVector<vector<uint>>(doorAssign);
+	}
+}
+
+
+template <typename T>
+void printVector(T vec)
+{
+	for(uint i=0; i < vec.size(); i++){
+		cout << vec[i] << " ";
+	}
+	cout << endl;
+}
