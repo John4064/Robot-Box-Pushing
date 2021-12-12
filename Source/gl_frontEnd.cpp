@@ -79,16 +79,7 @@ const float kTextColor[4] = {1.f, 1.f, 1.f, 1.f};
 const int   INIT_WIN_X = 100,
             INIT_WIN_Y = 40;
 
-//	Wow!  gcc on Linux is really dumb!  The code below doesn't even compile there.
-//const int	GRID_PANE_WIDTH = 600,
-//			GRID_PANE_HEIGHT = GRID_PANE_WIDTH,	//	--> claims GRID_PANE_WIDTH not constant!
-//			STATE_PANE_WIDTH = 300,
-//			STATE_PANE_HEIGHT = GRID_PANE_HEIGHT,
-//			H_PADDING = 5,
-//			WINDOW_WIDTH = GRID_PANE_WIDTH + STATE_PANE_WIDTH + H_PADDING,
-//			WINDOW_HEIGHT = GRID_PANE_HEIGHT;
-//	(sigh!)	This completely negates the point of using constants for this kind of setup.
-//	No wonder most Linux apps suck so hard.
+
 int GRID_PANE_WIDTH = 800;
 int GRID_PANE_HEIGHT = 800;
 int STATE_PANE_WIDTH = 400;
@@ -119,13 +110,16 @@ float** doorColor;
 //	Drawing functions
 //---------------------------------------------------------------------------
 
+// David comment:  Not clear what's going on here.  Why is he drawing the 
+// robot and box in a pair?  That seems very odd.  We have robots, we have boxes, 
+// we have doors.  Why do we have robot/box pairs?
+
 void drawRobotAndBox(int id,
 					 int robotRow, int robotCol,
 					 int boxRow, int boxCol,
 					 int doorNumber)
 {
-	//	Yes, I know that it's inefficient to recompute this each and every time,
-	//	but gcc on Ubuntu doesn't let me define these as static [!??]
+	
 	const float	DH = 1.f*GRID_PANE_WIDTH / numCols,
 				DV = 1.f*GRID_PANE_HEIGHT / numRows;
 
