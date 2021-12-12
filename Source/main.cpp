@@ -15,6 +15,7 @@
 #include <iostream>
 #include <assert.h>
 #include <utility>
+#include<algorithm>
 //
 //
 #include "guiChoice.h"
@@ -38,8 +39,12 @@ void initializeApplication(void);
 void robotRandomPlacement();
 void doorRandomPlacement();
 void boxRandomPlacement();
+void assignDoors();
+
+// Utility functions
 void printObjectPlacements();
-bool checkIfPairExists(pair<int, int> randPair, vector<pair<uint, uint>*> vec);
+bool checkIfPairExists(pair<uint, uint> randPair, vector<pair<uint, uint>*> vec);
+bool checkIfNumExistsInVec(int unum, vector<uint> vec);
 
 //==================================================================================
 //	Application-level global variables
@@ -268,6 +273,9 @@ void initializeApplication(void)
 		doorRandomPlacement();
 		boxRandomPlacement();
 		printObjectPlacements();
+		assignDoors();
+
+		
 		exit(9);
 
 
@@ -378,3 +386,26 @@ bool checkIfPairExists(pair<int, int> randPair, vector<pair<uint, uint>*> vec){
 	}
 	return false;
 }
+
+void assignDoors(){
+	for (int i=0; i < robotLoc.size() && i < doorLoc.size(); i++){
+		bool numWorked = false;
+		while (numWorked == false)
+		uint randomDoor = random() % doorLoc.size();
+		if (!checkIfNumExistsInVec(randomDoor, doorAssign)){
+			doorAssign.push_back(randomDoor);
+			break;
+		}	
+	}
+	printVector(doorAssign);
+}
+
+bool checkIfNumExistsInVec(uint num, vector<uint> vec){
+	bool result = false;
+    if( find(vec.begin(), vec.end(), num) != vec.end() )
+    {
+        result = true;
+    }
+    return result;
+}
+

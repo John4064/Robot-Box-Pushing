@@ -110,10 +110,6 @@ float** doorColor;
 //	Drawing functions
 //---------------------------------------------------------------------------
 
-// David comment:  Not clear what's going on here.  Why is he drawing the 
-// robot and box in a pair?  That seems very odd.  We have robots, we have boxes, 
-// we have doors.  Why do we have robot/box pairs?
-
 void drawRobotAndBox(int id,
 					 int robotRow, int robotCol,
 					 int boxRow, int boxCol,
