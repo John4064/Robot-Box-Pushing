@@ -32,7 +32,7 @@ namespace Robot{
     } Moves;
 
     typedef pair<Moves, Direction> RobotCommand;
-
+    tuple<int, int, bool> determineStartingPushPositionAxis(RThread * RTinfo);
     typedef vector<RobotCommand> RobotCommandsList;
 
     vector<RobotCommandsList> RobotsCommandsList;
@@ -48,6 +48,7 @@ namespace Robot{
 
     void fprintRobotsCommandsList(RThread* RTInfo);
     void destroyRobotsCommandsList(RThread* RTinfo);
+    void recordMovesToBehindBox(pair <int, int> targetStartingPushPosition);
     
 };
 

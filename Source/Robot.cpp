@@ -4,6 +4,9 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <iostream>
+#include <tuple>
+#include <functional>
 
 
 extern uint** grid;
@@ -42,69 +45,106 @@ namespace Robot{
 
     RobotCommandsList genCommGetBehindBox(RThread* RTinfo){
 
-        int axis = NORTHSOUTH; // vertical axis is 0
+        tuple <int, int, bool> targetStartingPushPositionAxis = determineStartingPushPositionAxis(RTinfo);
+        recordMovesToBehindBox(targetStartingPushPositionAxis);
 
-        int boxVertDiff = boxLoc[RTinfo->index]->first - robotLoc[RTinfo->index]->first;
-        int doorVertDiff =  doorLoc[RTinfo->index]->first - robotLoc[RTinfo->index]->first;   
+    }
 
-        pair<int, Direction> numMovesDirectionRequiredVert = movesDirectionFigureOuter(boxVertDiff, doorVertDiff, 0);
+    void recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPositionAxis){
+        
+        // could add the distance to destination to tuple if wanted to
+        if (get<2>(targetStartingPushPositionAxis)){
 
-        axis = EASTWEST; // horizontal axis is 1
 
-        int boxHorizDiff = boxLoc[RTinfo->index]->second - robotLoc[RTinfo->index]->second;
-        int doorHorizDiff = doorLoc[RTinfo->index]->second - robotLoc[RTinfo->index]->second;
+        }
 
-        pair<int, Direction> numMovesDirectionRequiredHoriz = movesDirectionFigureOuter(boxHorizDiff, doorHorizDiff, 1);
+        int distanceToDestination = 
+
+        for(int i = 0; i < )
 
     }
 
 
-    /* We'll say we'll always go to the opposite side of the box on the vertical axis no matter what,
-        AND we'll always get level to the box on the horizontal axis no matter what */
+    // may have to generalize this later... we'll see
+   tuple<int, int, bool> determineStartingPushPositionAxis(RThread * RTinfo){
 
-    pair<int, Direction> movesDirectionFigureOuter(int boxDiff, int doorDiff, int axis){
+        bool no_Y_Diff_Case = false;
 
-        int magnitude = -999;
+        int idx = RTinfo->index;
 
-        // would never happen...
-        if (boxDiff == 0 && doorDiff == 0){
-            return(make_pair (0,  Direction(NOMOVEMENT)));
+        int startPushTargY, startPushTargX;
+
+        int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[idx]->first;
+
+        if (yDiffBoxDoor > 0){
+            startPushTargY = boxLoc[idx]->first + 1;
+        }
+        if (yDiffBoxDoor < 0){
+            startPushTargY = boxLoc[idx]->first -1;
+        }
+        if (yDiffBoxDoor == 0){
+            no_Y_Diff_Case = true;
         }
 
-        // what if you run into another door though?
-        if (boxDiff == 0 && doorDiff > 0){
-            magnitude = 1;
-        }
+        int xDiffBoxDoor = boxLoc[idx]->second - doorLoc[idx]->second;
 
-        if (boxDiff == 0 && doorDiff < 0){
-            magnitude = -1;
-        }
-
-        if (boxDiff > 0 && doorDiff == 0){
-            magnitude = ;
-        }
-
-
-
-
-        if(axis == NORTHSOUTH){
-            if (magnitude == 1){
-                return make_pair(1, Direction );
+        if (no_Y_Diff_Case){
+            if (xDiffBoxDoor > 0){
+                startPushTargX = boxLoc[idx]->second + 1;
             }
-            if (magnitude == -1){
-                return make_pair(1, Direction );
+            else if (xDiffBoxDoor < 0){
+                startPushTargX = boxLoc[idx]->second - 1;
+            }
+            else {
+                cerr << "Error, the robot is on top of its target box" << endl;
             }
         }
-        if(axis == EASTWEST){
-            if (magnitude == 1){
-                return make_pair(1, Direction );
-            }
-            if (magnitude == -1){
-                return make_pair(1, Direction );
-            }
+        else {
+            startPushTargX = boxLoc[idx]->second;
         }
+        return make_tuple(startPushTargY, startPushTargX, no_Y_Diff_Case);
+    }
+
+    void pushToDoorX(){
 
     }
+
+
+           //Diff's are relative to the robot
+            // int boxVertDiff = boxLoc[RTinfo->index]->first - robotLoc[RTinfo->index]->first;
+            // int doorVertDiff =  doorLoc[RTinfo->index]->first - robotLoc[RTinfo->index]->first;   
+            // int boxHorizDiff = boxLoc[RTinfo->index]->second - robotLoc[RTinfo->index]->second;
+            // int doorHorizDiff = doorLoc[RTinfo->index]->second - robotLoc[RTinfo->index]->second;
+    // /* We'll say we'll always go to the opposite side of the box on the vertical axis no matter what,
+    //     AND we'll always get level to the box on the horizontal axis no matter what
+    //     so we'll get it lined up first, then if its in the vertical axis we'll add one to the magnitude */
+
+    // pair<int, Direction> movesDirectionFigureOuter(int boxDiff, int doorDiff, int axis){
+
+    //     int distanceRequiredThisAxis = -999;
+
+    //     if (boxDiff == 0 && doorDiff == 0){
+    //         return(make_pair (0,  Direction(NOMOVEMENT)));
+    //     }
+
+    //     // what if you run into another door though?
+    //     if (boxDiff == 0 && doorDiff > 0){
+    //         distanceRequiredThisAxis = 0;
+    //     }
+
+    //     if (boxDiff == 0 && doorDiff < 0){
+    //         distanceRequiredThisAxis = 0;
+    //     }
+
+    //     if (doorDiff == 0){
+    //         distanceRequiredThisAxis = -boxDiff;
+    //     }
+
+
+
+
+
+    // }
 
 
     RobotCommandList genCommPushBoxtoDoor(RThread* RTinfo){
