@@ -360,6 +360,7 @@ void myResize(int w, int h)
 
 void myDisplay(void)
 {
+
     glutSetWindow(gMainWindow);
 
     glMatrixMode(GL_MODELVIEW);
@@ -468,11 +469,10 @@ void myKeyboard(unsigned char c, int x, int y)
 }
 
 
-void myIdle(void)
+void myTimerFunc(void)
 {
-    //  possibly I do something to update the scene
-    
-	//	And finally I perform the rendering
+	glutTimerFunc(10, myDisplay, NULL);
+
 	glutPostRedisplay();
 }
 
@@ -494,7 +494,7 @@ void initializeFrontEnd(int argc, char** argv, void (*gridDisplayCB)(void),
 	glutDisplayFunc(myDisplay);
 	glutReshapeFunc(myResize);
 	glutMouseFunc(myMouse);
-    glutIdleFunc(myIdle);
+    glutIdleFunc(myTimerFunc);
 	
 	gridDisplayFunc = gridDisplayCB;
 	stateDisplayFunc = stateDisplayCB;

@@ -114,6 +114,9 @@ namespace Robot{
 
 void displayGridPane(void)
 {
+
+	//Do one move here...
+
 	//	This is OpenGL/glut magic.  Don't touch
 	//---------------------------------------------
 	glutSetWindow(gSubwindow[GRID_PANE]);

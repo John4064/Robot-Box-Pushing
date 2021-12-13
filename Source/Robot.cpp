@@ -6,7 +6,6 @@
 #include <string>
 
 
-
 extern uint** grid;
 extern uint numRows;	//	height of the grid
 extern uint numCols;	//	width
@@ -32,27 +31,40 @@ namespace Robot{
 
     }
 
-
     void genRobotsCommandsList(RThread* RTinfo){
         RobotCommandsList behindBoxList = genCommGetBehindBox(RThread* RTinfo);
         RobotCommandsList toDoorList = genCommPushBoxtoDoor(RThread* RTinfo);
         behindBoxList.insert(behindBoxList.end(), toDoorList.begin(), toDoorList.end());
     };
 
-    genCommGetBehindBox(RThread* RTinfo){
+    RobotCommandsList genCommGetBehindBox(RThread* RTinfo){
 
         int boxVertDiff = robotLoc[RTinfo->index]->first - boxLoc[RTinfo->index]->first;
         int doorVertDiff = robotLoc[RTinfo->index]->first - doorLoc[RTinfo->index]->first;   
 
         pair<int, Direction> numMovesDirectionRequiredVert = movesDirectionFigureOuter(boxVertDiff, doorVertDiff);
 
-
         int boxHorizDiff = robotLoc[RTinfo->index]->second - boxLoc[RTinfo->index]->second;
         int doorHorizDiff = robotLoc[RTinfo->index]->second - doorLoc[RTinfo->index]->second;
 
         pair<int, Direction> numMovesDirectionRequiredVert = movesDirectionFigureOuter(boxHorizDiff, doorHorizDiff);
+
+
     
     }
+
+    movesDirectionFigureOuter(boxHorizDiff, doorHorizDiff){
+
+
+
+        case:
+
+
+
+
+
+    }
+
 
     genCommPushBoxtoDoor(RThread* RTinfo){
         
