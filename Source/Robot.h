@@ -14,14 +14,14 @@ typedef unsigned int uint;
 
 namespace Robot{
 
-    extern vector<RobostCommandsList> CommandsForAllRobots;
 
     typedef enum Direction {
 								NORTH = 0,
 								WEST = 1,
 								EAST = 3,
 								SOUTH = 4,
-								NUM_TRAVEL_DIRECTIONS = 4
+								NUM_TRAVEL_DIRECTIONS = 4,
+                                NOMOVEMENT = -1
     } Direction;
 
 
@@ -35,13 +35,17 @@ namespace Robot{
 
     typedef vector<RobotCommand> RobotCommandsList;
 
+    vector<RobotCommandsList> RobotsCommandsList;
+
     typedef struct RThread {
         pthread_t TID;
         uint index;  
     } RThread;
 
-    void genCommPushBoxtoDoor(RThread* RTinfo);
-    void genRobotsCommandsList(RThread* RTinfo);
+    RobotCommandsList genCommPushBoxtoDoor(RThread* RTinfo);
+
+    RobotCommandsList genRobotsCommandsList(RThread* RTinfo);
+
     void fprintRobotsCommandsList(RThread* RTInfo);
     void destroyRobotsCommandsList(RThread* RTinfo);
     

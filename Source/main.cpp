@@ -22,6 +22,7 @@
 #include <assert.h>
 #include<algorithm>
 #include "Robot.h"
+
 //
 //
 #include "guiChoice.h"
@@ -100,7 +101,7 @@ vector<pair<uint, uint>*> doorLoc;
 
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
-	vector<RobotCommandsList> CommandsforAllRobots;
+	extern vector<RobotCommandsList> RobotsCommandsList;
 };
 
 
@@ -411,3 +412,4 @@ void printVector(T vec)
 	}
 	cout << endl;
 }
+
