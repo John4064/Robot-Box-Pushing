@@ -33,7 +33,7 @@
 	#error unknown OS
 #endif
 
-#include "RThread.h"
+#include "Robot.h"
 
 
 //-----------------------------------------------------------------------------

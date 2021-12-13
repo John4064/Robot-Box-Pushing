@@ -21,7 +21,7 @@
 #include <iostream>
 #include <assert.h>
 #include<algorithm>
-#include "RThread.h"
+#include "Robot.h"
 //
 //
 #include "guiChoice.h"
@@ -93,10 +93,15 @@ char** message;
 //	Global Vectors
 //-----------------------------
 
-vector<pair<uint, uint>*> robotLoc;
+
 vector<pair<uint, uint>*> boxLoc;
 vector<uint> doorAssign;
 vector<pair<uint, uint>*> doorLoc;
+
+namespace Robot{
+	vector<pair<uint, uint>*> robotLoc;
+	vector<RobotCommandsList> CommandsforAllRobots;
+};
 
 
 //==================================================================================
@@ -122,7 +127,7 @@ void displayGridPane(void)
 
 	for (uint i=0; i<numBoxes; i++)
 	{	//	here I would test if the robot thread is still live
-		drawRobotAndBox(i, robotLoc[i]->first, robotLoc[i]->second, boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
+		drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
 	}
 
 	for (uint i=0; i<numDoors; i++)
@@ -313,8 +318,8 @@ void robotRandomPlacement(){
 			uint robotRow = random() % numRows;
 			uint robotCol = random() % numCols;
 			pair<uint, uint> proposedPair = make_pair(robotRow, robotCol);
-			if(!checkIfPairExists(proposedPair, robotLoc) && !checkIfPairExists(proposedPair, boxLoc)){
-				robotLoc.push_back(new pair<uint, uint>(robotRow, robotCol));
+			if(!checkIfPairExists(proposedPair, Robot::robotLoc) && !checkIfPairExists(proposedPair, boxLoc)){
+				Robot::robotLoc.push_back(new pair<uint, uint>(robotRow, robotCol));
 				break;
 			}
 		}
@@ -327,7 +332,7 @@ void doorRandomPlacement(){
 			uint doorRow = random() % numRows;
 			uint doorCol = random() % numCols;
 			pair<uint, uint> proposedPair = make_pair(doorRow, doorCol);
-			if(!checkIfPairExists(proposedPair, robotLoc) && !checkIfPairExists(proposedPair, boxLoc)
+			if(!checkIfPairExists(proposedPair, Robot::robotLoc) && !checkIfPairExists(proposedPair, boxLoc)
 				&& !checkIfPairExists(proposedPair, doorLoc)){
 				doorLoc.push_back(new pair<uint, uint>(doorRow, doorCol));
 				break;
@@ -343,8 +348,8 @@ void printObjectPlacements(){
 	}
 	cout << endl;
 	cout << "Robot locations:" << endl;
-	for(uint i=0; i < robotLoc.size(); i++){
-		cout <<"\t"<< robotLoc[i]->first << ", "<<robotLoc[i]->second<< endl;
+	for(uint i=0; i < Robot::robotLoc.size(); i++){
+		cout <<"\t"<< Robot::robotLoc[i]->first << ", "<<Robot::robotLoc[i]->second<< endl;
 	}
 	cout << endl;
 	cout << "Box locations:" << endl;
@@ -374,7 +379,7 @@ bool checkIfNumExistsInVec(uint num, vector<uint> vec){
 
 
 void assignDoors(){
-	for (uint i=0; i < robotLoc.size() && i < doorLoc.size(); i++){
+	for (uint i=0; i < Robot::robotLoc.size() && i < doorLoc.size(); i++){
 		bool numWorked = false;
 		while (numWorked == false){
 		uint randomDoor = random() % doorLoc.size();
@@ -385,7 +390,7 @@ void assignDoors(){
 		}
 	}
 
-	for (uint i=doorLoc.size(); i < robotLoc.size(); i++){
+	for (uint i=doorLoc.size(); i < Robot::robotLoc.size(); i++){
 		uint randomDoor = random() % doorLoc.size();
 			doorAssign.push_back(randomDoor);
 			break;

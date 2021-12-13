@@ -7,7 +7,7 @@ typedef unsigned int uint;
 
 using namespace std;
 
-vector<pair<uint, uint>*> robotLoc;
+namespace Robot{vector<pair<uint, uint>*> robotLoc;
 vector<pair<uint, uint>*> boxLoc;
 vector<uint> doorAssign;
 vector<pair<uint, uint>*> doorLoc;

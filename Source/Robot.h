@@ -14,6 +14,8 @@ typedef unsigned int uint;
 
 namespace Robot{
 
+    extern Robot
+
     typedef enum Direction {
 								NORTH = 0,
 								WEST = 1,
@@ -33,16 +35,15 @@ namespace Robot{
 
     typedef vector<RobotCommand> RobotCommandsList;
 
+
     typedef struct RThread {
-
         pthread_t TID;        
-
-        vector<RobotCommandsList> CommandsforAllRobots;
 
     } RThread;
 
-    void generateRobotsCommandsList(RThread* RTinfo);
+    void genRobotsCommandsList(RThread* RTinfo);
     void fprintRobotsCommandsList(RThread* RTInfo);
+    void destroyRobotsCommandsList(RThread* RTinfo);
     
 };
 
