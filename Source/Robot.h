@@ -41,9 +41,9 @@ namespace Robot{
 
     } RThread;
 
-    void printRobotsCommandsList(RThread* RTInfo);
+    void generateRobotsCommandsList(RThread* RTinfo);
+    void fprintRobotsCommandsList(RThread* RTInfo);
     
-
 };
 
 #endif
