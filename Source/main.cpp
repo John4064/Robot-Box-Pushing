@@ -16,22 +16,18 @@
 
 */
 #include <string>
-#include <vector>
 #include <cstdio>
-#include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <assert.h>
-#include <utility>
 #include<algorithm>
+#include "RThread.h"
 //
 //
 #include "guiChoice.h"
 #if CSC412_FP_USE_GUI
 	#include "gl_frontEnd.h"
 #endif
-
-typedef unsigned int uint;
 
 using namespace std;
 
@@ -94,16 +90,8 @@ const int MAX_LENGTH_MESSAGE = 32;
 char** message;
 
 //-----------------------------
-//	CHANGE THIS
+//	Global Vectors
 //-----------------------------
-
-// Dave comment... these are going to have to be dynamically allocated.
-// Dave comment... let's use vectors here.
-
-// int robotLoc[][2] = {{12, 8}, {6, 9}, {3, 14}, {11, 15}};
-// int boxLoc[][2] = {{6, 7}, {4, 12}, {13, 13}, {8, 12}};
-// int doorAssign[] = {1, 0, 0, 2};	//	door id assigned to each robot-box pair
-// int doorLoc[][2] = {{3, 3}, {8, 11}, {7, 10}};
 
 vector<pair<uint, uint>*> robotLoc;
 vector<pair<uint, uint>*> boxLoc;
@@ -133,8 +121,7 @@ void displayGridPane(void)
 	glScalef(1.f, -1.f, 1.f);
 
 	for (uint i=0; i<numBoxes; i++)
-	{
-		//	here I would test if the robot thread is still live
+	{	//	here I would test if the robot thread is still live
 		drawRobotAndBox(i, robotLoc[i]->first, robotLoc[i]->second, boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
 	}
 
@@ -142,7 +129,6 @@ void displayGridPane(void)
 	{
 		drawDoor(i, doorLoc[i]->first, doorLoc[i]->second);
 	}
-
 
 	//	This call does nothing important. It only draws lines
 	//	There is nothing to synchronize here
@@ -217,13 +203,6 @@ void slowdownRobots(void)
 //------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-	//	We know that the arguments  of the program  are going
-	//	to be the width (number of columns) and height (number of rows) of the
-	//	grid, the number of boxes (and robots), and the number of doors.
-	//	You are going to have to extract these.  For the time being,
-	//	I hard code-some values
-	//WARNING ROBOTS = BOXES or Seg fault
-
 	numRows = atoi(argv[1]);
 	numCols = atoi(argv[2]);
 	numBoxes = atoi(argv[3]);
@@ -231,7 +210,6 @@ int main(int argc, char** argv)
 
 	// abort program if these values do not match
 	assert (numBoxes == numRobots);
-
 
 #if CSC412_FP_USE_GUI
 	//	Even though we extracted the relevant information from the argument
@@ -287,14 +265,6 @@ void initializeApplication(void)
 		printObjectPlacements();
 		assignDoors();
 
-
-	//	Allocate the grid
-
-	// Thinking about maybe using a vector here... Not sure though..
-
-	// An essential question is how we represent the presence of a robot, door, or 
-	// box.  Should we use different integers?
-
 	// How we represent directions and orientations with respect to these objects also seems very
 	// important.
 
@@ -311,7 +281,6 @@ void initializeApplication(void)
 	//	I initialize the grid's pixels to have something to look at
 	//---------------------------------------------------------------
 	
-
 	//	normally, here I would initialize the location of my doors, boxes,
 	//	and robots, and create threads (not necessarily in that order).
 	//	For the handout I have nothing to do.
@@ -414,8 +383,15 @@ void assignDoors(){
 				break;
 			}	
 		}
-	printVector<vector<uint>>(doorAssign);
 	}
+
+	for (uint i=doorLoc.size(); i < robotLoc.size(); i++){
+		uint randomDoor = random() % doorLoc.size();
+			doorAssign.push_back(randomDoor);
+			break;
+	}	
+	cout << "assigned doors:\n";
+	printVector<vector<uint>>(doorAssign);
 }
 
 

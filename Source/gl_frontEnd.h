@@ -33,7 +33,7 @@
 	#error unknown OS
 #endif
 
-#include "dataTypes.h"
+#include "RThread.h"
 
 
 //-----------------------------------------------------------------------------
