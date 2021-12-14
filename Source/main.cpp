@@ -7,14 +7,6 @@
 //	This is public domain code.  By all means appropriate it and change is to your
 //	heart's content.
 
-
-/* Tasks:
-
-	John:
-		-- Add in error handling e.g., number of doors should not exceed 3.
-
-
-*/
 #include <string>
 #include <vector>
 #include <cstdio>
@@ -24,6 +16,7 @@
 #include <assert.h>
 #include <utility>
 #include<algorithm>
+#include "Robot.h"
 //
 //
 #include "guiChoice.h"
@@ -110,6 +103,10 @@ vector<pair<uint, uint>*> boxLoc;
 vector<uint> doorAssign;
 vector<pair<uint, uint>*> doorLoc;
 
+namespace Robot{
+	vector<pair<uint, uint>*> robotLoc;
+	extern vector<RobotCommandsList> RobotsCommandsList;
+};
 
 //==================================================================================
 //	These are the functions that tie the simulation with the rendering.
@@ -244,10 +241,6 @@ int main(int argc, char** argv)
 	if(numDoors>3 || numDoors <1){
 		exit(44);
 	}
-
-
-
-
 	// abort program if these values do not match
 	assert (numBoxes == numRobots);
 
@@ -293,7 +286,13 @@ int main(int argc, char** argv)
 //	This is a part that you have to edit and add to.
 //
 //==================================================================================
-
+void processPath(){
+	/**
+	 * @brief: Calculates the path for each robot 
+	 * 
+	 */
+	return;
+}
 
 void initializeApplication(void)
 {
@@ -303,8 +302,10 @@ void initializeApplication(void)
 		robotRandomPlacement();
 		doorRandomPlacement();
 		boxRandomPlacement();
-		printObjectPlacements();
+		//printObjectPlacements();
 		assignDoors();
+
+	//Here is where for each Robot we calculate best path
 
 
 	//	Allocate the grid
@@ -433,8 +434,15 @@ void assignDoors(){
 				break;
 			}	
 		}
-	printVector<vector<uint> >(doorAssign);
 	}
+
+	for (uint i=doorLoc.size(); i < robotLoc.size(); i++){
+		uint randomDoor = random() % doorLoc.size();
+			doorAssign.push_back(randomDoor);
+			break;
+	}
+	cout << "assigned doors:\n";
+	printVector<vector<uint> >(doorAssign);
 }
 
 

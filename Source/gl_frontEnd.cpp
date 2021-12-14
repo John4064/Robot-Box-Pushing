@@ -325,8 +325,6 @@ void displayTextualInfo(const char* infoStr, int xPos, int yPos, int fontSize)
 void drawState(int numMessages, char** message)
 {
 	//	I compute once the dimensions for all the rendering of my state info
-	//	One other place to rant about that desperately lame gcc compiler.  It's
-	//	positively disgusting that the code below is rejected.
 	int LEFT_MARGIN = STATE_PANE_WIDTH / 12;
 	int V_PAD = STATE_PANE_HEIGHT / 12;
 
@@ -362,6 +360,7 @@ void myResize(int w, int h)
 
 void myDisplay(void)
 {
+
     glutSetWindow(gMainWindow);
 
     glMatrixMode(GL_MODELVIEW);
@@ -470,11 +469,10 @@ void myKeyboard(unsigned char c, int x, int y)
 }
 
 
-void myIdle(void)
+void myTimerFunc(void)
 {
-    //  possibly I do something to update the scene
-    
-	//	And finally I perform the rendering
+	glutTimerFunc(10, (void(*)(int))&myDisplay, NULL);
+
 	glutPostRedisplay();
 }
 
@@ -489,14 +487,14 @@ void initializeFrontEnd(int argc, char** argv, void (*gridDisplayCB)(void),
 
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitWindowPosition(INIT_WIN_X, INIT_WIN_Y);
-	gMainWindow = glutCreateWindow("Colorful Trails -- CSC 412 - Spring 2017");
+	gMainWindow = glutCreateWindow("Final Project -- CSC 412 - Spring 2021");
 	glClearColor(0.2f, 0.2f, 0.2f, 1.f);
 	
 	//	set up the callbacks for the main window
 	glutDisplayFunc(myDisplay);
 	glutReshapeFunc(myResize);
 	glutMouseFunc(myMouse);
-    glutIdleFunc(myIdle);
+    glutIdleFunc(myTimerFunc);
 	
 	gridDisplayFunc = gridDisplayCB;
 	stateDisplayFunc = stateDisplayCB;
