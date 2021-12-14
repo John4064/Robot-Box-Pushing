@@ -208,7 +208,19 @@ void slowdownRobots(void)
 	//	increase sleep time by 20%
 	robotSleepTime = (12 * robotSleepTime) / 10;
 }
-
+void inputCheck(int argc,char** argv){
+	/** @param: length of argv string array array of the inputs
+	 * @brief: Will check the inputs are valid inputs
+	 * @return: nothing
+	 */
+	
+	for(int x = 1; x < argc;x++ ){
+		if(!isdigit(*argv[x])){
+			exit(43);
+		}
+	}
+	//If it survives the loop inputs are all integers
+}
 
 
 //------------------------------------------------------------------------
@@ -223,11 +235,18 @@ int main(int argc, char** argv)
 	//	You are going to have to extract these.  For the time being,
 	//	I hard code-some values
 	//WARNING ROBOTS = BOXES or Seg fault
-
+	//ERROR HANDLING
+	inputCheck(argc,argv);
 	numRows = atoi(argv[1]);
 	numCols = atoi(argv[2]);
 	numBoxes = atoi(argv[3]);
 	numDoors = atoi(argv[4]);
+	if(numDoors>3 || numDoors <1){
+		exit(44);
+	}
+
+
+
 
 	// abort program if these values do not match
 	assert (numBoxes == numRobots);
@@ -414,7 +433,7 @@ void assignDoors(){
 				break;
 			}	
 		}
-	printVector<vector<uint>>(doorAssign);
+	printVector<vector<uint> >(doorAssign);
 	}
 }
 
