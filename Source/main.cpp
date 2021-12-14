@@ -220,7 +220,8 @@ void inputCheck(int argc,char** argv){
 	//If it survives the loop inputs are all integers
 }
 
-void output(vector<int> history){
+
+void output(vector<uint> history){
 	/**
 	 * @brief This is a vector of the movements of the robot
 	 * 1 is North, -1 is south, 1 is east and -1 is west
@@ -228,15 +229,25 @@ void output(vector<int> history){
 	 */
 
 
-
+	
 
 }
 
 void threadFunc(struct tArg arg){
-	//thread function itself
-	
+	/**
+	 * @brief a struct of the arguments we need!
+	 * @return: void
+	 */
+	//What number robot we are doing in this function
+	uint robI = arg.robotI;
+	uint boxI = arg.boxI;
+	//History of our movements
+	vector<uint> history;
 
-
+	cout << arg.doorI << " WE ARE GOING TO CALCULATE DISTANCE BETWEEN: "<<doorLoc[arg.doorI]->first<<" "<<doorLoc[arg.doorI]->second<<endl;
+	cout << boxLoc[boxI]->first<< " "<< boxLoc[boxI]->second<< endl;
+	cout << robotLoc[robI]->first<< " "<<robotLoc[robI]->second <<endl;
+	while 
 	return;
 }
 void process(void){
@@ -255,8 +266,6 @@ void process(void){
 		tap.robotI=i;
 		threadFunc(tap);
 		//doorI is door index
-		//uint doorI = doorAssign[i];
-		//cout << doorI<< " WE ARE GOING TO CALCULATE DISTANCE BETWEEN: "<<doorLoc[doorI]->first<<" "<<doorLoc[doorI]->second<<endl;
 	}
 	return;
 }
