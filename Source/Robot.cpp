@@ -7,6 +7,7 @@
 #include <iostream>
 #include <tuple>
 #include <functional>
+#include <cmath> 
 
 
 extern uint** grid;
@@ -33,7 +34,8 @@ namespace Robot{
         RThread* RTinfo = (RThread*) arg;
         RobotCommandsList *robotsList = genRobotsCommandsList(RTinfo);
         printRobotsCommandsList(robotsList);
-        
+        RobotCLs.push_back(robotsList);
+        cout << "made it here" << endl;
         return (new void*);
     }
 
@@ -60,61 +62,42 @@ namespace Robot{
 
         int idx = RTinfo->index;
 
-        cout << "\n\trobotLoc[idx]->first = " << robotLoc[idx]->first << "\n\trobotLoc[idx]->second = " <<robotLoc[idx]->second <<  endl;
-
         RobotCommandsList* RCList = new RobotCommandsList();
-        
-        // could add the distance to destination to tuple if wanted to
 
-        // if this is no_Y_Diff_Case... horizontal movement
-        if (get<2>(targetStartingPushPositionAxis)){
-            
-            int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(targetStartingPushPositionAxis);
-            if (distanceFromRobToDestinationX > 0){
-                for (int i = 0; i < distanceFromRobToDestinationX; i++){
-                     RobotCommand* robComm= new RobotCommand();
-                     robComm->direction = WEST;
-                     robComm->move = MOVE;
-                    RCList->push_back(robComm);
-                    // cout << "pushed back new Robot command " << endl;
-                    // cout << RCList.
-                }
-            }
-            if (distanceFromRobToDestinationX < 0) {
-                for (int i = 0; i > distanceFromRobToDestinationX; i--){
-                     RobotCommand* robComm= new RobotCommand();
-                     robComm->direction = EAST;
-                     robComm->move = MOVE;
-                    RCList->push_back(robComm);
-                }
-            }
-            if (distanceFromRobToDestinationX == 0){
-                cout << "error, robot on top of desintation (recmoves func)" << endl;
-            }
-        }                // if this is NOT no_Y_Diff_Case... horizontal movement
-        if (!get<2>(targetStartingPushPositionAxis)){
-            int distanceFromRobToDestinationY = robotLoc[idx]->first - get<0>(targetStartingPushPositionAxis);
-            if (distanceFromRobToDestinationY > 0){
-                for (int i = 0; i < distanceFromRobToDestinationY; i++){
-                     RobotCommand* robComm= new RobotCommand();
-                     robComm->direction = NORTH;
-                     robComm->move = MOVE;
-                     RCList->push_back(robComm);
-                }
-            }
-            if (distanceFromRobToDestinationY < 0){
-                for (int i = 0; i > distanceFromRobToDestinationY; i--){
-                     RobotCommand* robComm= new RobotCommand();
-                     robComm->direction = SOUTH;
-                     robComm->move = MOVE;
-                     RCList->push_back(robComm);
-                }
-            }
-            if (distanceFromRobToDestinationY == 0){
-                cout << "error, robot on top of desintation (recmoves func)" << endl;
+        bool verticalShouldBeFirst = collisionWithBoxAvoider(targetStartingPushPositionAxis, idx);
+
+        if(verticalShouldBeFirst){
+            recordMovesY(RCList, targetStartingPushPositionAxis, idx);
+            recordMovesX(RCList, targetStartingPushPositionAxis, idx);
+        }
+        else {
+            recordMovesX(RCList, targetStartingPushPositionAxis, idx);
+            recordMovesY(RCList, targetStartingPushPositionAxis, idx);
+        }      
+        return RCList;
+    }
+
+    bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx){
+
+        int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(targetStartingPushPositionAxis);
+        int distanceFromRobToBoxX = robotLoc[idx]->second - boxLoc[idx]->second;
+
+        if(abs(distanceFromRobToDestinationX) > abs(distanceFromRobToBoxX)){
+            if (robotLoc[idx]->first != boxLoc[idx]->first){
+                return false;
             }
         }
-        return RCList;
+
+        int distanceFromRobToDestinationY = robotLoc[idx]->first - get<0>(targetStartingPushPositionAxis);
+        int distanceFromRobToBoxY = robotLoc[idx]->first - boxLoc[idx]->first;
+
+        if(abs(distanceFromRobToDestinationY) > abs(distanceFromRobToBoxY)){
+            if (robotLoc[idx]->second != boxLoc[idx]->second){
+                return true;
+            }
+        }
+        cout << "target loc wasn't on other side for either axis" << endl;
+        return true;
     }
 
     // may have to generalize this later... we'll see
@@ -184,14 +167,109 @@ namespace Robot{
         cout << "hello" << endl;
         cout << "Printing RCL List: \n"<< endl;
         cout << "\tMOVE:\tDirection:" << endl;
-        for(uint i = 0; i < RCL->size(); i++){
-            cout << "item "<< i+1 <<" "<< (*RCL)[i]->move <<"\t" << (*RCL)[i]->direction << endl;
+        for(auto it = RCL->begin(); it != RCL->end(); ++it){
+            cout << (*it)->move <<"\t" << (*it)->direction << endl;
+            cout << "hello" << endl;
+        }
+    }
+
+    void makeRegMove(Direction dir, int idx){
+
+       switch (dir){
+            case NORTH:
+                robotLoc[idx]->first--;
+                break;
+            case SOUTH:
+                robotLoc[idx]->first++;
+                break;
+            case EAST:
+                robotLoc[idx]->second++;
+                break;
+            case WEST:
+                robotLoc[idx]->second--;
+                break;
+        }
+    }
+    void makePushMove(Direction dir, int idx){
+       switch (dir){
+            case NORTH:
+                robotLoc[idx]->first--;
+                boxLoc[idx]->first--;
+                break;
+            case SOUTH:
+                robotLoc[idx]->first++;
+                boxLoc[idx]->first++;
+                break;
+            case EAST:
+                robotLoc[idx]->second++;
+                boxLoc[idx]->second++;
+                break;
+            case WEST:
+                robotLoc[idx]->second--;
+                boxLoc[idx]->second--;
+                break;
         }
     }
 
     void destroyRobotsCommandsList(RThread* RTinfo){
+        
 
     }
 
-};
+    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx){
 
+            int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(targetStartingPushPositionAxis);
+            if (distanceFromRobToDestinationX > 0){
+                for (int i = 0; i < distanceFromRobToDestinationX; i++){
+                     RobotCommand* robComm= new RobotCommand();
+                     robComm->direction = WEST;
+                     robComm->move = MOVE;
+                    RCList->push_front(robComm);
+                    // cout << "pushed back new Robot command " << endl;
+                    // cout << RCList.
+                }
+            }
+            if (distanceFromRobToDestinationX < 0) {
+                for (int i = 0; i > distanceFromRobToDestinationX; i--){
+                     RobotCommand* robComm= new RobotCommand();
+                     robComm->direction = EAST;
+                     robComm->move = MOVE;
+                    RCList->push_front(robComm);
+                }
+            }
+
+
+            if (distanceFromRobToDestinationX == 0){
+                cout << "error, robot on top of desintation (recmoves func)" << endl;
+            }
+
+    }
+
+
+    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx){
+
+         // if this is NOT no_Y_Diff_Case... horizontal movement
+            int distanceFromRobToDestinationY = robotLoc[idx]->first - get<0>(targetStartingPushPositionAxis);
+            if (distanceFromRobToDestinationY > 0){
+                for (int i = 0; i < distanceFromRobToDestinationY; i++){
+                     RobotCommand* robComm= new RobotCommand();
+                     robComm->direction = NORTH;
+                     robComm->move = MOVE;
+                     RCList->push_front(robComm);
+                }
+            }
+            if (distanceFromRobToDestinationY < 0){
+                for (int i = 0; i > distanceFromRobToDestinationY; i--){
+                     RobotCommand* robComm= new RobotCommand();
+                     robComm->direction = SOUTH;
+                     robComm->move = MOVE;
+                     RCList->push_front(robComm);
+                }
+            }
+            if (distanceFromRobToDestinationY == 0){
+                cout << "error, robot on top of desintation (recmoves func)" << endl;
+            }
+    }
+
+};
+            

@@ -3,7 +3,7 @@
 #include <vector>
 #include <utility>
 #include <string>
-#include <queue>
+#include <deque>
 
 #ifndef ROBOT_H
 #define ROBOT_H
@@ -45,9 +45,9 @@ namespace Robot{
 
     tuple<int, int, bool> determineStartingPushPositionAxis(RThread * RTinfo);
 
-    typedef vector<RobotCommand*> RobotCommandsList;
+    typedef deque<RobotCommand*> RobotCommandsList;
     
-    extern vector<RobotCommandsList> RobotsCL;
+    extern vector<RobotCommandsList*> RobotCLs;
 
     RobotCommandsList* genCommGetBehindBox(RThread* RTinfo);
 
@@ -60,6 +60,11 @@ namespace Robot{
     RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPosition, RThread* RTinfo);
     
     void printRobotsCommandsList(RobotCommandsList* RCL);
+    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
+    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
+    bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
+    void makeRegMove(Direction dir, int idx);
+    void makePushMove(Direction dir, int idx);
     
 };
 

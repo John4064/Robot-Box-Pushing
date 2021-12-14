@@ -59,7 +59,7 @@ void myMouse(int b, int s, int x, int y);
 void myGridPaneMouse(int b, int s, int x, int y);
 void myStatePaneMouse(int b, int s, int x, int y);
 void myKeyboard(unsigned char c, int x, int y);
-void myIdle(void);
+void myTimerFunc(void);
 void createDoorColors(void);
 void freeDoorColors(void);
 
@@ -469,9 +469,9 @@ void myKeyboard(unsigned char c, int x, int y)
 }
 
 
-void myTimerFunc(void)
+void myTimerFunc(int val)
 {
-	glutTimerFunc(10, (void(*)(int))&myDisplay, NULL);
+	glutTimerFunc(1000, myTimerFunc, val);
 
 	glutPostRedisplay();
 }
@@ -494,7 +494,7 @@ void initializeFrontEnd(int argc, char** argv, void (*gridDisplayCB)(void),
 	glutDisplayFunc(myDisplay);
 	glutReshapeFunc(myResize);
 	glutMouseFunc(myMouse);
-    glutIdleFunc(myTimerFunc);
+    glutTimerFunc(10, myTimerFunc, 0);
 	
 	gridDisplayFunc = gridDisplayCB;
 	stateDisplayFunc = stateDisplayCB;

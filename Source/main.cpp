@@ -102,6 +102,7 @@ vector<pair<uint, uint>*> doorLoc;
 
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
+	vector<RobotCommandsList*> RobotCLs;
 };
 
 
@@ -115,8 +116,33 @@ namespace Robot{
 
 void displayGridPane(void)
 {
-
 	//Do one move here...
+
+	for (uint i = 0; i < numRobots; i++){
+
+		{using namespace Robot;
+
+			cout << "made it here .... yay1" << endl;
+
+			RobotCommand* command = RobotCLs[i]->back();
+			cout << "made it here .... yay2" << endl;
+			Moves move = command->move;
+			cout << "made it here .... yay3" << endl;
+			Direction dir = command->direction;
+			cout << "made it here .... yay4" << endl;
+			if (move == MOVE){
+				makeRegMove(dir, i);
+			}
+			if (move == PUSH){
+				makePushMove(dir, i);
+			}
+			if(!RobotCLs[i]->empty()){
+				RobotCLs[i]->pop_back();
+				cout << "made it here .... yay6" << endl;
+			}
+			cout << "made it here .... yay7" << endl;
+		}
+	}
 
 	//	This is OpenGL/glut magic.  Don't touch
 	//---------------------------------------------
@@ -276,10 +302,10 @@ void initializeApplication(void)
 
 		Robot::RThread* rtInfo= new Robot::RThread();
 
-		rtInfo->index = 0;
-
-		Robot::robotThreadFunc(rtInfo);
-
+		for (int i =0; i < numRobots; i++){
+			(rtInfo+i)->index = i;
+			Robot::robotThreadFunc(rtInfo);
+		}
 
 	// How we represent directions and orientations with respect to these objects also seems very
 	// important.
@@ -300,6 +326,8 @@ void initializeApplication(void)
 	//	normally, here I would initialize the location of my doors, boxes,
 	//	and robots, and create threads (not necessarily in that order).
 	//	For the handout I have nothing to do.
+
+cout << "made it all the way down here ... "<< endl;
 }
 	// a random location for each door;•  an initial position of each box on the grid 
 		//(be careful that boxes should not be placed on theedges of the grid, that two boxes 
