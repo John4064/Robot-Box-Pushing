@@ -65,31 +65,29 @@ namespace Robot{
 
         int idx = RTinfo->index;
 
-        NeedToGoAround goAround = NO;
-
         RobotCommandsList* RCList = new RobotCommandsList();
 
         // bool verticalShouldBeFirst = collisionWithBoxAvoider(targetStartingPushPositionAxis, idx, goAround);
-        recordMovesX(RCList, targetStartingPushPositionAxis, idx, goAround);
-        recordMovesY(RCList, targetStartingPushPositionAxis, idx, goAround);
+        recordMovesX(RCList, targetStartingPushPositionAxis, idx);
+        recordMovesY(RCList, targetStartingPushPositionAxis, idx);
         return RCList;
     }
 
 
- set<pair<uint, uint>> genSetofCoordsToAvoid(int currIdx){
-    set<pair<uint, uint>> coordsToAvoid;
-    for(int i=0; i < boxLoc.size(); i++){
+//  set<pair<uint, uint>> genSetofCoordsToAvoid(int currIdx){
+//     set<pair<uint, uint>> coordsToAvoid;
+//     for(int i=0; i < boxLoc.size(); i++){
     
-        if (i = currIdx){
-            continue;
-        }
-            coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
-        }
+//         if (i = currIdx){
+//             continue;
+//         }
+//             coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
+//         }
 
-        for(int i=0; i < doorLoc.size(); i++){
-            coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
-        }
- }
+//         for(int i=0; i < doorLoc.size(); i++){
+//             coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
+//         }
+//  }
 
 /*
 
@@ -174,10 +172,10 @@ and then switch angles.
         // is the opposite side from the door.  So figure out what side the door is on compared
         // with the Box.  In other words if it is a positive diff. Box - door or a negative difference.
         // If box - door is positive, the door is closer to the top row, and vice versa.
-        int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[idx]->first;
+        int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[doorAssign[idx]]->first;
 
         cout << "boxLoc[idx]->first:  \t"<< boxLoc[idx]->first << endl;
-        cout << "doorLoc[idx]->first:  \t" << doorLoc[idx]->first << endl;
+        cout << "doorLoc[idx]->first:  \t" << doorLoc[doorAssign[idx]]->first << endl;
         cout << "yDiffBoxDoor:  \t" << yDiffBoxDoor << endl;
 
         //if door closer to top, we want to push the box from one greater row number than the box
@@ -197,10 +195,10 @@ and then switch angles.
             cout << "no_Y_Diff_Case = " << no_Y_Diff_Case << endl;
         }
 
-        int xDiffBoxDoor = boxLoc[idx]->second - doorLoc[idx]->second;
+        int xDiffBoxDoor = boxLoc[idx]->second - doorLoc[doorAssign[idx]]->second;
         
         cout << "boxLoc[idx]->second:  \t"<< boxLoc[idx]->second << endl;
-        cout << "doorLoc[idx]->second:  \t" << doorLoc[idx]->second << endl;
+        cout << "doorLoc[idx]->second:  \t" << doorLoc[doorAssign[idx]]->second << endl;
         cout << "xDiffBoxDoor:  \t" << xDiffBoxDoor << endl;
 
         if (no_Y_Diff_Case){
@@ -283,7 +281,7 @@ and then switch angles.
 
     }
 
-    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx, const NeedToGoAround goAround){
+    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx){
 
             int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(targetStartingPushPositionAxis);
             if (distanceFromRobToDestinationX > 0){
@@ -306,12 +304,12 @@ and then switch angles.
             }
 
             if (distanceFromRobToDestinationX == 0){
-                cout << "error, robot on top of desintation (recmoves func)" << endl;
+                cout << "no distance to travel X axis" << endl;
             }
     }
 
 
-    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround goAround){
+    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx){
 
                 // if this is NOT no_Y_Diff_Case... horizontal movement
                 int distanceFromRobToDestinationY = robotLoc[idx]->first - get<0>(targetStartingPushPositionAxis);
@@ -336,7 +334,7 @@ and then switch angles.
 
             }
             if (distanceFromRobToDestinationY == 0){
-                cout << "Y axis already equal, don't need to do anything?" << endl;
+                cout << "no distance to travel Y axis" << endl;
             }
     }
 

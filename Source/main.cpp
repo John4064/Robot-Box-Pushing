@@ -142,7 +142,7 @@ void displayGridPane(void)
 			}
 			cout << "made it here .... yay7" << endl;
 		}
-		usleep(500000);
+		usleep(250000);
 	}
 
 	//	This is OpenGL/glut magic.  Don't touch
