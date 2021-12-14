@@ -175,7 +175,7 @@ and then switch angles.
         int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[doorAssign[idx]]->first;
 
         cout << "boxLoc[idx]->first:  \t"<< boxLoc[idx]->first << endl;
-        cout << "doorLoc[idx]->first:  \t" << doorLoc[doorAssign[idx]]->first << endl;
+        cout << "doorLoc[doorAssign[idx]]->first:  \t" << doorLoc[doorAssign[idx]]->first << endl;
         cout << "yDiffBoxDoor:  \t" << yDiffBoxDoor << endl;
 
         //if door closer to top, we want to push the box from one greater row number than the box
