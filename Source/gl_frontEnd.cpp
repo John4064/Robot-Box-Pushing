@@ -471,7 +471,7 @@ void myKeyboard(unsigned char c, int x, int y)
 
 void myTimerFunc(int val)
 {
-	glutTimerFunc(1000, myTimerFunc, val);
+	glutTimerFunc(10, myTimerFunc, val);
 
 	glutPostRedisplay();
 }

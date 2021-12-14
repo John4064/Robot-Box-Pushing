@@ -43,6 +43,14 @@ namespace Robot{
         Direction direction;
     } RobotCommand;
 
+    typedef enum NeedToGoAround{
+
+        NO,
+        YES_X,
+        YES_Y
+
+    } NeedToGoAround;
+
     tuple<int, int, bool> determineStartingPushPositionAxis(RThread * RTinfo);
 
     typedef deque<RobotCommand*> RobotCommandsList;
@@ -60,9 +68,9 @@ namespace Robot{
     RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPosition, RThread* RTinfo);
     
     void printRobotsCommandsList(RobotCommandsList* RCL);
-    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
-    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
-    bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
+    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx, const NeedToGoAround goAround);
+    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx, const NeedToGoAround goAround);
+    bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround& goAround);
     void makeRegMove(Direction dir, int idx);
     void makePushMove(Direction dir, int idx);
     

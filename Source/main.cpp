@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <vector>
 #include "Robot.h"
+#include <unistd.h>
 
 //
 //
@@ -123,7 +124,7 @@ void displayGridPane(void)
 		{using namespace Robot;
 
 			cout << "made it here .... yay1" << endl;
-
+			if(!RobotCLs[i]->empty()){
 			RobotCommand* command = RobotCLs[i]->back();
 			cout << "made it here .... yay2" << endl;
 			Moves move = command->move;
@@ -136,12 +137,12 @@ void displayGridPane(void)
 			if (move == PUSH){
 				makePushMove(dir, i);
 			}
-			if(!RobotCLs[i]->empty()){
+
 				RobotCLs[i]->pop_back();
-				cout << "made it here .... yay6" << endl;
 			}
 			cout << "made it here .... yay7" << endl;
 		}
+		usleep(500000);
 	}
 
 	//	This is OpenGL/glut magic.  Don't touch
@@ -304,7 +305,7 @@ void initializeApplication(void)
 
 		for (int i =0; i < numRobots; i++){
 			(rtInfo+i)->index = i;
-			Robot::robotThreadFunc(rtInfo);
+			Robot::robotThreadFunc(rtInfo+i);
 		}
 
 	// How we represent directions and orientations with respect to these objects also seems very
