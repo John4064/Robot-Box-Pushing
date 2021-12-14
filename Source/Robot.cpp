@@ -8,6 +8,7 @@
 #include <tuple>
 #include <functional>
 #include <cmath> 
+#include <set>
 
 
 extern uint** grid;
@@ -79,6 +80,22 @@ namespace Robot{
         return RCList;
     }
 
+
+ set<pair<uint, uint>> genSetofCoordsToAvoid(int currIdx){
+    set<pair<uint, uint>> coordsToAvoid;
+    for(int i=0; i < boxLoc.size(); i++){
+    
+        if (i = currIdx){
+            continue;
+        }
+            coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
+        }
+
+        for(int i=0; i < doorLoc.size(); i++){
+            coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
+        }
+ }
+
 /*
 
 The algo for this box pushing is actually pretty complicated... You will have to push the box twice if it does on start off in 
@@ -92,14 +109,29 @@ and then switch angles.
     // There's obviously some bugs with this function... Need to figure out why robots are going to wrong side sometimes.
     bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround& goAround){
 
+        int robotRow = robotLoc[idx]->first;
+        int boxRow = boxLoc[idx]->first;
+        int destRow = get<0>(targetStartingPushPositionAxis);
+
+        int robotCol = robotLoc[idx]->first;
+        int boxCol = boxLoc[idx]->first;
+        int destCol = get<0>(targetStartingPushPositionAxis);
+
+        set<pair<uint, uint>> coordsToAvoid = genSetofCoordsToAvoid(idx);
+
         int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(targetStartingPushPositionAxis);
         int distanceFromRobToBoxX = robotLoc[idx]->second - boxLoc[idx]->second;
 
+        
+        // (1) if the destination is on the other side of the box from the robot on the X axis
         if(abs(distanceFromRobToDestinationX) > abs(distanceFromRobToBoxX)){
-            if (robotLoc[idx]->first != boxLoc[idx]->first){
+            // (2) if the robot's current path is not going to collide with coordinate to avoid
+
+            if (robotLoc[idx]->first != boxLoc[idx]->first && ){
+                // (1) and (2) are true so we do not necessarily need to do vertical first... 
                 return false;
             }
-            else {
+            // 
                 goAround = YES_X;
                 return false;
             }
