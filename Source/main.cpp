@@ -16,7 +16,6 @@
 #include <assert.h>
 #include <utility>
 #include<algorithm>
-#include "Robot.h"
 //
 //
 #include "guiChoice.h"
@@ -44,6 +43,12 @@ void assignDoors();
 
 template <typename T>
 void printVector(T vec);
+//Global Struct
+struct tArg{
+	//Row and column for the 
+	uint doorI, robotI, boxI;
+};
+
 
 // Utility functions
 void printObjectPlacements();
@@ -98,15 +103,11 @@ char** message;
 // int doorAssign[] = {1, 0, 0, 2};	//	door id assigned to each robot-box pair
 // int doorLoc[][2] = {{3, 3}, {8, 11}, {7, 10}};
 
-vector<pair<uint, uint>*> robotLoc;
-vector<pair<uint, uint>*> boxLoc;
+vector<pair<uint, uint>* > robotLoc;
+vector<pair<uint, uint>* > boxLoc;
 vector<uint> doorAssign;
-vector<pair<uint, uint>*> doorLoc;
+vector<pair<uint, uint>* > doorLoc;
 
-namespace Robot{
-	vector<pair<uint, uint>*> robotLoc;
-	extern vector<RobotCommandsList> RobotsCommandsList;
-};
 
 //==================================================================================
 //	These are the functions that tie the simulation with the rendering.
@@ -200,11 +201,11 @@ void speedupRobots(void)
 	}
 }
 
-void slowdownRobots(void)
-{
+void slowdownRobots(void){
 	//	increase sleep time by 20%
 	robotSleepTime = (12 * robotSleepTime) / 10;
 }
+
 void inputCheck(int argc,char** argv){
 	/** @param: length of argv string array array of the inputs
 	 * @brief: Will check the inputs are valid inputs
@@ -219,7 +220,46 @@ void inputCheck(int argc,char** argv){
 	//If it survives the loop inputs are all integers
 }
 
+void output(vector<int> history){
+	/**
+	 * @brief This is a vector of the movements of the robot
+	 * 1 is North, -1 is south, 1 is east and -1 is west
+	 * May need extra param to specify which robot
+	 */
 
+
+
+
+}
+
+void threadFunc(struct tArg arg){
+	//thread function itself
+	
+
+
+	return;
+}
+void process(void){
+	/**
+	 * @brief: Calculates the path for each robot 
+	 * Note: it starts by simply iterating through each robot.
+	 * Then calls the "threadfunc" where it actually generates the path and runs the checks
+	 * For output each move should pushback to an ouput vector
+	 */
+	for (uint i = 0; i < robotLoc.size(); i++){
+
+		//CREATE STRUCT
+		struct tArg tap;
+		tap.doorI= doorAssign[i];
+		tap.boxI=i;
+		tap.robotI=i;
+		threadFunc(tap);
+		//doorI is door index
+		//uint doorI = doorAssign[i];
+		//cout << doorI<< " WE ARE GOING TO CALCULATE DISTANCE BETWEEN: "<<doorLoc[doorI]->first<<" "<<doorLoc[doorI]->second<<endl;
+	}
+	return;
+}
 //------------------------------------------------------------------------
 //	You shouldn't have to change anything in the main function besides
 //	the initialization of numRows, numCos, numDoors, numBoxes.
@@ -255,6 +295,7 @@ int main(int argc, char** argv)
 	
 	//	Now we can do application-level initialization
 	initializeApplication();
+	process();
 	
 #if CSC412_FP_USE_GUI
 	//	Now we enter the main loop of the program and to a large extend
@@ -286,13 +327,7 @@ int main(int argc, char** argv)
 //	This is a part that you have to edit and add to.
 //
 //==================================================================================
-void processPath(){
-	/**
-	 * @brief: Calculates the path for each robot 
-	 * 
-	 */
-	return;
-}
+
 
 void initializeApplication(void)
 {

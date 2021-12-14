@@ -13,9 +13,10 @@ extern uint numCols;	//	width
 // extern uint numDoors;	//	The number of doors.
 // extern uint& numRobots;
 
-extern vector<pair<uint, uint>*> boxLoc;
+
+extern vector<pair<uint, uint>* > boxLoc;
 extern vector<uint> doorAssign;
-extern vector<pair<uint, uint>*> doorLoc;
+extern vector<pair<uint, uint>* > doorLoc;
 
 typedef unsigned int uint;
 
