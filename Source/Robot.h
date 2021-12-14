@@ -3,7 +3,7 @@
 #include <vector>
 #include <utility>
 #include <string>
-#include <queue>
+#include <deque>
 
 #ifndef ROBOT_H
 #define ROBOT_H
@@ -13,6 +13,13 @@ using namespace std;
 typedef unsigned int uint;
 
 namespace Robot{
+
+    typedef struct RThread {
+        pthread_t TID;
+        uint index;  
+    } RThread;
+
+     void* robotThreadFunc(void * arg);
 
 
     typedef enum Direction {
@@ -31,23 +38,41 @@ namespace Robot{
                                 END 
     } Moves;
 
-    typedef pair<Moves, Direction> RobotCommand;
+    typedef struct RobotCommand{
+        Moves move;
+        Direction direction;
+    } RobotCommand;
 
-    typedef vector<RobotCommand> RobotCommandsList;
+    typedef enum NeedToGoAround{
 
-    vector<RobotCommandsList> RobotsCommandsList;
+        NO,
+        YES_X,
+        YES_Y
 
-    typedef struct RThread {
-        pthread_t TID;
-        uint index;  
-    } RThread;
+    } NeedToGoAround;
 
-    RobotCommandsList genCommPushBoxtoDoor(RThread* RTinfo);
+    tuple<int, int, bool> determineStartingPushPositionAxis(RThread * RTinfo);
 
-    RobotCommandsList genRobotsCommandsList(RThread* RTinfo);
+    typedef deque<RobotCommand*> RobotCommandsList;
+    
+    extern vector<RobotCommandsList*> RobotCLs;
+
+    RobotCommandsList* genCommGetBehindBox(RThread* RTinfo);
+
+    RobotCommandsList* genCommPushBoxtoDoor(RThread* RTinfo);
+
+    RobotCommandsList* genRobotsCommandsList(RThread* RTinfo);
 
     void fprintRobotsCommandsList(RThread* RTInfo);
     void destroyRobotsCommandsList(RThread* RTinfo);
+    RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPosition, RThread* RTinfo);
+    
+    void printRobotsCommandsList(RobotCommandsList* RCL);
+    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
+    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
+    // bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround& goAround);
+    void makeRegMove(Direction dir, int idx);
+    void makePushMove(Direction dir, int idx);
     
 };
 

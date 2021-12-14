@@ -16,6 +16,7 @@
 #include <assert.h>
 #include <utility>
 #include<algorithm>
+#include <robot.h>
 //
 //
 #include "guiChoice.h"
@@ -241,13 +242,41 @@ void threadFunc(struct tArg arg){
 	//What number robot we are doing in this function
 	uint robI = arg.robotI;
 	uint boxI = arg.boxI;
+	uint doorI = arg.doorI;
 	//History of our movements
 	vector<uint> history;
-
-	cout << arg.doorI << " WE ARE GOING TO CALCULATE DISTANCE BETWEEN: "<<doorLoc[arg.doorI]->first<<" "<<doorLoc[arg.doorI]->second<<endl;
+	cout << arg.doorI << " WE ARE GOING TO CALCULATE DISTANCE BETWEEN: "<<doorLoc[doorI]->first<<" "<<doorLoc[arg.doorI]->second<<endl;
 	cout << boxLoc[boxI]->first<< " "<< boxLoc[boxI]->second<< endl;
 	cout << robotLoc[robI]->first<< " "<<robotLoc[robI]->second <<endl;
-	while 
+	//While loop to move the first index of box to the door
+	//HERE TO ROBOT GOES TO THE CORRECT SPOT
+	while (boxLoc[boxI]->first != doorLoc[doorI]->first){
+		if(boxLoc[boxI]->first>doorLoc[doorI]->first){
+			boxLoc[boxI]->first -=1;
+			cout << boxLoc[boxI]->first << ' '<< boxLoc[boxI]->second;
+		}else if(boxLoc[boxI]->first<doorLoc[doorI]->first){
+			boxLoc[boxI]->first +=1;
+		}else{
+			cout<<"CRASHED in ThreadFuncfirst index \n";
+			//Error in direciton
+			exit(9);
+		}
+	}
+	//HERE THE ROBOT GOES AROUND TO CORRECT INDEX
+	while (boxLoc[boxI]->second != doorLoc[doorI]->second - 1){
+		if(boxLoc[boxI]->second>doorLoc[doorI]->second){
+			boxLoc[boxI]->second -=1;
+			cout << boxLoc[boxI]->second << ' '<< boxLoc[boxI]->second;
+		}else if(boxLoc[boxI]->second<doorLoc[doorI]->second){
+			boxLoc[boxI]->second +=1;
+		}else{
+			cout<<"CRASHED in ThreadFunc second index\n";
+			//Error in direciton
+			exit(10);
+		}
+	}
+	//NOW FOR SECOND INDEX()
+	//This is now for the lateral cordinates
 	return;
 }
 void process(void){
