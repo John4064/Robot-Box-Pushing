@@ -20,7 +20,8 @@
 #include <ctime>
 #include <iostream>
 #include <assert.h>
-#include<algorithm>
+#include <algorithm>
+#include <vector>
 #include "Robot.h"
 
 //
@@ -33,7 +34,7 @@
 using namespace std;
 
 //==================================================================================
-//	Function prototypes
+  //	Function prototypes
 //==================================================================================
 #if CSC412_FP_USE_GUI
 	void displayGridPane(void);
@@ -101,7 +102,6 @@ vector<pair<uint, uint>*> doorLoc;
 
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
-	extern vector<RobotCommandsList> RobotsCommandsList;
 };
 
 
@@ -273,6 +273,13 @@ void initializeApplication(void)
 		boxRandomPlacement();
 		printObjectPlacements();
 		assignDoors();
+
+		Robot::RThread* rtInfo= new Robot::RThread();
+
+		rtInfo->index = 0;
+
+		Robot::robotThreadFunc(rtInfo);
+
 
 	// How we represent directions and orientations with respect to these objects also seems very
 	// important.

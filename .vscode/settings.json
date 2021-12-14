@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.cpp": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "tuple": "cpp",
+        "functional": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "new": "cpp"
+    }
+}

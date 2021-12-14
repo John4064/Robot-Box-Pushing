@@ -31,62 +31,128 @@ namespace Robot{
     void* robotThreadFunc(void * arg){
 
         RThread* RTinfo = (RThread*) arg;
-        RobotCommandsList robotsList = genRobotsCommandsList(RTinfo);
-
+        RobotCommandsList *robotsList = genRobotsCommandsList(RTinfo);
+        printRobotsCommandsList(robotsList);
+        
         return (new void*);
     }
 
-    RobotCommandsList genRobotsCommandsList(RThread* RTinfo){
-        RobotCommandsList behindBoxList = genCommGetBehindBox(RTinfo);
-        RobotCommandsList toDoorList = genCommPushBoxtoDoor(RTinfo);
-        behindBoxList.insert(behindBoxList.end(), toDoorList.begin(), toDoorList.end());
+    RobotCommandsList* genRobotsCommandsList(RThread* RTinfo){
+        RobotCommandsList* behindBoxList = genCommGetBehindBox(RTinfo);
+        // RobotCommandsList toDoorList = genCommPushBoxtoDoor(RTinfo);
+        // behindBoxList.insert(behindBoxList.end(), toDoorList.begin(), toDoorList.end());
         return behindBoxList;
     }
 
-    RobotCommandsList genCommGetBehindBox(RThread* RTinfo){
+    RobotCommandsList* genCommGetBehindBox(RThread* RTinfo){
 
         tuple <int, int, bool> targetStartingPushPositionAxis = determineStartingPushPositionAxis(RTinfo);
-        recordMovesToBehindBox(targetStartingPushPositionAxis);
-
+        cout << "targetStartingPushPositionAxis:" << endl;
+        cout << "\t y coord = " << get<0> (targetStartingPushPositionAxis) << endl;
+        cout << "\t x coord = " << get<1> (targetStartingPushPositionAxis) << endl;
+        cout << "\t axis = " << get<2> (targetStartingPushPositionAxis) << endl;
+        return recordMovesToBehindBox(targetStartingPushPositionAxis, RTinfo);
     }
 
-    void recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPositionAxis){
+
+
+    RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPositionAxis, RThread* RTinfo){
+
+        int idx = RTinfo->index;
+
+        cout << "\n\trobotLoc[idx]->first = " << robotLoc[idx]->first << "\n\trobotLoc[idx]->second = " <<robotLoc[idx]->second <<  endl;
+
+        RobotCommandsList* RCList = new RobotCommandsList();
         
         // could add the distance to destination to tuple if wanted to
+
+        // if this is no_Y_Diff_Case... horizontal movement
         if (get<2>(targetStartingPushPositionAxis)){
-
-
+            
+            int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(targetStartingPushPositionAxis);
+            if (distanceFromRobToDestinationX > 0){
+                for (int i = 0; i < distanceFromRobToDestinationX; i++){
+                     RobotCommand* robComm= new RobotCommand();
+                     robComm->direction = WEST;
+                     robComm->move = MOVE;
+                    RCList->push_back(robComm);
+                    // cout << "pushed back new Robot command " << endl;
+                    // cout << RCList.
+                }
+            }
+            if (distanceFromRobToDestinationX < 0) {
+                for (int i = 0; i > distanceFromRobToDestinationX; i--){
+                     RobotCommand* robComm= new RobotCommand();
+                     robComm->direction = EAST;
+                     robComm->move = MOVE;
+                    RCList->push_back(robComm);
+                }
+            }
+            if (distanceFromRobToDestinationX == 0){
+                cout << "error, robot on top of desintation (recmoves func)" << endl;
+            }
+        }                // if this is NOT no_Y_Diff_Case... horizontal movement
+        if (!get<2>(targetStartingPushPositionAxis)){
+            int distanceFromRobToDestinationY = robotLoc[idx]->first - get<0>(targetStartingPushPositionAxis);
+            if (distanceFromRobToDestinationY > 0){
+                for (int i = 0; i < distanceFromRobToDestinationY; i++){
+                     RobotCommand* robComm= new RobotCommand();
+                     robComm->direction = NORTH;
+                     robComm->move = MOVE;
+                     RCList->push_back(robComm);
+                }
+            }
+            if (distanceFromRobToDestinationY < 0){
+                for (int i = 0; i > distanceFromRobToDestinationY; i--){
+                     RobotCommand* robComm= new RobotCommand();
+                     robComm->direction = SOUTH;
+                     robComm->move = MOVE;
+                     RCList->push_back(robComm);
+                }
+            }
+            if (distanceFromRobToDestinationY == 0){
+                cout << "error, robot on top of desintation (recmoves func)" << endl;
+            }
         }
-
-        int distanceToDestination = 
-
-        for(int i = 0; i < )
-
+        return RCList;
     }
-
 
     // may have to generalize this later... we'll see
    tuple<int, int, bool> determineStartingPushPositionAxis(RThread * RTinfo){
 
         bool no_Y_Diff_Case = false;
+        bool& pushingAxisIsHorizontal = no_Y_Diff_Case;
 
         int idx = RTinfo->index;
+
+        cout << "idx = " << idx << endl;
 
         int startPushTargY, startPushTargX;
 
         int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[idx]->first;
 
+        cout << "boxLoc[idx]->first:  \t"<< boxLoc[idx]->first << endl;
+        cout << "doorLoc[idx]->first:  \t" << doorLoc[idx]->first << endl;
+        cout << "yDiffBoxDoor:  \t" << yDiffBoxDoor << endl;
+
         if (yDiffBoxDoor > 0){
             startPushTargY = boxLoc[idx]->first + 1;
+            cout << "startPushTargY (>) = \t" << startPushTargY << endl;
         }
         if (yDiffBoxDoor < 0){
             startPushTargY = boxLoc[idx]->first -1;
+            cout << "startPushTargY (<) = \t" << startPushTargY << endl;
         }
         if (yDiffBoxDoor == 0){
             no_Y_Diff_Case = true;
+            cout << "no_Y_Diff_Case = " << no_Y_Diff_Case << endl;
         }
 
         int xDiffBoxDoor = boxLoc[idx]->second - doorLoc[idx]->second;
+        
+        cout << "boxLoc[idx]->second:  \t"<< boxLoc[idx]->second << endl;
+        cout << "doorLoc[idx]->second:  \t" << doorLoc[idx]->second << endl;
+        cout << "xDiffBoxDoor:  \t" << xDiffBoxDoor << endl;
 
         if (no_Y_Diff_Case){
             if (xDiffBoxDoor > 0){
@@ -102,66 +168,30 @@ namespace Robot{
         else {
             startPushTargX = boxLoc[idx]->second;
         }
-        return make_tuple(startPushTargY, startPushTargX, no_Y_Diff_Case);
+
+        cout << "final values: \n";
+        cout << "startPushTargY  \t" << startPushTargY << endl;
+        cout << "startPushTargX \t" << startPushTargX << endl;
+
+        return make_tuple(startPushTargY, startPushTargX, pushingAxisIsHorizontal);
     }
 
     void pushToDoorX(){
 
     }
 
-
-           //Diff's are relative to the robot
-            // int boxVertDiff = boxLoc[RTinfo->index]->first - robotLoc[RTinfo->index]->first;
-            // int doorVertDiff =  doorLoc[RTinfo->index]->first - robotLoc[RTinfo->index]->first;   
-            // int boxHorizDiff = boxLoc[RTinfo->index]->second - robotLoc[RTinfo->index]->second;
-            // int doorHorizDiff = doorLoc[RTinfo->index]->second - robotLoc[RTinfo->index]->second;
-    // /* We'll say we'll always go to the opposite side of the box on the vertical axis no matter what,
-    //     AND we'll always get level to the box on the horizontal axis no matter what
-    //     so we'll get it lined up first, then if its in the vertical axis we'll add one to the magnitude */
-
-    // pair<int, Direction> movesDirectionFigureOuter(int boxDiff, int doorDiff, int axis){
-
-    //     int distanceRequiredThisAxis = -999;
-
-    //     if (boxDiff == 0 && doorDiff == 0){
-    //         return(make_pair (0,  Direction(NOMOVEMENT)));
-    //     }
-
-    //     // what if you run into another door though?
-    //     if (boxDiff == 0 && doorDiff > 0){
-    //         distanceRequiredThisAxis = 0;
-    //     }
-
-    //     if (boxDiff == 0 && doorDiff < 0){
-    //         distanceRequiredThisAxis = 0;
-    //     }
-
-    //     if (doorDiff == 0){
-    //         distanceRequiredThisAxis = -boxDiff;
-    //     }
-
-
-
-
-
-    // }
-
-
-    RobotCommandList genCommPushBoxtoDoor(RThread* RTinfo){
-        
-    }
-
-    void printRobotsCommandsList(RThread* RTinfo){
-
-
-
+    void printRobotsCommandsList(RobotCommandsList* RCL){
+        cout << "hello" << endl;
+        cout << "Printing RCL List: \n"<< endl;
+        cout << "\tMOVE:\tDirection:" << endl;
+        for(uint i = 0; i < RCL->size(); i++){
+            cout << "item "<< i+1 <<" "<< (*RCL)[i]->move <<"\t" << (*RCL)[i]->direction << endl;
+        }
     }
 
     void destroyRobotsCommandsList(RThread* RTinfo){
 
     }
-
-
 
 };
 

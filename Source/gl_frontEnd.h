@@ -33,8 +33,6 @@
 	#error unknown OS
 #endif
 
-#include "Robot.h"
-
 
 //-----------------------------------------------------------------------------
 //	Function prototypes

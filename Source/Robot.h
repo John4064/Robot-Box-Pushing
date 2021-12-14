@@ -14,6 +14,13 @@ typedef unsigned int uint;
 
 namespace Robot{
 
+    typedef struct RThread {
+        pthread_t TID;
+        uint index;  
+    } RThread;
+
+     void* robotThreadFunc(void * arg);
+
 
     typedef enum Direction {
 								NORTH = 0,
@@ -31,24 +38,28 @@ namespace Robot{
                                 END 
     } Moves;
 
-    typedef pair<Moves, Direction> RobotCommand;
+    typedef struct RobotCommand{
+        Moves move;
+        Direction direction;
+    } RobotCommand;
+
     tuple<int, int, bool> determineStartingPushPositionAxis(RThread * RTinfo);
-    typedef vector<RobotCommand> RobotCommandsList;
 
-    vector<RobotCommandsList> RobotsCommandsList;
+    typedef vector<RobotCommand*> RobotCommandsList;
+    
+    extern vector<RobotCommandsList> RobotsCL;
 
-    typedef struct RThread {
-        pthread_t TID;
-        uint index;  
-    } RThread;
+    RobotCommandsList* genCommGetBehindBox(RThread* RTinfo);
 
-    RobotCommandsList genCommPushBoxtoDoor(RThread* RTinfo);
+    RobotCommandsList* genCommPushBoxtoDoor(RThread* RTinfo);
 
-    RobotCommandsList genRobotsCommandsList(RThread* RTinfo);
+    RobotCommandsList* genRobotsCommandsList(RThread* RTinfo);
 
     void fprintRobotsCommandsList(RThread* RTInfo);
     void destroyRobotsCommandsList(RThread* RTinfo);
-    void recordMovesToBehindBox(pair <int, int> targetStartingPushPosition);
+    RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPosition, RThread* RTinfo);
+    
+    void printRobotsCommandsList(RobotCommandsList* RCL);
     
 };
 
