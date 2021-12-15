@@ -145,7 +145,7 @@ void displayGridPane(void)
 			}
 			cout << "made it here .... yay7" << endl;
 		}
-		usleep(200000);
+		usleep(500000);
 	}
 
 	//	This is OpenGL/glut magic.  Don't touch
@@ -250,6 +250,7 @@ int main(int argc, char** argv)
 	numBoxes = atoi(argv[3]);
 	numDoors = atoi(argv[4]);
 
+
 	// abort program if these values do not match
 	assert (numBoxes == numRobots);
 
@@ -332,7 +333,7 @@ void initializeApplication(void)
 
         for (uint j = 0; j < RThread::commandsListHolder.size(); j++){
             cout << "List " << j << endl;
-           for (auto i = 0; i < (RThread::commandsListHolder[j])->size(); i++) {
+           for (uint i= 0; i < (RThread::commandsListHolder[j])->size(); i++) {
             cout << "'i' = " << i << endl;
             string moveString = convertMoveEnumToWord((*(RThread::commandsListHolder[j]))[i].first);
 			string directionString = convertDirEnumToWord((*(RThread::commandsListHolder[j]))[i].second);

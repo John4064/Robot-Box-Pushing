@@ -12,6 +12,7 @@
         "*.tcc": "cpp",
         "unordered_map": "cpp",
         "initializer_list": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "new": "cpp"
     }
 }
