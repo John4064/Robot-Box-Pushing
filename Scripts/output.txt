@@ -1,42 +1,112 @@
 Door locations:
-	3, 3
-	10, 10
+	6, 12
+	12, 5
 	9, 6
 
 Robot locations:
-	12, 0
-	8, 0
-	5, 7
-	13, 1
+	13, 7
+	8, 9
+	2, 1
+	9, 1
 
 Box locations:
-	3, 10
-	11, 6
-	12, 1
-	5, 10
+	6, 7
+	4, 2
+	10, 4
+	7, 14
 
 assigned doors:
-2 0 1 0 
+0 1 2 0 
 okay ...
 yes
 hi again
 idx = 0
-boxLoc[idx]->first:  	3
-doorLoc[doorAssign[idx]]->first:  	9
-yDiffBoxDoor:  	-6
-startPushTargY (<) = 	2
-boxLoc[idx]->second:  	10
-doorLoc[idx]->second:  	6
-xDiffBoxDoor:  	4
+boxLoc[idx]->first:  	6
+doorLoc[doorAssign[idx]]->first:  	6
+yDiffBoxDoor:  	0
+boxLoc[idx]->second:  	7
+doorLoc[idx]->second:  	12
+xDiffBoxDoor:  	-5
 final values: 
-startPushTargY  	2
-startPushTargX 	10
+startPushTargY  	6
+startPushTargX 	6
 startingPushPositionAxis:
-	 y coord = 2
-	 x coord = 10
-	 axis = 0
+	 y coord = 6
+	 x coord = 6
+	 axis = 1
+
+
+distanceFromRobToDoorX = 
+-6
+distanceFromRobToDoorY = 0
+
+
+error establishing second push position 
 AN ERROR OCCURRED....
-behindBoxList->size()20
+no distance to travel Y axis
+behindBoxList->size()8
+first leg list [0] equals 0 3
+first leg list [1] equals 0 3
+first leg list [2] equals 0 3
+first leg list [3] equals 0 3
+first leg list [4] equals 0 3
+behindBoxList->size()13
+Thread 0 has following Commands: 
+'i' = 0
+	MOVE	WEST
+'i' = 1
+	MOVE	NORTH
+'i' = 2
+	MOVE	NORTH
+'i' = 3
+	MOVE	NORTH
+'i' = 4
+	MOVE	NORTH
+'i' = 5
+	MOVE	NORTH
+'i' = 6
+	MOVE	NORTH
+'i' = 7
+	MOVE	NORTH
+'i' = 8
+	PUSH	EAST
+'i' = 9
+	PUSH	EAST
+'i' = 10
+	PUSH	EAST
+'i' = 11
+	PUSH	EAST
+'i' = 12
+	PUSH	EAST
+hello
+hello145
+okay ...
+yes
+hi again
+idx = 1
+boxLoc[idx]->first:  	4
+doorLoc[doorAssign[idx]]->first:  	12
+yDiffBoxDoor:  	-8
+startPushTargY (<) = 	3
+boxLoc[idx]->second:  	2
+doorLoc[idx]->second:  	5
+xDiffBoxDoor:  	-3
+final values: 
+startPushTargY  	3
+startPushTargX 	2
+startingPushPositionAxis:
+	 y coord = 3
+	 x coord = 2
+	 axis = 0
+
+
+distanceFromRobToDoorX = 
+-3
+distanceFromRobToDoorY = -9
+
+
+AN ERROR OCCURRED....
+behindBoxList->size()12
 first leg list [0] equals 0 4
 first leg list [1] equals 0 4
 first leg list [2] equals 0 4
@@ -44,202 +114,104 @@ first leg list [3] equals 0 4
 first leg list [4] equals 0 4
 first leg list [5] equals 0 4
 first leg list [6] equals 0 4
-first leg list [7] equals 0 1
-first leg list [8] equals 0 1
-first leg list [9] equals 0 1
-first leg list [10] equals 0 1
-behindBoxList->size()31
-Thread 0 has following Commands: 
-'i' = 0
-	MOVE	EAST
-'i' = 1
-	MOVE	EAST
-'i' = 2
-	MOVE	EAST
-'i' = 3
-	MOVE	EAST
-'i' = 4
-	MOVE	EAST
-'i' = 5
-	MOVE	EAST
-'i' = 6
-	MOVE	EAST
-'i' = 7
-	MOVE	EAST
-'i' = 8
-	MOVE	EAST
-'i' = 9
-	MOVE	EAST
-'i' = 10
-	MOVE	NORTH
-'i' = 11
-	MOVE	NORTH
-'i' = 12
-	MOVE	NORTH
-'i' = 13
-	MOVE	NORTH
-'i' = 14
-	MOVE	NORTH
-'i' = 15
-	MOVE	NORTH
-'i' = 16
-	MOVE	NORTH
-'i' = 17
-	MOVE	NORTH
-'i' = 18
-	MOVE	NORTH
-'i' = 19
-	MOVE	NORTH
-'i' = 20
-	PUSH	SOUTH
-'i' = 21
-	PUSH	SOUTH
-'i' = 22
-	PUSH	SOUTH
-'i' = 23
-	PUSH	SOUTH
-'i' = 24
-	PUSH	SOUTH
-'i' = 25
-	PUSH	SOUTH
-'i' = 26
-	PUSH	SOUTH
-'i' = 27
-	PUSH	WEST
-'i' = 28
-	PUSH	WEST
-'i' = 29
-	PUSH	WEST
-'i' = 30
-	PUSH	WEST
-hello
-hello145
-okay ...
-yes
-hi again
-idx = 1
-boxLoc[idx]->first:  	11
-doorLoc[doorAssign[idx]]->first:  	3
-yDiffBoxDoor:  	8
-startPushTargY (>) = 	12
-boxLoc[idx]->second:  	6
-doorLoc[idx]->second:  	3
-xDiffBoxDoor:  	3
-final values: 
-startPushTargY  	12
-startPushTargX 	6
-startingPushPositionAxis:
-	 y coord = 12
-	 x coord = 6
-	 axis = 0
-AN ERROR OCCURRED....
-behindBoxList->size()10
-first leg list [0] equals 0 0
-first leg list [1] equals 0 0
-first leg list [2] equals 0 0
-first leg list [3] equals 0 0
-first leg list [4] equals 0 0
-first leg list [5] equals 0 0
-first leg list [6] equals 0 0
-first leg list [7] equals 0 0
-first leg list [8] equals 0 0
-first leg list [9] equals 0 1
-first leg list [10] equals 0 1
-first leg list [11] equals 0 1
-behindBoxList->size()22
+first leg list [7] equals 0 4
+first leg list [8] equals 0 3
+first leg list [9] equals 0 3
+first leg list [10] equals 0 3
+behindBoxList->size()23
 Thread 1 has following Commands: 
 'i' = 0
-	MOVE	EAST
+	MOVE	WEST
 'i' = 1
-	MOVE	EAST
+	MOVE	WEST
 'i' = 2
-	MOVE	EAST
+	MOVE	WEST
 'i' = 3
-	MOVE	EAST
+	MOVE	WEST
 'i' = 4
-	MOVE	EAST
+	MOVE	WEST
 'i' = 5
-	MOVE	EAST
+	MOVE	WEST
 'i' = 6
-	MOVE	SOUTH
+	MOVE	WEST
 'i' = 7
-	MOVE	SOUTH
+	MOVE	NORTH
 'i' = 8
-	MOVE	SOUTH
+	MOVE	NORTH
 'i' = 9
-	MOVE	SOUTH
+	MOVE	NORTH
 'i' = 10
-	PUSH	NORTH
+	MOVE	NORTH
 'i' = 11
-	PUSH	NORTH
+	MOVE	NORTH
 'i' = 12
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 13
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 14
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 15
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 16
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 17
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 18
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 19
-	PUSH	WEST
+	PUSH	SOUTH
 'i' = 20
-	PUSH	WEST
+	PUSH	EAST
 'i' = 21
-	PUSH	WEST
+	PUSH	EAST
+'i' = 22
+	PUSH	EAST
 hello
 hello145
 okay ...
 yes
 hi again
 idx = 2
-boxLoc[idx]->first:  	12
-doorLoc[doorAssign[idx]]->first:  	10
-yDiffBoxDoor:  	2
-startPushTargY (>) = 	13
-boxLoc[idx]->second:  	1
-doorLoc[idx]->second:  	10
-xDiffBoxDoor:  	-9
+boxLoc[idx]->first:  	10
+doorLoc[doorAssign[idx]]->first:  	9
+yDiffBoxDoor:  	1
+startPushTargY (>) = 	11
+boxLoc[idx]->second:  	4
+doorLoc[idx]->second:  	6
+xDiffBoxDoor:  	-2
 final values: 
-startPushTargY  	13
-startPushTargX 	1
+startPushTargY  	11
+startPushTargX 	4
 startingPushPositionAxis:
-	 y coord = 13
-	 x coord = 1
+	 y coord = 11
+	 x coord = 4
 	 axis = 0
+
+
+distanceFromRobToDoorX = 
+-2
+distanceFromRobToDoorY = 2
+
+
 AN ERROR OCCURRED....
-behindBoxList->size()14
+behindBoxList->size()12
 first leg list [0] equals 0 0
-first leg list [1] equals 0 0
-first leg list [2] equals 0 0
-first leg list [3] equals 0 3
-first leg list [4] equals 0 3
-first leg list [5] equals 0 3
-first leg list [6] equals 0 3
-first leg list [7] equals 0 3
-first leg list [8] equals 0 3
-first leg list [9] equals 0 3
-first leg list [10] equals 0 3
-first leg list [11] equals 0 3
-behindBoxList->size()26
+first leg list [1] equals 0 3
+first leg list [2] equals 0 3
+behindBoxList->size()15
 Thread 2 has following Commands: 
 'i' = 0
-	MOVE	WEST
+	MOVE	EAST
 'i' = 1
-	MOVE	WEST
+	MOVE	EAST
 'i' = 2
-	MOVE	WEST
+	MOVE	EAST
 'i' = 3
-	MOVE	WEST
+	MOVE	SOUTH
 'i' = 4
-	MOVE	WEST
+	MOVE	SOUTH
 'i' = 5
-	MOVE	WEST
+	MOVE	SOUTH
 'i' = 6
 	MOVE	SOUTH
 'i' = 7
@@ -253,32 +225,10 @@ Thread 2 has following Commands:
 'i' = 11
 	MOVE	SOUTH
 'i' = 12
-	MOVE	SOUTH
+	PUSH	NORTH
 'i' = 13
-	MOVE	SOUTH
+	PUSH	EAST
 'i' = 14
-	PUSH	NORTH
-'i' = 15
-	PUSH	NORTH
-'i' = 16
-	PUSH	NORTH
-'i' = 17
-	PUSH	EAST
-'i' = 18
-	PUSH	EAST
-'i' = 19
-	PUSH	EAST
-'i' = 20
-	PUSH	EAST
-'i' = 21
-	PUSH	EAST
-'i' = 22
-	PUSH	EAST
-'i' = 23
-	PUSH	EAST
-'i' = 24
-	PUSH	EAST
-'i' = 25
 	PUSH	EAST
 hello
 hello145
@@ -286,33 +236,33 @@ okay ...
 yes
 hi again
 idx = 3
-boxLoc[idx]->first:  	5
-doorLoc[doorAssign[idx]]->first:  	3
-yDiffBoxDoor:  	2
-startPushTargY (>) = 	6
-boxLoc[idx]->second:  	10
-doorLoc[idx]->second:  	3
-xDiffBoxDoor:  	7
+boxLoc[idx]->first:  	7
+doorLoc[doorAssign[idx]]->first:  	6
+yDiffBoxDoor:  	1
+startPushTargY (>) = 	8
+boxLoc[idx]->second:  	14
+doorLoc[idx]->second:  	12
+xDiffBoxDoor:  	2
 final values: 
-startPushTargY  	6
-startPushTargX 	10
+startPushTargY  	8
+startPushTargX 	14
 startingPushPositionAxis:
-	 y coord = 6
-	 x coord = 10
+	 y coord = 8
+	 x coord = 14
 	 axis = 0
+
+
+distanceFromRobToDoorX = 
+2
+distanceFromRobToDoorY = 2
+
+
 AN ERROR OCCURRED....
-behindBoxList->size()16
+behindBoxList->size()14
 first leg list [0] equals 0 0
-first leg list [1] equals 0 0
-first leg list [2] equals 0 0
-first leg list [3] equals 0 1
-first leg list [4] equals 0 1
-first leg list [5] equals 0 1
-first leg list [6] equals 0 1
-first leg list [7] equals 0 1
-first leg list [8] equals 0 1
-first leg list [9] equals 0 1
-behindBoxList->size()26
+first leg list [1] equals 0 1
+first leg list [2] equals 0 1
+behindBoxList->size()17
 Thread 3 has following Commands: 
 'i' = 0
 	MOVE	EAST
@@ -333,38 +283,20 @@ Thread 3 has following Commands:
 'i' = 8
 	MOVE	EAST
 'i' = 9
-	MOVE	NORTH
+	MOVE	EAST
 'i' = 10
-	MOVE	NORTH
+	MOVE	EAST
 'i' = 11
-	MOVE	NORTH
+	MOVE	EAST
 'i' = 12
-	MOVE	NORTH
+	MOVE	EAST
 'i' = 13
 	MOVE	NORTH
 'i' = 14
-	MOVE	NORTH
+	PUSH	NORTH
 'i' = 15
-	MOVE	NORTH
+	PUSH	WEST
 'i' = 16
-	PUSH	NORTH
-'i' = 17
-	PUSH	NORTH
-'i' = 18
-	PUSH	NORTH
-'i' = 19
-	PUSH	WEST
-'i' = 20
-	PUSH	WEST
-'i' = 21
-	PUSH	WEST
-'i' = 22
-	PUSH	WEST
-'i' = 23
-	PUSH	WEST
-'i' = 24
-	PUSH	WEST
-'i' = 25
 	PUSH	WEST
 hello
 hello145
@@ -373,114 +305,33 @@ Printing RCL List:
 	MOVE:	Direction:
 List 0
 'i' = 0
-	MOVE	EAST
+	MOVE	WEST
 'i' = 1
-	MOVE	EAST
+	MOVE	NORTH
 'i' = 2
-	MOVE	EAST
+	MOVE	NORTH
 'i' = 3
-	MOVE	EAST
+	MOVE	NORTH
 'i' = 4
-	MOVE	EAST
+	MOVE	NORTH
 'i' = 5
-	MOVE	EAST
+	MOVE	NORTH
 'i' = 6
-	MOVE	EAST
+	MOVE	NORTH
 'i' = 7
-	MOVE	EAST
+	MOVE	NORTH
 'i' = 8
-	MOVE	EAST
+	PUSH	EAST
 'i' = 9
-	MOVE	EAST
+	PUSH	EAST
 'i' = 10
-	MOVE	NORTH
+	PUSH	EAST
 'i' = 11
-	MOVE	NORTH
+	PUSH	EAST
 'i' = 12
-	MOVE	NORTH
-'i' = 13
-	MOVE	NORTH
-'i' = 14
-	MOVE	NORTH
-'i' = 15
-	MOVE	NORTH
-'i' = 16
-	MOVE	NORTH
-'i' = 17
-	MOVE	NORTH
-'i' = 18
-	MOVE	NORTH
-'i' = 19
-	MOVE	NORTH
-'i' = 20
-	PUSH	SOUTH
-'i' = 21
-	PUSH	SOUTH
-'i' = 22
-	PUSH	SOUTH
-'i' = 23
-	PUSH	SOUTH
-'i' = 24
-	PUSH	SOUTH
-'i' = 25
-	PUSH	SOUTH
-'i' = 26
-	PUSH	SOUTH
-'i' = 27
-	PUSH	WEST
-'i' = 28
-	PUSH	WEST
-'i' = 29
-	PUSH	WEST
-'i' = 30
-	PUSH	WEST
+	PUSH	EAST
 List 1
 'i' = 0
-	MOVE	EAST
-'i' = 1
-	MOVE	EAST
-'i' = 2
-	MOVE	EAST
-'i' = 3
-	MOVE	EAST
-'i' = 4
-	MOVE	EAST
-'i' = 5
-	MOVE	EAST
-'i' = 6
-	MOVE	SOUTH
-'i' = 7
-	MOVE	SOUTH
-'i' = 8
-	MOVE	SOUTH
-'i' = 9
-	MOVE	SOUTH
-'i' = 10
-	PUSH	NORTH
-'i' = 11
-	PUSH	NORTH
-'i' = 12
-	PUSH	NORTH
-'i' = 13
-	PUSH	NORTH
-'i' = 14
-	PUSH	NORTH
-'i' = 15
-	PUSH	NORTH
-'i' = 16
-	PUSH	NORTH
-'i' = 17
-	PUSH	NORTH
-'i' = 18
-	PUSH	NORTH
-'i' = 19
-	PUSH	WEST
-'i' = 20
-	PUSH	WEST
-'i' = 21
-	PUSH	WEST
-List 2
-'i' = 0
 	MOVE	WEST
 'i' = 1
 	MOVE	WEST
@@ -493,44 +344,69 @@ List 2
 'i' = 5
 	MOVE	WEST
 'i' = 6
-	MOVE	SOUTH
+	MOVE	WEST
 'i' = 7
-	MOVE	SOUTH
+	MOVE	NORTH
 'i' = 8
-	MOVE	SOUTH
+	MOVE	NORTH
 'i' = 9
-	MOVE	SOUTH
+	MOVE	NORTH
 'i' = 10
-	MOVE	SOUTH
+	MOVE	NORTH
 'i' = 11
-	MOVE	SOUTH
+	MOVE	NORTH
 'i' = 12
-	MOVE	SOUTH
+	PUSH	SOUTH
 'i' = 13
-	MOVE	SOUTH
+	PUSH	SOUTH
 'i' = 14
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 15
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 16
-	PUSH	NORTH
+	PUSH	SOUTH
 'i' = 17
-	PUSH	EAST
+	PUSH	SOUTH
 'i' = 18
-	PUSH	EAST
+	PUSH	SOUTH
 'i' = 19
-	PUSH	EAST
+	PUSH	SOUTH
 'i' = 20
 	PUSH	EAST
 'i' = 21
 	PUSH	EAST
 'i' = 22
 	PUSH	EAST
-'i' = 23
+List 2
+'i' = 0
+	MOVE	EAST
+'i' = 1
+	MOVE	EAST
+'i' = 2
+	MOVE	EAST
+'i' = 3
+	MOVE	SOUTH
+'i' = 4
+	MOVE	SOUTH
+'i' = 5
+	MOVE	SOUTH
+'i' = 6
+	MOVE	SOUTH
+'i' = 7
+	MOVE	SOUTH
+'i' = 8
+	MOVE	SOUTH
+'i' = 9
+	MOVE	SOUTH
+'i' = 10
+	MOVE	SOUTH
+'i' = 11
+	MOVE	SOUTH
+'i' = 12
+	PUSH	NORTH
+'i' = 13
 	PUSH	EAST
-'i' = 24
-	PUSH	EAST
-'i' = 25
+'i' = 14
 	PUSH	EAST
 List 3
 'i' = 0
@@ -552,38 +428,20 @@ List 3
 'i' = 8
 	MOVE	EAST
 'i' = 9
-	MOVE	NORTH
+	MOVE	EAST
 'i' = 10
-	MOVE	NORTH
+	MOVE	EAST
 'i' = 11
-	MOVE	NORTH
+	MOVE	EAST
 'i' = 12
-	MOVE	NORTH
+	MOVE	EAST
 'i' = 13
 	MOVE	NORTH
 'i' = 14
-	MOVE	NORTH
+	PUSH	NORTH
 'i' = 15
-	MOVE	NORTH
+	PUSH	WEST
 'i' = 16
-	PUSH	NORTH
-'i' = 17
-	PUSH	NORTH
-'i' = 18
-	PUSH	NORTH
-'i' = 19
-	PUSH	WEST
-'i' = 20
-	PUSH	WEST
-'i' = 21
-	PUSH	WEST
-'i' = 22
-	PUSH	WEST
-'i' = 23
-	PUSH	WEST
-'i' = 24
-	PUSH	WEST
-'i' = 25
 	PUSH	WEST
 made it here !!!
 made it all the way down here ... 
@@ -848,174 +706,6 @@ made it here .... yay3
 made it here .... yay4
 made it here .... yay7
 made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
 made it here .... yay7
 made it here .... yay1
 made it here .... yay2
@@ -1057,9 +747,6 @@ made it here .... yay3
 made it here .... yay4
 made it here .... yay7
 made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
 made it here .... yay7
 made it here .... yay1
 made it here .... yay2
@@ -1074,9 +761,6 @@ made it here .... yay3
 made it here .... yay4
 made it here .... yay7
 made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
 made it here .... yay7
 made it here .... yay1
 made it here .... yay2
@@ -1084,16 +768,6 @@ made it here .... yay3
 made it here .... yay4
 made it here .... yay7
 made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
-made it here .... yay7
-made it here .... yay1
-made it here .... yay2
-made it here .... yay3
-made it here .... yay4
 made it here .... yay7
 made it here .... yay1
 made it here .... yay2
@@ -1151,32 +825,9 @@ made it here .... yay7
 made it here .... yay1
 made it here .... yay7
 made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
-made it here .... yay7
-made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
 made it here .... yay7
 made it here .... yay1
 made it here .... yay7

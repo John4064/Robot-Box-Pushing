@@ -257,8 +257,6 @@ void inputCheck(int argc,char** argv){
 //------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-<<<<<<< HEAD
-=======
 	//	We know that the arguments  of the program  are going
 	//	to be the width (number of columns) and height (number of rows) of the
 	//	grid, the number of boxes (and robots), and the number of doors.
@@ -267,7 +265,6 @@ int main(int argc, char** argv)
 	//WARNING ROBOTS = BOXES or Seg fault
 	//ERROR HANDLING
 	inputCheck(argc,argv);
->>>>>>> 23fc6f5ff170a60d5d0e6bd72352f9ece1327a70
 	numRows = atoi(argv[1]);
 	numCols = atoi(argv[2]);
 	numBoxes = atoi(argv[3]);
@@ -359,6 +356,8 @@ void initializeApplication(void)
 
         cout << "Printing RCL List: \n"<< endl;
         cout << "\tMOVE:\tDirection:" << endl;
+
+// printing to standard output
 
         for (uint j = 0; j < RThread::commandsListHolder.size(); j++){
             cout << "List " << j << endl;
@@ -497,10 +496,6 @@ void assignDoors(){
 				break;
 			}	
 		}
-<<<<<<< HEAD
-=======
-	printVector<vector<uint> >(doorAssign);
->>>>>>> 23fc6f5ff170a60d5d0e6bd72352f9ece1327a70
 	}
 
 	for (uint i=doorLoc.size(); i < Robot::robotLoc.size(); i++){

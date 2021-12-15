@@ -82,16 +82,18 @@ namespace Robot{
         int distanceFromRobToDoorX = startingPoint.second - destination.second;
         int distanceFromRobToDoorY = startingPoint.first - destination.first;
 
-        if (get<2> (startingPushPositionAxis) == HORIZONTAL){
+        if ((get<2> (startingPushPositionAxis)) == HORIZONTAL){
             recordMovesX(*movesPushtoDoor, startingPoint, destination, PUSH);        
             pushToDoorAxis pushDoorAxis = ptdVERTICAL;
+            movesPushtoDoor->pop_back();
             recordMovesToSecondPushPosition(*movesPushtoDoor, distanceFromRobToDoorY,distanceFromRobToDoorX, pushDoorAxis);
             recordMovesY(*movesPushtoDoor, startingPoint, destination, PUSH);
         }
 
-        if (get<2>(startingPushPositionAxis) == VERTICAL){
+        if ((get<2>(startingPushPositionAxis)) == VERTICAL){
             recordMovesY(*movesPushtoDoor, startingPoint, destination, PUSH);
             pushToDoorAxis pushDoorAxis = ptdHORIZONTAL;
+            movesPushtoDoor->pop_back();
             recordMovesToSecondPushPosition(*movesPushtoDoor, distanceFromRobToDoorY, distanceFromRobToDoorX, pushDoorAxis);
             recordMovesX(*movesPushtoDoor, startingPoint, destination, PUSH);
         }   
@@ -130,7 +132,12 @@ namespace Robot{
     }
 
 
-    void recordMovesToSecondPushPosition(vector<pair<Moves, Direction>>& RCList, int distanceFromRobToDoorY, int distanceFromRobToDoorX, pushToDoorAxis pushToDoorAxis){
+    void recordMovesToSecondPushPosition(vector<pair<Moves, Direction>>& RCList, int distanceFromRobToDoorY,
+     int distanceFromRobToDoorX, startPushAxis pushToDoorAxis){
+
+         cout << "\n\ndistanceFromRobToDoorX = \n" << distanceFromRobToDoorX << endl;
+         cout << "distanceFromRobToDoorY = " << distanceFromRobToDoorY <<"\n\n"<< endl;
+         
 
         pair<int, int> destination;
 
@@ -142,6 +149,7 @@ namespace Robot{
             robComm = new pair<Moves, Direction>();
             robComm->second = WEST;
             robComm->first = MOVE;
+            RCList.push_back(*robComm);
             return;    
         }
         if (pushToDoorAxis == ptdVERTICAL && distanceFromRobToDoorY > 0 && distanceFromRobToDoorX == -1){
@@ -152,6 +160,7 @@ namespace Robot{
             robComm = new pair<Moves, Direction>();
             robComm->second = EAST;
             robComm->first = MOVE;
+            RCList.push_back(*robComm);
             return;    
         }
 
@@ -164,6 +173,7 @@ namespace Robot{
             robComm = new pair<Moves, Direction>();
             robComm->second = WEST;
             robComm->first = MOVE;
+            RCList.push_back(*robComm);
             return;    
         }
         if (pushToDoorAxis == ptdVERTICAL && distanceFromRobToDoorY > 0 && distanceFromRobToDoorX == -1){
@@ -174,6 +184,7 @@ namespace Robot{
             robComm = new pair<Moves, Direction>();
             robComm->second = EAST;
             robComm->first = MOVE;
+            RCList.push_back(*robComm);
             return;    
         }
 
@@ -186,6 +197,7 @@ namespace Robot{
             robComm = new pair<Moves, Direction>();
             robComm->second = SOUTH;
             robComm->first = MOVE;
+            RCList.push_back(*robComm);
             return;    
         }
         if (pushToDoorAxis == ptdHORIZONTAL && distanceFromRobToDoorX > 0 && distanceFromRobToDoorY == -1){
@@ -196,6 +208,7 @@ namespace Robot{
             robComm = new pair<Moves, Direction>();
             robComm->second = NORTH;
             robComm->first = MOVE;
+            RCList.push_back(*robComm);
             return;    
         }
 
@@ -208,6 +221,7 @@ namespace Robot{
             robComm = new pair<Moves, Direction>();
             robComm->second = SOUTH;
             robComm->first = MOVE;
+            RCList.push_back(*robComm);
             return;    
         }
 
@@ -219,6 +233,7 @@ namespace Robot{
             robComm = new pair<Moves, Direction>();
             robComm->second = NORTH;
             robComm->first = MOVE;
+            RCList.push_back(*robComm);
             return;    
         }
 

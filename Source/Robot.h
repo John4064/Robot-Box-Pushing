@@ -35,12 +35,6 @@ namespace Robot{
                                 HORIZONTAL
     } startPushAxis;
 
-    typedef enum pushToDoorAxis{
-                                ptdVERTICAL,
-                                ptdHORIZONTAL
-    } pushToDoorAxis;
-
-
 
     typedef struct RThread {
         static vector<vector<pair<Moves, Direction>>*> commandsListHolder;
