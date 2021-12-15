@@ -59,7 +59,7 @@ void myMouse(int b, int s, int x, int y);
 void myGridPaneMouse(int b, int s, int x, int y);
 void myStatePaneMouse(int b, int s, int x, int y);
 void myKeyboard(unsigned char c, int x, int y);
-void myIdle(void);
+void myTimerFunc(void);
 void createDoorColors(void);
 void freeDoorColors(void);
 
@@ -79,16 +79,7 @@ const float kTextColor[4] = {1.f, 1.f, 1.f, 1.f};
 const int   INIT_WIN_X = 100,
             INIT_WIN_Y = 40;
 
-//	Wow!  gcc on Linux is really dumb!  The code below doesn't even compile there.
-//const int	GRID_PANE_WIDTH = 600,
-//			GRID_PANE_HEIGHT = GRID_PANE_WIDTH,	//	--> claims GRID_PANE_WIDTH not constant!
-//			STATE_PANE_WIDTH = 300,
-//			STATE_PANE_HEIGHT = GRID_PANE_HEIGHT,
-//			H_PADDING = 5,
-//			WINDOW_WIDTH = GRID_PANE_WIDTH + STATE_PANE_WIDTH + H_PADDING,
-//			WINDOW_HEIGHT = GRID_PANE_HEIGHT;
-//	(sigh!)	This completely negates the point of using constants for this kind of setup.
-//	No wonder most Linux apps suck so hard.
+
 int GRID_PANE_WIDTH = 800;
 int GRID_PANE_HEIGHT = 800;
 int STATE_PANE_WIDTH = 400;
@@ -124,8 +115,7 @@ void drawRobotAndBox(int id,
 					 int boxRow, int boxCol,
 					 int doorNumber)
 {
-	//	Yes, I know that it's inefficient to recompute this each and every time,
-	//	but gcc on Ubuntu doesn't let me define these as static [!??]
+	
 	const float	DH = 1.f*GRID_PANE_WIDTH / numCols,
 				DV = 1.f*GRID_PANE_HEIGHT / numRows;
 
@@ -335,8 +325,6 @@ void displayTextualInfo(const char* infoStr, int xPos, int yPos, int fontSize)
 void drawState(int numMessages, char** message)
 {
 	//	I compute once the dimensions for all the rendering of my state info
-	//	One other place to rant about that desperately lame gcc compiler.  It's
-	//	positively disgusting that the code below is rejected.
 	int LEFT_MARGIN = STATE_PANE_WIDTH / 12;
 	int V_PAD = STATE_PANE_HEIGHT / 12;
 
@@ -372,6 +360,7 @@ void myResize(int w, int h)
 
 void myDisplay(void)
 {
+
     glutSetWindow(gMainWindow);
 
     glMatrixMode(GL_MODELVIEW);
@@ -480,11 +469,10 @@ void myKeyboard(unsigned char c, int x, int y)
 }
 
 
-void myIdle(void)
+void myTimerFunc(int val)
 {
-    //  possibly I do something to update the scene
-    
-	//	And finally I perform the rendering
+	glutTimerFunc(10, myTimerFunc, val);
+
 	glutPostRedisplay();
 }
 
@@ -499,14 +487,14 @@ void initializeFrontEnd(int argc, char** argv, void (*gridDisplayCB)(void),
 
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitWindowPosition(INIT_WIN_X, INIT_WIN_Y);
-	gMainWindow = glutCreateWindow("Colorful Trails -- CSC 412 - Spring 2017");
+	gMainWindow = glutCreateWindow("Final Project -- CSC 412 - Spring 2021");
 	glClearColor(0.2f, 0.2f, 0.2f, 1.f);
 	
 	//	set up the callbacks for the main window
 	glutDisplayFunc(myDisplay);
 	glutReshapeFunc(myResize);
 	glutMouseFunc(myMouse);
-    glutIdleFunc(myIdle);
+    glutTimerFunc(10, myTimerFunc, 0);
 	
 	gridDisplayFunc = gridDisplayCB;
 	stateDisplayFunc = stateDisplayCB;

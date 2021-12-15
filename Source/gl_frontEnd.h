@@ -33,8 +33,6 @@
 	#error unknown OS
 #endif
 
-#include "dataTypes.h"
-
 
 //-----------------------------------------------------------------------------
 //	Function prototypes

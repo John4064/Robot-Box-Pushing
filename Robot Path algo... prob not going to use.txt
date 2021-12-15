@@ -1,0 +1,56 @@
+//When am I adding to the move... before it gets sent in or after?  I think it needs to be berore
+
+// need to make an "occupied array", that stores whether cell is occupied by another door or box
+
+bool genMoves(pair<int, int> currRobPos, pair<int, int> destination, deque <pair<int, int>> moves, Direction currDirection, stack<Direction> savedDirections){
+
+    if(currRobPos == destination){
+        return true;
+    }
+
+    else if(occupied(currRobPos) || currRobPos Outside Of Bounds){
+        // Undo move
+        moves.pop_back();
+        return false;
+    }
+
+    else if (!return genMoves((currRobPos + 1 in "CurrDirection"), destination, moves, savedDirections){
+
+        // Undo move
+        moves.pop_back();
+
+        //change Direction
+        currDirection = direction to the left
+
+        //add one previous direction to the stack
+        savedDirectionMoves.push(currDirection to the right);
+
+        //add one opposite direction to where turning to to the stack
+        savedDirectionMoves.push(currDirectoin to the right right);
+
+        //add one previous direction to the stack
+        savedDirectionMoves.push(currDirection to the right);
+
+        //add move to the moves deque
+
+        moves.push((currRobPos +1 in "CurrDirection"));
+
+        return genMoves((currRobPos + 1 in "CurrDirection"), destination, moves, savedDirections);
+
+    }
+    else{
+        //adjust direction
+        if(!savedDirections.empty()){
+            currDirection = savedDirections.top();
+            savedDirections.pop();
+        }   
+
+        //make move in currDirection
+        moves.push((currRobPos +1 in "CurrDirection"));
+
+        return genMoves(currRobPos + 1 in "CurrDirection", destination, moveds, savedDirections);
+    }
+
+}
+
+can also try duplicating direction to the left as direction to the right, and see if that improves behavior

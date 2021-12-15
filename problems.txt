@@ -1,0 +1,6 @@
+Getting seg fault every time go more than 4 robots
+
+Some of the robots are going to opposite side of 
+box that they are supposed to be going
+
+Haven't gotten to test out the goaround functionality yet

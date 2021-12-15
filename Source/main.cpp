@@ -6,12 +6,25 @@
 //  Created by Jean-Yves Hervé on 2018-12-05, Rev. 2021-12-01
 //	This is public domain code.  By all means appropriate it and change is to your
 //	heart's content.
+
+
+/* Tasks:
+
+	John:
+		-- Add in error handling e.g., number of doors should not exceed 3.
+
+
+*/
 #include <string>
-#include <vector>
 #include <cstdio>
-#include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <assert.h>
+#include <algorithm>
+#include <vector>
+#include "Robot.h"
+#include <unistd.h>
+
 //
 //
 #include "guiChoice.h"
@@ -22,7 +35,7 @@
 using namespace std;
 
 //==================================================================================
-//	Function prototypes
+  //	Function prototypes
 //==================================================================================
 #if CSC412_FP_USE_GUI
 	void displayGridPane(void);
@@ -30,6 +43,18 @@ using namespace std;
 #endif
 void initializeApplication(void);
 
+void robotRandomPlacement();
+void doorRandomPlacement();
+void boxRandomPlacement();
+void assignDoors();
+
+template <typename T>
+void printVector(T vec);
+
+// Utility functions
+void printObjectPlacements();
+bool checkIfPairExists(pair<uint, uint> randPair, vector<pair<uint, uint>*> vec);
+bool checkIfNumExistsInVec(uint unum, vector<uint> vec);
 
 //==================================================================================
 //	Application-level global variables
@@ -47,11 +72,12 @@ void initializeApplication(void);
 //	Don't rename any of these variables
 //-------------------------------------
 //	The state grid and its dimensions (arguments to the program)
-int** grid;
-int numRows = -1;	//	height of the grid
-int numCols = -1;	//	width
-int numBoxes = -1;	//	also the number of robots
-int numDoors = -1;	//	The number of doors.
+uint** grid;
+uint numRows = -1;	//	height of the grid
+uint numCols = -1;	//	width
+uint numBoxes = -1;	//	also the number of robots
+uint numDoors = -1;	//	The number of doors.
+uint& numRobots = numBoxes;
 
 int numLiveThreads = 0;		//	the number of live robot threads
 
@@ -67,32 +93,18 @@ const int MAX_LENGTH_MESSAGE = 32;
 char** message;
 
 //-----------------------------
-//	CHANGE THIS
+//	Global Vectors
 //-----------------------------
-//	Here I hard-code myself some data for robots and doors.  Obviously this code
-//	must go away.  I just want to show you how information gets displayed.  
-//	Obviously, you will need to allocate yourself some dynamic data structure to store 
-//	that information once you know the dimensions of the grid, number of boxes/robots and
-//	doors.  
-//	Note that, even if you use the GUI version, it doesn't impose you a storage format at
-//	all, since the drawing function draw a single robot/box/door at a time, and take that
-//	object's parameters as individual argumenta.
-//	So, feel free to go vectors all the way if you like it better than int**
-//	Just don't feel free to declare oversized arrays, in the style of
-//	int robotLoc[1000][2];
-//	I can guarantee you that this kind of stuff will get penalized harshly (if might have
-//	been convenient, borderline cute, in CSC211, but by now it's absolutely embarrassing)
-//
-//	Also:  Please note that because this is a grid-based problem, I never think of x and y but
-//			row and column (well, the "I" dealing with the planning problem.  The "I" doing
-//			the dirty work underneath has to translated all of that into x and y pixel
-//			coordinates for OpenGL for rendering
-//		   So,... In all of these arrays of 2 int values, the first value (index 0)
-//			is a row coordinate and the second value (index 1) is a y coordinate.
-int robotLoc[][2] = {{12, 8}, {6, 9}, {3, 14}, {11, 15}};
-int boxLoc[][2] = {{6, 7}, {4, 12}, {13, 13}, {8, 12}};
-int doorAssign[] = {1, 0, 0, 2};	//	door id assigned to each robot-box pair
-int doorLoc[][2] = {{3, 3}, {8, 11}, {7, 10}};
+
+
+vector<pair<uint, uint>*> boxLoc;
+vector<uint> doorAssign;
+vector<pair<uint, uint>*> doorLoc;
+
+namespace Robot{
+	vector<pair<uint, uint>*> robotLoc;
+	vector<vector<pair<Moves, Direction>>*> RThread::commandsListHolder;
+};
 
 
 //==================================================================================
@@ -105,6 +117,37 @@ int doorLoc[][2] = {{3, 3}, {8, 11}, {7, 10}};
 
 void displayGridPane(void)
 {
+	//Do one move here...
+	{using namespace Robot;
+
+	for (uint i = 0; i < RThread::commandsListHolder.size(); i++){
+
+			cout << "made it here .... yay1" << endl;
+			if(!(RThread::commandsListHolder[i]->empty())){
+			pair<Moves, Direction> command = RThread::commandsListHolder[i]->front();
+			cout << "made it here .... yay2" << endl;
+			Moves move = command.first;
+			cout << "made it here .... yay3" << endl;
+			Direction dir = command.second;
+			cout << "made it here .... yay4" << endl;
+			if (move == MOVE){
+				makeRegMove(dir, i);
+			}
+			if (move == PUSH){
+				makePushMove(dir, i);
+			}
+			if (move == END){
+				RThread::commandsListHolder[i]->clear();
+			}
+			
+			RThread::commandsListHolder[i]->erase(RThread::commandsListHolder[i]->begin());
+			
+			}
+			cout << "made it here .... yay7" << endl;
+		}
+		usleep(500000);
+	}
+
 	//	This is OpenGL/glut magic.  Don't touch
 	//---------------------------------------------
 	glutSetWindow(gSubwindow[GRID_PANE]);
@@ -116,18 +159,18 @@ void displayGridPane(void)
 	// flip the vertiucal axis pointing down, in regular "grid" orientation
 	glScalef(1.f, -1.f, 1.f);
 
-	for (int i=0; i<numBoxes; i++)
-	{
-		//	here I would test if the robot thread is still live
-		drawRobotAndBox(i, robotLoc[i][0], robotLoc[i][1], boxLoc[i][0], boxLoc[i][1], doorAssign[i]);
+	for (uint i=0; i<numBoxes; i++)
+	{	//	here I would test if the robot thread is still live
+		if(!(Robot::RThread::commandsListHolder[i]->empty())){
+			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
+			boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
+		}
 	}
 
-	for (int i=0; i<numDoors; i++)
+	for (uint i=0; i<numDoors; i++)
 	{
-		//	here I would test if the robot thread is still alive
-		drawDoor(i, doorLoc[i][0], doorLoc[i][1]);
+		drawDoor(i, doorLoc[i]->first, doorLoc[i]->second);
 	}
-
 
 	//	This call does nothing important. It only draws lines
 	//	There is nothing to synchronize here
@@ -196,30 +239,21 @@ void slowdownRobots(void)
 
 
 
-
 //------------------------------------------------------------------------
 //	You shouldn't have to change anything in the main function besides
 //	the initialization of numRows, numCos, numDoors, numBoxes.
 //------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-	//	We know that the arguments  of the program  are going
-	//	to be the width (number of columns) and height (number of rows) of the
-	//	grid, the number of boxes (and robots), and the number of doors.
-	//	You are going to have to extract these.  For the time being,
-	//	I hard code-some values
-	//WARNING ROBOTS = BOXES or Seg fault
-	//16-16-3-4 were default values
-	/*
-	numRows = 16;
-	numCols = 16;
-	numDoors = 3;
-	numBoxes = 4;
-	*/
 	numRows = atoi(argv[1]);
 	numCols = atoi(argv[2]);
-	numDoors = atoi(argv[3]);
-	numBoxes = atoi(argv[4]);
+	numBoxes = atoi(argv[3]);
+	numDoors = atoi(argv[4]);
+
+
+	// abort program if these values do not match
+	assert (numBoxes == numRobots);
+
 #if CSC412_FP_USE_GUI
 	//	Even though we extracted the relevant information from the argument
 	//	list, I still need to pass argc and argv to the front-end init
@@ -242,7 +276,7 @@ int main(int argc, char** argv)
 	//	Free allocated resource before leaving (not absolutely needed, but
 	//	just nicer.  Also, if you crash there, you know something is wrong
 	//	in your code.
-	for (int i=0; i< numRows; i++)
+	for (uint i=0; i< numRows; i++)
 		delete []grid[i];
 	delete []grid;
 	for (int k=0; k<MAX_NUM_MESSAGES; k++)
@@ -263,38 +297,195 @@ int main(int argc, char** argv)
 //==================================================================================
 
 
-
-
-
-
-
-
-
 void initializeApplication(void)
 {
-	//	Allocate the grid
-	grid = new int*[numRows];
-	for (int i=0; i<numRows; i++)
-		grid[i] = new int [numCols];
+	//	seed the pseudo-random generator
+	srand((unsigned int) time(NULL));
+
+		robotRandomPlacement();
+		doorRandomPlacement();
+		boxRandomPlacement();
+		printObjectPlacements();
+		assignDoors();
+
+	{
+		using namespace Robot;
+
+		RThread* rtInfo= new RThread();
+
+		for (uint i =0; i < numRobots; i++){
+			cout << "okay ..." << endl;
+			fflush(stdout);
+			(rtInfo+i)->index = i;
+			cout << "yes" << endl;
+			vector<pair<Moves, Direction>>** pointerToPointer = new (vector<pair<Moves, Direction>>*);
+			*pointerToPointer = new (vector<pair<Moves, Direction>>);
+			RThread::commandsListHolder.push_back(*pointerToPointer);
+			vector<pair<Moves, Direction>> ithCommandsList = robotThreadFunc(rtInfo+i);
+			*(RThread::commandsListHolder[i]) = ithCommandsList;
+			cout << "hello" << endl;
+			cout << "hello145" << endl;
+			fflush(stdout);
+		}
+
+        cout << "Printing RCL List: \n"<< endl;
+        cout << "\tMOVE:\tDirection:" << endl;
+
+        for (uint j = 0; j < RThread::commandsListHolder.size(); j++){
+            cout << "List " << j << endl;
+           for (uint i= 0; i < (RThread::commandsListHolder[j])->size(); i++) {
+            cout << "'i' = " << i << endl;
+            string moveString = convertMoveEnumToWord((*(RThread::commandsListHolder[j]))[i].first);
+			string directionString = convertDirEnumToWord((*(RThread::commandsListHolder[j]))[i].second);
+	
+            cout <<"\t" << moveString << "\t" << directionString << endl;
+                     fflush(stdout);
+            }
+        }
+
+		cout << "made it here !!!" << endl;
+		fflush(stdout);
+
+	}
+
+	// How we represent directions and orientations with respect to these objects also seems very
+	// important.
+
+	grid = new uint*[numRows];
+	for (uint i=0; i<numRows; i++)
+		grid[i] = new uint [numCols];
 	
 	message = (char**) malloc(MAX_NUM_MESSAGES*sizeof(char*));
-	for (int k=0; k<MAX_NUM_MESSAGES; k++)
+	for (uint k=0; k<MAX_NUM_MESSAGES; k++)
 		message[k] = (char*) malloc((MAX_LENGTH_MESSAGE+1)*sizeof(char));
 		
 	//---------------------------------------------------------------
 	//	All the code below to be replaced/removed
 	//	I initialize the grid's pixels to have something to look at
 	//---------------------------------------------------------------
-	//	Yes, I am using the C random generator after ranting in class that the C random
-	//	generator was junk.  Here I am not using it to produce "serious" data (as in a
-	//	simulation), only some color, in meant-to-be-thrown-away code
 	
-	//	seed the pseudo-random generator
-	srand((unsigned int) time(NULL));
-
 	//	normally, here I would initialize the location of my doors, boxes,
 	//	and robots, and create threads (not necessarily in that order).
 	//	For the handout I have nothing to do.
+
+cout << "made it all the way down here ... "<< endl;
+}
+	// a random location for each door;•  an initial position of each box on the grid 
+		//(be careful that boxes should not be placed on theedges of the grid, that two boxes 
+		// should not occupy the same position, and that a box shouldnot be created at the same
+		//  location as a door),•  an initial position for each on the grid (be careful that a 
+		// robot should not occupy the sameposition as a door, a box, or as another robot);•  
+		// randomly assign a door as destination for a robot-box pair.
+
+void boxRandomPlacement(){
+	for(uint i = 0; i < numBoxes; i++){
+		while(true){
+			uint boxRow = (random() % (numRows - 2))+1;
+			uint boxCol = (random() % (numCols - 2))+1;
+			pair<uint, uint> proposedPair = make_pair(boxRow, boxCol);
+			if(!checkIfPairExists(proposedPair, boxLoc)){
+				boxLoc.push_back(new pair<uint, uint>(boxRow, boxCol));
+				break;
+			}
+		}
+	}	
 }
 
+
+void robotRandomPlacement(){
+	for(uint i = 0; i < numRobots; i++){
+		while(true){
+			uint robotRow = random() % numRows;
+			uint robotCol = random() % numCols;
+			pair<uint, uint> proposedPair = make_pair(robotRow, robotCol);
+			if(!checkIfPairExists(proposedPair, Robot::robotLoc) && !checkIfPairExists(proposedPair, boxLoc)){
+				Robot::robotLoc.push_back(new pair<uint, uint>(robotRow, robotCol));
+				break;
+			}
+		}
+	}
+}
+
+void doorRandomPlacement(){
+	for(uint i = 0; i < numDoors; i++){
+		while(true){
+			uint doorRow = random() % numRows;
+			uint doorCol = random() % numCols;
+			pair<uint, uint> proposedPair = make_pair(doorRow, doorCol);
+			if(!checkIfPairExists(proposedPair, Robot::robotLoc) && !checkIfPairExists(proposedPair, boxLoc)
+				&& !checkIfPairExists(proposedPair, doorLoc)){
+				doorLoc.push_back(new pair<uint, uint>(doorRow, doorCol));
+				break;
+			}
+		}
+	}
+}
+
+void printObjectPlacements(){
+	cout << "Door locations:" << endl;
+	for(uint i=0; i < doorLoc.size(); i++){
+		cout <<"\t"<< doorLoc[i]->first << ", "<<doorLoc[i]->second<< endl;
+	}
+	cout << endl;
+	cout << "Robot locations:" << endl;
+	for(uint i=0; i < Robot::robotLoc.size(); i++){
+		cout <<"\t"<< Robot::robotLoc[i]->first << ", "<<Robot::robotLoc[i]->second<< endl;
+	}
+	cout << endl;
+	cout << "Box locations:" << endl;
+	for(uint i=0; i < boxLoc.size(); i++){
+		cout <<"\t"<< boxLoc[i]->first << ", "<<boxLoc[i]->second<< endl;
+	}
+	cout << endl;
+}
+
+bool checkIfPairExists(pair<uint, uint> randPair, vector<pair<uint, uint>*> vec){
+	for(auto it = vec.begin(); it!=vec.end(); it++){ 
+		if((*it)->first == randPair.first && (*it)->second == randPair.second){ 
+			return true; 
+		}
+	}
+	return false;
+}
+
+bool checkIfNumExistsInVec(uint num, vector<uint> vec){
+	bool result = false;
+    if( find(vec.begin(), vec.end(), num) != vec.end() )
+    {
+        result = true;
+    }
+    return result;
+}
+
+
+void assignDoors(){
+	for (uint i=0; i < Robot::robotLoc.size() && i < doorLoc.size(); i++){
+		bool numWorked = false;
+		while (numWorked == false){
+		uint randomDoor = random() % doorLoc.size();
+			if (!checkIfNumExistsInVec(randomDoor, doorAssign)){
+				doorAssign.push_back(randomDoor);
+				break;
+			}	
+		}
+	}
+
+	for (uint i=doorLoc.size(); i < Robot::robotLoc.size(); i++){
+		uint randomDoor = random() % doorLoc.size();
+			doorAssign.push_back(randomDoor);
+			break;
+	}	
+	cout << "assigned doors:\n";
+	printVector<vector<uint>>(doorAssign);
+}
+
+
+template <typename T>
+void printVector(T vec)
+{
+	for(uint i=0; i < vec.size(); i++){
+		cout << vec[i] << " ";
+	}
+	cout << endl;
+}
 
