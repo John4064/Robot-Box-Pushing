@@ -31,25 +31,27 @@ namespace Robot{
 
     extern vector<pair<uint, uint>*> robotLoc;
 
-    void*  robotThreadFunc(void * arg){
+    vector<pair<Moves, Direction>>  robotThreadFunc(void * arg){
         cout << "hi again" << endl;
         fflush(stdout);
         RThread* RTinfo = (RThread*) arg;
         vector<pair<Moves, Direction>> robotsList = genRobotsCommandsList(RTinfo);
-        return ((void*)&robotsList);
+        return robotsList;
     }
 
     vector<pair<Moves, Direction>> genRobotsCommandsList(RThread* RTinfo){
         tuple <int, int, bool> startingPushPositionAxis;
         vector<pair<Moves, Direction>> behindBoxList = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
-        vector<pair<Moves, Direction>> pushFirstLegList = recordMovesFirstLeg(RTinfo, startingPushPositionAxis);
+        vector<pair<Moves, Direction>> pushFirstLegList = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
         // vector<pair<Moves, Direction>*> toDoorList = genCommPushBoxtoDoor(RTinfo);
         cout << "behindBoxList->size()" <<  behindBoxList.size() << endl;
 
         for (int i = 0; i < pushFirstLegList.size(); i++){
+            cout << "first leg list ["<< i<< "] equals " << pushFirstLegList[i].first << " " 
+            << pushFirstLegList[i].second << endl;
+
             behindBoxList.push_back(pushFirstLegList[i]);
         }
-
 
         cout << "behindBoxList->size()" <<  behindBoxList.size() << endl;
 
@@ -65,19 +67,19 @@ namespace Robot{
         return behindBoxList;
     }
 
-    vector<pair<Moves, Direction>> recordMovesFirstLeg(RThread* RTinfo, tuple <int, int ,bool> startingPushPositionAxis){
+    vector<pair<Moves, Direction>> recordMovesPushToDoor(RThread* RTinfo, tuple <int, int ,bool> startingPushPositionAxis){
 
-        vector<pair<Moves, Direction>>* movesToDogLegPoint = new vector<pair<Moves, Direction>>();
+        vector<pair<Moves, Direction>>* movesPushtoDoor = new vector<pair<Moves, Direction>>();
 
         int idx = RTinfo->index;
         // If pushing axis is horizontal
         pair<int,int> startingPoint = make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis));
         pair<int, int> destination = make_pair(doorLoc[doorAssign[idx]]->first, doorLoc[doorAssign[idx]]->second);
 
-        recordMovesX(*movesToDogLegPoint, startingPoint, destination, PUSH);
-        recordMovesY(*movesToDogLegPoint, startingPoint, destination, PUSH);
+        recordMovesX(*movesPushtoDoor, startingPoint, destination, PUSH);
+        recordMovesY(*movesPushtoDoor, startingPoint, destination, PUSH);
 
-        return *movesToDogLegPoint;
+        return *movesPushtoDoor;
     }
 
     vector<pair<Moves, Direction>> genCommGetBehindBox(RThread* RTinfo, tuple <int, int, bool>& startingPushPositionAxis){

@@ -161,8 +161,9 @@ void displayGridPane(void)
 
 	for (uint i=0; i<numBoxes; i++)
 	{	//	here I would test if the robot thread is still live
-		if(!Robot::RThread::commandsListHolder[i]->empty()){
-			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
+		if(!(Robot::RThread::commandsListHolder[i]->empty())){
+			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
+			boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
 		}
 	}
 
@@ -319,7 +320,8 @@ void initializeApplication(void)
 			vector<pair<Moves, Direction>>** pointerToPointer = new (vector<pair<Moves, Direction>>*);
 			*pointerToPointer = new (vector<pair<Moves, Direction>>);
 			RThread::commandsListHolder.push_back(*pointerToPointer);
-			robotThreadFunc(rtInfo+i);
+			vector<pair<Moves, Direction>> ithCommandsList = robotThreadFunc(rtInfo+i);
+			*(RThread::commandsListHolder[i]) = ithCommandsList;
 			cout << "hello" << endl;
 			cout << "hello145" << endl;
 			fflush(stdout);

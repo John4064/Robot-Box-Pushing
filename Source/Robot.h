@@ -37,7 +37,7 @@ namespace Robot{
         uint index;  
     } RThread;
 
-     void* robotThreadFunc(void * arg);
+    vector<pair<Moves, Direction>>  robotThreadFunc(void * arg);
 
 
 
@@ -58,7 +58,7 @@ namespace Robot{
 
     vector<pair<Moves, Direction>> genRobotsCommandsList(RThread* RTinfo);
 
-    vector<pair<Moves, Direction>> recordMovesFirstLeg(RThread* RTinfo, tuple <int, int ,bool> startingPushPositionAxis);
+    vector<pair<Moves, Direction>> recordMovesPushToDoor(RThread* RTinfo, tuple <int, int ,bool> startingPushPositionAxis);
 
     string convertMoveEnumToWord(Moves move);
     string convertDirEnumToWord(Direction dir);
