@@ -8,6 +8,11 @@
         "functional": "cpp",
         "ostream": "cpp",
         "iostream": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "array": "cpp",
+        "utility": "cpp",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "istream": "cpp"
     }
 }

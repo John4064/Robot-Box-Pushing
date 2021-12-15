@@ -63,13 +63,20 @@ namespace Robot{
 
     RobotCommandsList* genRobotsCommandsList(RThread* RTinfo);
 
+    RobotCommandsList* recordMovesFirstLegPush(RThread*RTinfo, tuple<int, int, bool> startingPushPosition);
+    RobotCommandsList* recordMovesFirstLeg(RThread* RTinfo, tuple <int, int ,bool> startingPushPositionAxis);
+
+
+
+    }
+
     void fprintRobotsCommandsList(RThread* RTInfo);
     void destroyRobotsCommandsList(RThread* RTinfo);
-    RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPosition, RThread* RTinfo);
+    RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> startingPushPosition, RThread* RTinfo);
     
     void printRobotsCommandsList(RobotCommandsList* RCL);
-    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
-    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx);
+    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> startingPushPositionAxis, int idx);
+    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> startingPushPositionAxis, int idx);
     // bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround& goAround);
     void makeRegMove(Direction dir, int idx);
     void makePushMove(Direction dir, int idx);

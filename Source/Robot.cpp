@@ -42,113 +42,64 @@ namespace Robot{
     }
 
     RobotCommandsList* genRobotsCommandsList(RThread* RTinfo){
+        tuple <int, int, bool> startingPushPositionAxis;
         RobotCommandsList* behindBoxList = genCommGetBehindBox(RTinfo);
+        RobotCommandsList* pushFirstLegList = genFirstLeg(RTinfo, startingPushPositionAxis);
         // RobotCommandsList toDoorList = genCommPushBoxtoDoor(RTinfo);
         // behindBoxList.insert(behindBoxList.end(), toDoorList.begin(), toDoorList.end());
         return behindBoxList;
     }
 
-    RobotCommandsList* genCommGetBehindBox(RThread* RTinfo){
+    RobotCommandsList* genFirstLeg(RThread* RTinfo, tuple <int, int, bool> startingPushPositionAxis){
+
+        RobotCommandsList* movesToDogLegPoint = recordMovesFirstLeg(RTinfo, startingPushPositionAxis);
+        return movesToDogLegPoint;
+    }
+
+    RobotCommandsList* recordMovesFirstLeg(RThread* RTinfo, tuple <int, int ,bool> startingPushPositionAxis){
+
+        // If pushing axis is horizontal
+        if (get<2>(startingPushPositionAxis) == true){
+
+            recordMovesX(RCList, startingPushPositionAxis, idx);
+
+        }
+
+
+    }
+
+    RobotCommandsList* genCommGetBehindBox(RThread* RTinfo, tuple <int, int, bool>& startingPushPositionAxis){
 
         // determine the starting push position 
-        tuple <int, int, bool> targetStartingPushPositionAxis = determineStartingPushPositionAxis(RTinfo);
-        cout << "targetStartingPushPositionAxis:" << endl;
-        cout << "\t y coord = " << get<0> (targetStartingPushPositionAxis) << endl;
-        cout << "\t x coord = " << get<1> (targetStartingPushPositionAxis) << endl;
-        cout << "\t axis = " << get<2> (targetStartingPushPositionAxis) << endl;
-        return recordMovesToBehindBox(targetStartingPushPositionAxis, RTinfo);
+        startingPushPositionAxis = determineStartingPushPositionAxis(RTinfo);
+        cout << "startingPushPositionAxis:" << endl;
+        cout << "\t y coord = " << get<0> (startingPushPositionAxis) << endl;
+        cout << "\t x coord = " << get<1> (startingPushPositionAxis) << endl;
+        cout << "\t axis = " << get<2> (startingPushPositionAxis) << endl;
+        return recordMovesToBehindBox(startingPushPositionAxis, RTinfo);
     }
 
 
 
-    RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> targetStartingPushPositionAxis, RThread* RTinfo){
+
+   RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> startingPushPositionAxis, RThread* RTinfo){
 
         int idx = RTinfo->index;
 
         RobotCommandsList* RCList = new RobotCommandsList();
 
-        // bool verticalShouldBeFirst = collisionWithBoxAvoider(targetStartingPushPositionAxis, idx, goAround);
-        recordMovesX(RCList, targetStartingPushPositionAxis, idx);
-        recordMovesY(RCList, targetStartingPushPositionAxis, idx);
+        // bool verticalShouldBeFirst = collisionWithBoxAvoider(startingPushPositionAxis, idx, goAround);
+
+        recordMovesX(RCList, make_pair(robotLoc[idx]->first, robotLoc[idx]->second),
+        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)));
+
+        recordMovesY(RCList, startingPushPositionAxis, idx);
+
+
         return RCList;
     }
 
 
-//  set<pair<uint, uint>> genSetofCoordsToAvoid(int currIdx){
-//     set<pair<uint, uint>> coordsToAvoid;
-//     for(int i=0; i < boxLoc.size(); i++){
-    
-//         if (i = currIdx){
-//             continue;
-//         }
-//             coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
-//         }
-
-//         for(int i=0; i < doorLoc.size(); i++){
-//             coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
-//         }
-//  }
-
-/*
-
-The algo for this box pushing is actually pretty complicated... You will have to push the box twice if it does on start off in 
-
-the same plane as the door.  So you will have to push it to a sub-target.  So you'll have to figure out the subtarget, get it there, 
-
-and then switch angles.
-
-*/
-
-    // There's obviously some bugs with this function... Need to figure out why robots are going to wrong side sometimes.
-    // bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround& goAround){{
-
-    //     int robotRow = robotLoc[idx]->first;
-    //     int boxRow = boxLoc[idx]->first;
-    //     int destRow = get<0>(targetStartingPushPositionAxis);
-
-    //     int robotCol = robotLoc[idx]->first;
-    //     int boxCol = boxLoc[idx]->first;
-    //     int destCol = get<0>(targetStartingPushPositionAxis);
-
-    //     set<pair<uint, uint>> coordsToAvoid = genSetofCoordsToAvoid(idx);
-
-    //     int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(targetStartingPushPositionAxis);
-    //     int distanceFromRobToBoxX = robotLoc[idx]->second - boxLoc[idx]->second;
-
-        
-    //     // (1) if the destination is on the other side of the box from the robot on the X axis
-    //     if(abs(distanceFromRobToDestinationX) > abs(distanceFromRobToBoxX)){
-    //         // (2) if the robot's current path is not going to collide with coordinate to avoid
-
-    //         if (robotLoc[idx]->first != boxLoc[idx]->first && ){
-    //             // (1) and (2) are true so we do not necessarily need to do vertical first... 
-    //             return false;
-    //         }
-    //         // 
-    //             goAround = YES_X;
-    //             return false;
-    //         }
-    //     }
-
-    //     int distanceFromRobToDestinationY = robotLoc[idx]->first - get<0>(targetStartingPushPositionAxis);
-    //     int distanceFromRobToBoxY = robotLoc[idx]->first - boxLoc[idx]->first;
-
-    //     if(abs(distanceFromRobToDestinationY) > abs(distanceFromRobToBoxY)){
-    //         if (robotLoc[idx]->second != boxLoc[idx]->second){
-    //             return true;
-    //         }
-    //         else {
-    //             goAround = YES_Y;
-    //             return true;
-    //         }
-    //     }
-    //     cout << "target loc wasn't on other side for either axis" << endl;
-    //     return true;
-    // }
-
-    // may have to generalize this later... we'll see
-    // function returns a tuple that provides the starting push position and the axis down which
-    // the robot needs to travel to get there
    tuple<int, int, bool> determineStartingPushPositionAxis(RThread * RTinfo){
 
        // assume we will push vertically first, then horizontally
@@ -224,9 +175,6 @@ and then switch angles.
         return make_tuple(startPushTargY, startPushTargX, pushingAxisIsHorizontal);
     }
 
-    void pushToDoorX(){
-
-    }
 
     void printRobotsCommandsList(RobotCommandsList* RCL){
         cout << "hello" << endl;
@@ -281,49 +229,50 @@ and then switch angles.
 
     }
 
-    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx){
 
-            int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(targetStartingPushPositionAxis);
-            if (distanceFromRobToDestinationX > 0){
-                for (int i = 0; i < distanceFromRobToDestinationX; i++){
-                     RobotCommand* robComm= new RobotCommand();
-                     robComm->direction = WEST;
-                     robComm->move = MOVE;
-                    RCList->push_front(robComm);
-                    // cout << "pushed back new Robot command " << endl;
-                    // cout << RCList.
-                }
-            }
-            if (distanceFromRobToDestinationX < 0) {
-                for (int i = 0; i > distanceFromRobToDestinationX; i--){
-                     RobotCommand* robComm= new RobotCommand();
-                     robComm->direction = EAST;
-                     robComm->move = MOVE;
-                    RCList->push_front(robComm);
-                }
-            }
 
-            if (distanceFromRobToDestinationX == 0){
-                cout << "no distance to travel X axis" << endl;
+    void recordMovesX(RobotCommandsList* RCList, pair<int, int> startingPoint, pair<int, int> destination){
+
+        int distanceFromRobToDestinationX = startingPoint.second - destination.second;
+        if (distanceFromRobToDestinationX > 0){
+            for (int i = 0; i < distanceFromRobToDestinationX; i++){
+                    RobotCommand* robComm= new RobotCommand();
+                    robComm->direction = WEST;
+                    robComm->move = MOVE;
+                RCList->push_front(robComm);
+                // cout << "pushed back new Robot command " << endl;
+                // cout << RCList.
             }
+        }
+        if (distanceFromRobToDestinationX < 0) {
+            for (int i = 0; i > distanceFromRobToDestinationX; i--){
+                    RobotCommand* robComm= new RobotCommand();
+                    robComm->direction = EAST;
+                    robComm->move = MOVE;
+                RCList->push_front(robComm);
+            }
+        }
+
+        if (distanceFromRobToDestinationX == 0){
+            cout << "no distance to travel X axis" << endl;
+        }
     }
 
 
-    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> targetStartingPushPositionAxis, int idx){
+    void recordMovesY(RobotCommandsList* RCList, pair<int, int> startingPoint, pair<int, int> destination){
 
                 // if this is NOT no_Y_Diff_Case... horizontal movement
-                int distanceFromRobToDestinationY = robotLoc[idx]->first - get<0>(targetStartingPushPositionAxis);
+            int distanceFromRobToDestinationY = startingPoint.first - destination.first;
 
             if (distanceFromRobToDestinationY > 0){
-
                 for (int i = 0; i < distanceFromRobToDestinationY; i++){
                      RobotCommand* robComm= new RobotCommand();
                      robComm->direction = NORTH;
                      robComm->move = MOVE;
                      RCList->push_front(robComm);
                 }
-
             }
+
             if (distanceFromRobToDestinationY < 0){
                 for (int i = 0; i > distanceFromRobToDestinationY; i--){
                      RobotCommand* robComm= new RobotCommand();
@@ -331,12 +280,89 @@ and then switch angles.
                      robComm->move = MOVE;
                      RCList->push_front(robComm);
                 }
-
             }
+            
             if (distanceFromRobToDestinationY == 0){
                 cout << "no distance to travel Y axis" << endl;
             }
     }
 
 };
+
+
+//  set<pair<uint, uint>> genSetofCoordsToAvoid(int currIdx){
+//     set<pair<uint, uint>> coordsToAvoid;
+//     for(int i=0; i < boxLoc.size(); i++){
+    
+//         if (i = currIdx){
+//             continue;
+//         }
+//             coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
+//         }
+
+//         for(int i=0; i < doorLoc.size(); i++){
+//             coordsToAvoid.insert(make_pair(boxLoc[i]->first, boxLoc[i]->second));
+//         }
+//  }
+
+/*
+
+The algo for this box pushing is actually pretty complicated... You will have to push the box twice if it does on start off in 
+
+the same plane as the door.  So you will have to push it to a sub-target.  So you'll have to figure out the subtarget, get it there, 
+
+and then switch angles.
+
+*/
+
+    // There's obviously some bugs with this function... Need to figure out why robots are going to wrong side sometimes.
+    // bool collisionWithBoxAvoider(tuple <int, int, bool> startingPushPositionAxis, int idx, NeedToGoAround& goAround){{
+
+    //     int robotRow = robotLoc[idx]->first;
+    //     int boxRow = boxLoc[idx]->first;
+    //     int destRow = get<0>(startingPushPositionAxis);
+
+    //     int robotCol = robotLoc[idx]->first;
+    //     int boxCol = boxLoc[idx]->first;
+    //     int destCol = get<0>(startingPushPositionAxis);
+
+    //     set<pair<uint, uint>> coordsToAvoid = genSetofCoordsToAvoid(idx);
+
+    //     int distanceFromRobToDestinationX = robotLoc[idx]->second - get<1>(startingPushPositionAxis);
+    //     int distanceFromRobToBoxX = robotLoc[idx]->second - boxLoc[idx]->second;
+
+        
+    //     // (1) if the destination is on the other side of the box from the robot on the X axis
+    //     if(abs(distanceFromRobToDestinationX) > abs(distanceFromRobToBoxX)){
+    //         // (2) if the robot's current path is not going to collide with coordinate to avoid
+
+    //         if (robotLoc[idx]->first != boxLoc[idx]->first && ){
+    //             // (1) and (2) are true so we do not necessarily need to do vertical first... 
+    //             return false;
+    //         }
+    //         // 
+    //             goAround = YES_X;
+    //             return false;
+    //         }
+    //     }
+
+    //     int distanceFromRobToDestinationY = robotLoc[idx]->first - get<0>(startingPushPositionAxis);
+    //     int distanceFromRobToBoxY = robotLoc[idx]->first - boxLoc[idx]->first;
+
+    //     if(abs(distanceFromRobToDestinationY) > abs(distanceFromRobToBoxY)){
+    //         if (robotLoc[idx]->second != boxLoc[idx]->second){
+    //             return true;
+    //         }
+    //         else {
+    //             goAround = YES_Y;
+    //             return true;
+    //         }
+    //     }
+    //     cout << "target loc wasn't on other side for either axis" << endl;
+    //     return true;
+    // }
+
+    // may have to generalize this later... we'll see
+    // function returns a tuple that provides the starting push position and the axis down which
+    // the robot needs to travel to get there
             
