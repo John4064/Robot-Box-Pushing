@@ -118,10 +118,10 @@ namespace Robot{
 void displayGridPane(void)
 {
 	//Do one move here...
+	{using namespace Robot;
 
-	for (uint i = 0; i < numRobots; i++){
+	for (uint i = 0; i < RobotCLs.size(); i++){
 
-		{using namespace Robot;
 
 			cout << "made it here .... yay1" << endl;
 			if(!RobotCLs[i]->empty()){
@@ -137,8 +137,11 @@ void displayGridPane(void)
 			if (move == PUSH){
 				makePushMove(dir, i);
 			}
+			if (move == END){
+				RobotCLs.erase(RobotCLs.begin()+i);
+			}
 
-				RobotCLs[i]->pop_back();
+			RobotCLs[i]->pop_back();
 			}
 			cout << "made it here .... yay7" << endl;
 		}
