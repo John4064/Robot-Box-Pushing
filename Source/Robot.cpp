@@ -42,9 +42,7 @@ namespace Robot{
     vector<pair<Moves, Direction>> genRobotsCommandsList(RThread* RTinfo){
         tuple <int, int, startPushAxis> startingPushPositionAxis;
         vector<pair<Moves, Direction>> behindBoxList = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
-        // vector<pair<Moves, Direction>> robtoMovesToSecondPushPosition = genMovetoSecondPushPosition();
         vector<pair<Moves, Direction>> pushFirstLegList = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
-        // vector<pair<Moves, Direction>*> toDoorList = genCommPushBoxtoDoor(RTinfo);
         cout << "behindBoxList->size()" <<  behindBoxList.size() << endl;
 
 
@@ -75,27 +73,28 @@ namespace Robot{
         vector<pair<Moves, Direction>>* movesPushtoDoor = new vector<pair<Moves, Direction>>();
 
         int idx = RTinfo->index;
-        // If pushing axis is horizontal
-        pair<int,int> startingPoint = make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis));
-        pair<int, int> destination = make_pair(doorLoc[doorAssign[idx]]->first, doorLoc[doorAssign[idx]]->second);
+        
+        pair<uint,uint>* origStartingPoint = robotLoc[idx];
+        pair<uint, uint>* destination = doorLoc[doorAssign[idx]];
+        pair<int, int> pushStartingPoint = make_pair(get<0> (startingPushPositionAxis), get<1> (startingPushPositionAxis));
 
-        int distanceFromRobToDoorX = startingPoint.second - destination.second;
-        int distanceFromRobToDoorY = startingPoint.first - destination.first;
+        int origDistanceFromRobToDoorX = origStartingPoint->second - destination->second;
+        int origDistanceFromRobToDoorY = origStartingPoint->first - destination->first;
 
         if ((get<2> (startingPushPositionAxis)) == HORIZONTAL){
-            recordMovesX(*movesPushtoDoor, startingPoint, destination, PUSH);        
-            pushToDoorAxis pushDoorAxis = ptdVERTICAL;
+            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH);        
             movesPushtoDoor->pop_back();
-            recordMovesToSecondPushPosition(*movesPushtoDoor, distanceFromRobToDoorY,distanceFromRobToDoorX, pushDoorAxis);
-            recordMovesY(*movesPushtoDoor, startingPoint, destination, PUSH);
+            // movesPushtoDoor->pop_back();
+            recordMovesToSecondPushPosition(*movesPushtoDoor, startingPushPositionAxis, idx);
+            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH);
         }
 
         if ((get<2>(startingPushPositionAxis)) == VERTICAL){
-            recordMovesY(*movesPushtoDoor, startingPoint, destination, PUSH);
-            pushToDoorAxis pushDoorAxis = ptdHORIZONTAL;
+            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH);
             movesPushtoDoor->pop_back();
-            recordMovesToSecondPushPosition(*movesPushtoDoor, distanceFromRobToDoorY, distanceFromRobToDoorX, pushDoorAxis);
-            recordMovesX(*movesPushtoDoor, startingPoint, destination, PUSH);
+            // movesPushtoDoor->pop_back();
+            recordMovesToSecondPushPosition(*movesPushtoDoor, startingPushPositionAxis, idx);
+            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH);
         }   
 
         return *movesPushtoDoor;
@@ -132,16 +131,68 @@ namespace Robot{
     }
 
 
-    void recordMovesToSecondPushPosition(vector<pair<Moves, Direction>>& RCList, int distanceFromRobToDoorY,
-     int distanceFromRobToDoorX, startPushAxis pushToDoorAxis){
+    void recordMovesToSecondPushPosition(vector<pair<Moves, Direction>>& RCList, tuple <int, int, startPushAxis> 
+        startingPushPositionAxis, int idx){
 
-         cout << "\n\ndistanceFromRobToDoorX = \n" << distanceFromRobToDoorX << endl;
-         cout << "distanceFromRobToDoorY = " << distanceFromRobToDoorY <<"\n\n"<< endl;
+        int distanceFromOrigBoxToDoorY = get<0>(startingPushPositionAxis) - doorLoc[doorAssign[idx]]->first;
+        int distanceFromOrigBoxToDoorX = get<1>(startingPushPositionAxis) - doorLoc[doorAssign[idx]]->second;
+        startPushAxis pushToDoorAxis = get<2>(startingPushPositionAxis);
+
+         cout << "\n\ndistanceFromRobToDoorX = \n" << distanceFromOrigBoxToDoorX << endl;
+         cout << "distanceFromRobToDoorY = " << distanceFromOrigBoxToDoorY <<"\n\n"<< endl;
          
 
         pair<int, int> destination;
 
-        if (pushToDoorAxis == ptdVERTICAL && distanceFromRobToDoorY > 0 && distanceFromRobToDoorX == 1){
+        if (pushToDoorAxis == VERTICAL && distanceFromOrigBoxToDoorY > 0 && distanceFromOrigBoxToDoorX > 0){
+            pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+            robComm->second = EAST;
+            robComm->first = MOVE;
+            RCList.push_back(*robComm);
+            robComm = new pair<Moves, Direction>();
+            robComm->second = NORTH;
+            robComm->first = MOVE;
+            RCList.push_back(*robComm);
+            return;    
+        }
+        if (pushToDoorAxis == VERTICAL && distanceFromOrigBoxToDoorY > 0 && distanceFromOrigBoxToDoorX < 0){
+            pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+            robComm->second = WEST;
+            robComm->first = MOVE;
+            RCList.push_back(*robComm);
+            robComm = new pair<Moves, Direction>();
+            robComm->second = NORTH;
+            robComm->first = MOVE;
+            RCList.push_back(*robComm);
+            return;    
+        }
+
+        
+        if (pushToDoorAxis == VERTICAL && distanceFromOrigBoxToDoorY < 0 && distanceFromOrigBoxToDoorX > 0){
+            pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+            robComm->second = EAST;
+            robComm->first = MOVE;
+            RCList.push_back(*robComm);
+            robComm = new pair<Moves, Direction>();
+            robComm->second = SOUTH;
+            robComm->first = MOVE;
+            RCList.push_back(*robComm);
+            return;    
+        }
+        if (pushToDoorAxis == VERTICAL && distanceFromOrigBoxToDoorY < 0 && distanceFromOrigBoxToDoorX < 0){
+            pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+            robComm->second = WEST;
+            robComm->first = MOVE;
+            RCList.push_back(*robComm);
+            robComm = new pair<Moves, Direction>();
+            robComm->second = SOUTH;
+            robComm->first = MOVE;
+            RCList.push_back(*robComm);
+            return;    
+        }
+
+
+        if (pushToDoorAxis == HORIZONTAL && distanceFromOrigBoxToDoorY > 0 && distanceFromOrigBoxToDoorX > 0){
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = SOUTH;
             robComm->first = MOVE;
@@ -152,7 +203,7 @@ namespace Robot{
             RCList.push_back(*robComm);
             return;    
         }
-        if (pushToDoorAxis == ptdVERTICAL && distanceFromRobToDoorY > 0 && distanceFromRobToDoorX == -1){
+        if (pushToDoorAxis == HORIZONTAL && distanceFromOrigBoxToDoorY > 0 && distanceFromOrigBoxToDoorX < 0){
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = SOUTH;
             robComm->first = MOVE;
@@ -165,7 +216,7 @@ namespace Robot{
         }
 
         
-        if (pushToDoorAxis == ptdVERTICAL && distanceFromRobToDoorY > 0 && distanceFromRobToDoorX == 1){
+        if (pushToDoorAxis == HORIZONTAL && distanceFromOrigBoxToDoorY < 0 && distanceFromOrigBoxToDoorX > 0){
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = NORTH;
             robComm->first = MOVE;
@@ -176,7 +227,8 @@ namespace Robot{
             RCList.push_back(*robComm);
             return;    
         }
-        if (pushToDoorAxis == ptdVERTICAL && distanceFromRobToDoorY > 0 && distanceFromRobToDoorX == -1){
+
+        if (pushToDoorAxis == HORIZONTAL && distanceFromOrigBoxToDoorY < 0 && distanceFromOrigBoxToDoorY < 0){
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = NORTH;
             robComm->first = MOVE;
@@ -188,56 +240,7 @@ namespace Robot{
             return;    
         }
 
-
-        if (pushToDoorAxis == ptdHORIZONTAL && distanceFromRobToDoorX > 0 && distanceFromRobToDoorY == 1){
-            pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
-            robComm->second = EAST;
-            robComm->first = MOVE;
-            RCList.push_back(*robComm);
-            robComm = new pair<Moves, Direction>();
-            robComm->second = SOUTH;
-            robComm->first = MOVE;
-            RCList.push_back(*robComm);
-            return;    
-        }
-        if (pushToDoorAxis == ptdHORIZONTAL && distanceFromRobToDoorX > 0 && distanceFromRobToDoorY == -1){
-            pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
-            robComm->second = EAST;
-            robComm->first = MOVE;
-            RCList.push_back(*robComm);
-            robComm = new pair<Moves, Direction>();
-            robComm->second = NORTH;
-            robComm->first = MOVE;
-            RCList.push_back(*robComm);
-            return;    
-        }
-
-        
-        if (pushToDoorAxis == ptdHORIZONTAL && distanceFromRobToDoorX < 0 && distanceFromRobToDoorY == 1){
-            pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
-            robComm->second = WEST;
-            robComm->first = MOVE;
-            RCList.push_back(*robComm);
-            robComm = new pair<Moves, Direction>();
-            robComm->second = SOUTH;
-            robComm->first = MOVE;
-            RCList.push_back(*robComm);
-            return;    
-        }
-
-        if (pushToDoorAxis == ptdHORIZONTAL && distanceFromRobToDoorX < 0 && distanceFromRobToDoorX == -1){
-            pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
-            robComm->second = WEST;
-            robComm->first = MOVE;
-            RCList.push_back(*robComm);
-            robComm = new pair<Moves, Direction>();
-            robComm->second = NORTH;
-            robComm->first = MOVE;
-            RCList.push_back(*robComm);
-            return;    
-        }
-
-        if (distanceFromRobToDoorY == 0 || distanceFromRobToDoorX == 0) {
+        if (distanceFromOrigBoxToDoorY == 0 || distanceFromOrigBoxToDoorX == 0) {
             cout << "error establishing second push position " << endl;
             // exit(99);
         }

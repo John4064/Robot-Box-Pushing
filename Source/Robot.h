@@ -76,7 +76,8 @@ namespace Robot{
     
     void recordMovesX(vector<pair<Moves, Direction>>& RCList, pair<int, int> startinPoint, pair<int, int> destination, Moves move);
     void recordMovesY(vector<pair<Moves, Direction>>& RCList,  pair<int, int> startinPoint, pair<int, int> destination, Moves move);
-    void recordMovesToSecondPushPosition(vector<pair<Moves, Direction>>& RCList, int distanceFromRobToDoorY, int distanceFromRobToDoorX, pushToDoorAxis pushToDoorAxis);
+    void recordMovesToSecondPushPosition(vector<pair<Moves, Direction>>& RCList, tuple <int, int, startPushAxis> 
+        startingPushPositionAxis, int idx);
     // bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround& goAround);
     void makeRegMove(Direction dir, int idx);
     void makePushMove(Direction dir, int idx);
