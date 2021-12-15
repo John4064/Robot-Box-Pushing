@@ -1,0 +1,530 @@
+Door locations:
+	7, 6
+	14, 10
+	4, 11
+
+Robot locations:
+	6, 4
+	2, 8
+	4, 15
+	7, 12
+
+Box locations:
+	1, 4
+	9, 13
+	4, 13
+	7, 14
+
+assigned doors:
+0 1 2 1 
+okay ...
+yes
+hi again
+idx = 0
+boxLoc[idx]->first:  	1
+doorLoc[doorAssign[idx]]->first:  	7
+yDiffBoxDoor:  	-6
+startPushTargY (<) = 	0
+boxLoc[idx]->second:  	4
+doorLoc[idx]->second:  	6
+xDiffBoxDoor:  	-2
+final values: 
+startPushTargY  	0
+startPushTargX 	4
+startingPushPositionAxis:
+	 y coord = 0
+	 x coord = 4
+	 axis = 0
+no distance to travel X axis
+behindBoxList->size()6
+behindBoxList->size()15
+Thread 0 has following Commands: 
+'i' = 0
+	MOVE	NORTH
+'i' = 1
+	MOVE	NORTH
+'i' = 2
+	MOVE	NORTH
+'i' = 3
+	MOVE	NORTH
+'i' = 4
+	MOVE	NORTH
+'i' = 5
+	MOVE	NORTH
+'i' = 6
+	PUSH	EAST
+'i' = 7
+	PUSH	EAST
+'i' = 8
+	PUSH	SOUTH
+'i' = 9
+	PUSH	SOUTH
+'i' = 10
+	PUSH	SOUTH
+'i' = 11
+	PUSH	SOUTH
+'i' = 12
+	PUSH	SOUTH
+'i' = 13
+	PUSH	SOUTH
+'i' = 14
+	PUSH	SOUTH
+hello
+hello145
+okay ...
+yes
+hi again
+idx = 1
+boxLoc[idx]->first:  	9
+doorLoc[doorAssign[idx]]->first:  	14
+yDiffBoxDoor:  	-5
+startPushTargY (<) = 	8
+boxLoc[idx]->second:  	13
+doorLoc[idx]->second:  	10
+xDiffBoxDoor:  	3
+final values: 
+startPushTargY  	8
+startPushTargX 	13
+startingPushPositionAxis:
+	 y coord = 8
+	 x coord = 13
+	 axis = 0
+behindBoxList->size()11
+behindBoxList->size()20
+Thread 1 has following Commands: 
+'i' = 0
+	MOVE	EAST
+'i' = 1
+	MOVE	EAST
+'i' = 2
+	MOVE	EAST
+'i' = 3
+	MOVE	EAST
+'i' = 4
+	MOVE	EAST
+'i' = 5
+	MOVE	SOUTH
+'i' = 6
+	MOVE	SOUTH
+'i' = 7
+	MOVE	SOUTH
+'i' = 8
+	MOVE	SOUTH
+'i' = 9
+	MOVE	SOUTH
+'i' = 10
+	MOVE	SOUTH
+'i' = 11
+	PUSH	WEST
+'i' = 12
+	PUSH	WEST
+'i' = 13
+	PUSH	WEST
+'i' = 14
+	PUSH	SOUTH
+'i' = 15
+	PUSH	SOUTH
+'i' = 16
+	PUSH	SOUTH
+'i' = 17
+	PUSH	SOUTH
+'i' = 18
+	PUSH	SOUTH
+'i' = 19
+	PUSH	SOUTH
+hello
+hello145
+okay ...
+yes
+hi again
+idx = 2
+boxLoc[idx]->first:  	4
+doorLoc[doorAssign[idx]]->first:  	4
+yDiffBoxDoor:  	0
+no_Y_Diff_Case = 1
+boxLoc[idx]->second:  	13
+doorLoc[idx]->second:  	11
+xDiffBoxDoor:  	2
+final values: 
+startPushTargY  	4
+startPushTargX 	14
+startingPushPositionAxis:
+	 y coord = 4
+	 x coord = 14
+	 axis = 1
+no distance to travel Y axis
+no distance to travel Y axis
+behindBoxList->size()1
+behindBoxList->size()4
+Thread 2 has following Commands: 
+'i' = 0
+	MOVE	WEST
+'i' = 1
+	PUSH	WEST
+'i' = 2
+	PUSH	WEST
+'i' = 3
+	PUSH	WEST
+hello
+hello145
+okay ...
+yes
+hi again
+idx = 3
+boxLoc[idx]->first:  	7
+doorLoc[doorAssign[idx]]->first:  	14
+yDiffBoxDoor:  	-7
+startPushTargY (<) = 	6
+boxLoc[idx]->second:  	14
+doorLoc[idx]->second:  	10
+xDiffBoxDoor:  	4
+final values: 
+startPushTargY  	6
+startPushTargX 	14
+startingPushPositionAxis:
+	 y coord = 6
+	 x coord = 14
+	 axis = 0
+behindBoxList->size()3
+behindBoxList->size()15
+Thread 3 has following Commands: 
+'i' = 0
+	MOVE	EAST
+'i' = 1
+	MOVE	EAST
+'i' = 2
+	MOVE	NORTH
+'i' = 3
+	PUSH	WEST
+'i' = 4
+	PUSH	WEST
+'i' = 5
+	PUSH	WEST
+'i' = 6
+	PUSH	WEST
+'i' = 7
+	PUSH	SOUTH
+'i' = 8
+	PUSH	SOUTH
+'i' = 9
+	PUSH	SOUTH
+'i' = 10
+	PUSH	SOUTH
+'i' = 11
+	PUSH	SOUTH
+'i' = 12
+	PUSH	SOUTH
+'i' = 13
+	PUSH	SOUTH
+'i' = 14
+	PUSH	SOUTH
+hello
+hello145
+hello11111
+hello
+Printing RCL List: 
+
+	MOVE:	Direction:
+List 0
+'i' = 0
+	MOVE	NORTH
+'i' = 1
+	MOVE	NORTH
+'i' = 2
+	MOVE	NORTH
+'i' = 3
+	MOVE	NORTH
+'i' = 4
+	MOVE	NORTH
+'i' = 5
+	MOVE	NORTH
+List 1
+'i' = 0
+	MOVE	EAST
+'i' = 1
+	MOVE	EAST
+'i' = 2
+	MOVE	EAST
+'i' = 3
+	MOVE	EAST
+'i' = 4
+	MOVE	EAST
+'i' = 5
+	MOVE	SOUTH
+'i' = 6
+	MOVE	SOUTH
+'i' = 7
+	MOVE	SOUTH
+'i' = 8
+	MOVE	SOUTH
+'i' = 9
+	MOVE	SOUTH
+'i' = 10
+	MOVE	SOUTH
+List 2
+'i' = 0
+	MOVE	WEST
+List 3
+'i' = 0
+	MOVE	EAST
+'i' = 1
+	MOVE	EAST
+'i' = 2
+	MOVE	NORTH
+made it here !!!
+made it all the way down here ... 
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay2
+made it here .... yay3
+made it here .... yay4
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7
+made it here .... yay1
+made it here .... yay7

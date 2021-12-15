@@ -103,7 +103,7 @@ vector<pair<uint, uint>*> doorLoc;
 
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
-	vector<RobotCommandsList*> RobotCLs;
+	vector<vector<pair<Moves, Direction>>*> RThread::commandsListHolder;
 };
 
 
@@ -120,16 +120,15 @@ void displayGridPane(void)
 	//Do one move here...
 	{using namespace Robot;
 
-	for (uint i = 0; i < RobotCLs.size(); i++){
-
+	for (uint i = 0; i < RThread::commandsListHolder.size(); i++){
 
 			cout << "made it here .... yay1" << endl;
-			if(!RobotCLs[i]->empty()){
-			RobotCommand* command = RobotCLs[i]->back();
+			if(!(RThread::commandsListHolder[i]->empty())){
+			pair<Moves, Direction> command = RThread::commandsListHolder[i]->front();
 			cout << "made it here .... yay2" << endl;
-			Moves move = command->move;
+			Moves move = command.first;
 			cout << "made it here .... yay3" << endl;
-			Direction dir = command->direction;
+			Direction dir = command.second;
 			cout << "made it here .... yay4" << endl;
 			if (move == MOVE){
 				makeRegMove(dir, i);
@@ -138,14 +137,15 @@ void displayGridPane(void)
 				makePushMove(dir, i);
 			}
 			if (move == END){
-				RobotCLs.erase(RobotCLs.begin()+i);
+				RThread::commandsListHolder[i]->clear();
 			}
-
-			RobotCLs[i]->pop_back();
+			
+			RThread::commandsListHolder[i]->erase(RThread::commandsListHolder[i]->begin());
+			
 			}
 			cout << "made it here .... yay7" << endl;
 		}
-		usleep(250000);
+		usleep(200000);
 	}
 
 	//	This is OpenGL/glut magic.  Don't touch
@@ -161,7 +161,9 @@ void displayGridPane(void)
 
 	for (uint i=0; i<numBoxes; i++)
 	{	//	here I would test if the robot thread is still live
-		drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
+		if(!Robot::RThread::commandsListHolder[i]->empty()){
+			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
+		}
 	}
 
 	for (uint i=0; i<numDoors; i++)
@@ -304,12 +306,45 @@ void initializeApplication(void)
 		printObjectPlacements();
 		assignDoors();
 
-		Robot::RThread* rtInfo= new Robot::RThread();
+	{
+		using namespace Robot;
+
+		RThread* rtInfo= new RThread();
 
 		for (uint i =0; i < numRobots; i++){
+			cout << "okay ..." << endl;
+			fflush(stdout);
 			(rtInfo+i)->index = i;
-			Robot::robotThreadFunc(rtInfo+i);
+			cout << "yes" << endl;
+			vector<pair<Moves, Direction>>** pointerToPointer = new (vector<pair<Moves, Direction>>*);
+			*pointerToPointer = new (vector<pair<Moves, Direction>>);
+			RThread::commandsListHolder.push_back(*pointerToPointer);
+			robotThreadFunc(rtInfo+i);
+			cout << "hello" << endl;
+			cout << "hello145" << endl;
+			fflush(stdout);
 		}
+		cout << "hello11111" << endl;
+        cout << "hello" << endl;
+        cout << "Printing RCL List: \n"<< endl;
+        cout << "\tMOVE:\tDirection:" << endl;
+
+        for (uint j = 0; j < RThread::commandsListHolder.size(); j++){
+            cout << "List " << j << endl;
+           for (auto i = 0; i < (RThread::commandsListHolder[j])->size(); i++) {
+            cout << "'i' = " << i << endl;
+            string moveString = convertMoveEnumToWord((*(RThread::commandsListHolder[j]))[i].first);
+			string directionString = convertDirEnumToWord((*(RThread::commandsListHolder[j]))[i].second);
+	
+            cout <<"\t" << moveString << "\t" << directionString << endl;
+                     fflush(stdout);
+            }
+        }
+
+		cout << "made it here !!!" << endl;
+		fflush(stdout);
+
+	}
 
 	// How we represent directions and orientations with respect to these objects also seems very
 	// important.
