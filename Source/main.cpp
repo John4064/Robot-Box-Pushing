@@ -236,7 +236,19 @@ void slowdownRobots(void)
 	//	increase sleep time by 20%
 	robotSleepTime = (12 * robotSleepTime) / 10;
 }
-
+void inputCheck(int argc,char** argv){
+	/** @param: length of argv string array array of the inputs
+	 * @brief: Will check the inputs are valid inputs
+	 * @return: nothing
+	 */
+	
+	for(int x = 1; x < argc;x++ ){
+		if(!isdigit(*argv[x])){
+			exit(43);
+		}
+	}
+	//If it survives the loop inputs are all integers
+}
 
 
 //------------------------------------------------------------------------
@@ -245,10 +257,27 @@ void slowdownRobots(void)
 //------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
+<<<<<<< HEAD
+=======
+	//	We know that the arguments  of the program  are going
+	//	to be the width (number of columns) and height (number of rows) of the
+	//	grid, the number of boxes (and robots), and the number of doors.
+	//	You are going to have to extract these.  For the time being,
+	//	I hard code-some values
+	//WARNING ROBOTS = BOXES or Seg fault
+	//ERROR HANDLING
+	inputCheck(argc,argv);
+>>>>>>> 23fc6f5ff170a60d5d0e6bd72352f9ece1327a70
 	numRows = atoi(argv[1]);
 	numCols = atoi(argv[2]);
 	numBoxes = atoi(argv[3]);
 	numDoors = atoi(argv[4]);
+	if(numDoors>3 || numDoors <1){
+		exit(44);
+	}
+
+
+
 
 
 	// abort program if these values do not match
@@ -468,6 +497,10 @@ void assignDoors(){
 				break;
 			}	
 		}
+<<<<<<< HEAD
+=======
+	printVector<vector<uint> >(doorAssign);
+>>>>>>> 23fc6f5ff170a60d5d0e6bd72352f9ece1327a70
 	}
 
 	for (uint i=doorLoc.size(); i < Robot::robotLoc.size(); i++){
