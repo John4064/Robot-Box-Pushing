@@ -326,8 +326,7 @@ void initializeApplication(void)
 			cout << "hello145" << endl;
 			fflush(stdout);
 		}
-		cout << "hello11111" << endl;
-        cout << "hello" << endl;
+
         cout << "Printing RCL List: \n"<< endl;
         cout << "\tMOVE:\tDirection:" << endl;
 
