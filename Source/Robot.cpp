@@ -43,29 +43,26 @@ namespace Robot{
 
     RobotCommandsList* genRobotsCommandsList(RThread* RTinfo){
         tuple <int, int, bool> startingPushPositionAxis;
-        RobotCommandsList* behindBoxList = genCommGetBehindBox(RTinfo);
-        RobotCommandsList* pushFirstLegList = genFirstLeg(RTinfo, startingPushPositionAxis);
+        RobotCommandsList* behindBoxList = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
+        RobotCommandsList* pushFirstLegList = recordMovesFirstLeg(RTinfo, startingPushPositionAxis);
         // RobotCommandsList toDoorList = genCommPushBoxtoDoor(RTinfo);
-        // behindBoxList.insert(behindBoxList.end(), toDoorList.begin(), toDoorList.end());
+        behindBoxList->insert(behindBoxList->end(), pushFirstLegList->begin(), pushFirstLegList->end());
         return behindBoxList;
-    }
-
-    RobotCommandsList* genFirstLeg(RThread* RTinfo, tuple <int, int, bool> startingPushPositionAxis){
-
-        RobotCommandsList* movesToDogLegPoint = recordMovesFirstLeg(RTinfo, startingPushPositionAxis);
-        return movesToDogLegPoint;
     }
 
     RobotCommandsList* recordMovesFirstLeg(RThread* RTinfo, tuple <int, int ,bool> startingPushPositionAxis){
 
+        RobotCommandsList* movesToDogLegPoint = new RobotCommandsList();
+
+        int idx = RTinfo->index;
         // If pushing axis is horizontal
-        if (get<2>(startingPushPositionAxis) == true){
+        pair<int,int> startingPoint = make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis));
+        pair<int, int> destination = make_pair(doorLoc[doorAssign[idx]]->first, doorLoc[doorAssign[idx]]->second);
 
-            recordMovesX(RCList, startingPushPositionAxis, idx);
+        recordMovesX(movesToDogLegPoint, startingPoint, destination, PUSH);
+        recordMovesY(movesToDogLegPoint, startingPoint, destination, PUSH);
 
-        }
-
-
+        return movesToDogLegPoint;
     }
 
     RobotCommandsList* genCommGetBehindBox(RThread* RTinfo, tuple <int, int, bool>& startingPushPositionAxis){
@@ -80,8 +77,6 @@ namespace Robot{
     }
 
 
-
-
    RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> startingPushPositionAxis, RThread* RTinfo){
 
         int idx = RTinfo->index;
@@ -91,10 +86,10 @@ namespace Robot{
         // bool verticalShouldBeFirst = collisionWithBoxAvoider(startingPushPositionAxis, idx, goAround);
 
         recordMovesX(RCList, make_pair(robotLoc[idx]->first, robotLoc[idx]->second),
-        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)));
+        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE);
 
-        recordMovesY(RCList, startingPushPositionAxis, idx);
-
+        recordMovesY(RCList, make_pair(robotLoc[idx]->first, robotLoc[idx]->second),  
+        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE);
 
         return RCList;
     }
@@ -181,9 +176,47 @@ namespace Robot{
         cout << "Printing RCL List: \n"<< endl;
         cout << "\tMOVE:\tDirection:" << endl;
         for(auto it = RCL->begin(); it != RCL->end(); ++it){
-            cout << (*it)->move <<"\t" << (*it)->direction << endl;
-            cout << "hello" << endl;
+            string moveString = convertMoveEnumToWord((*it)->move );
+            string directionString = convertDirEnumToWord((*it)->direction);
+            cout <<"\t"<< moveString <<"\t" << directionString << endl;
         }
+    }
+
+    string convertMoveEnumToWord(Moves move){
+        string moveAsString;
+        switch(move){
+            case PUSH:
+                moveAsString = "PUSH";
+            break;
+            case MOVE:
+                moveAsString = "MOVE";
+            break;
+            case END:
+                moveAsString = "END";
+            break;
+        }
+        return moveAsString;
+    }
+
+    string convertDirEnumToWord(Direction dir){
+        string dirAsString;
+        switch(dir){
+            case NORTH:
+                dirAsString = "NORTH";
+            break;
+            case SOUTH:
+                dirAsString = "SOUTH";
+            break;
+            case EAST:
+                dirAsString = "EAST";
+            break;
+            case WEST:
+                dirAsString = "WEST";
+            break;
+            case NOMOVEMENT:
+                dirAsString = "NOMOVEMENT";
+        }
+        return dirAsString;
     }
 
     void makeRegMove(Direction dir, int idx){
@@ -231,14 +264,14 @@ namespace Robot{
 
 
 
-    void recordMovesX(RobotCommandsList* RCList, pair<int, int> startingPoint, pair<int, int> destination){
+    void recordMovesX(RobotCommandsList* RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove){
 
         int distanceFromRobToDestinationX = startingPoint.second - destination.second;
         if (distanceFromRobToDestinationX > 0){
             for (int i = 0; i < distanceFromRobToDestinationX; i++){
                     RobotCommand* robComm= new RobotCommand();
                     robComm->direction = WEST;
-                    robComm->move = MOVE;
+                    robComm->move = argmove;
                 RCList->push_front(robComm);
                 // cout << "pushed back new Robot command " << endl;
                 // cout << RCList.
@@ -248,7 +281,7 @@ namespace Robot{
             for (int i = 0; i > distanceFromRobToDestinationX; i--){
                     RobotCommand* robComm= new RobotCommand();
                     robComm->direction = EAST;
-                    robComm->move = MOVE;
+                    robComm->move = argmove;
                 RCList->push_front(robComm);
             }
         }
@@ -259,7 +292,7 @@ namespace Robot{
     }
 
 
-    void recordMovesY(RobotCommandsList* RCList, pair<int, int> startingPoint, pair<int, int> destination){
+    void recordMovesY(RobotCommandsList* RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove){
 
                 // if this is NOT no_Y_Diff_Case... horizontal movement
             int distanceFromRobToDestinationY = startingPoint.first - destination.first;
@@ -268,7 +301,7 @@ namespace Robot{
                 for (int i = 0; i < distanceFromRobToDestinationY; i++){
                      RobotCommand* robComm= new RobotCommand();
                      robComm->direction = NORTH;
-                     robComm->move = MOVE;
+                     robComm->move = argmove;
                      RCList->push_front(robComm);
                 }
             }
@@ -277,11 +310,11 @@ namespace Robot{
                 for (int i = 0; i > distanceFromRobToDestinationY; i--){
                      RobotCommand* robComm= new RobotCommand();
                      robComm->direction = SOUTH;
-                     robComm->move = MOVE;
+                     robComm->move = argmove;
                      RCList->push_front(robComm);
                 }
             }
-            
+
             if (distanceFromRobToDestinationY == 0){
                 cout << "no distance to travel Y axis" << endl;
             }

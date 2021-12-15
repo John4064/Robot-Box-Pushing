@@ -303,7 +303,7 @@ void initializeApplication(void)
 
 		Robot::RThread* rtInfo= new Robot::RThread();
 
-		for (int i =0; i < numRobots; i++){
+		for (uint i =0; i < numRobots; i++){
 			(rtInfo+i)->index = i;
 			Robot::robotThreadFunc(rtInfo+i);
 		}

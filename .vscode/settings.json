@@ -13,6 +13,9 @@
         "utility": "cpp",
         "*.tcc": "cpp",
         "memory": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "unordered_map": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp"
     }
 }

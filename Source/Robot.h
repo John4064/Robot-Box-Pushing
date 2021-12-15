@@ -57,26 +57,24 @@ namespace Robot{
     
     extern vector<RobotCommandsList*> RobotCLs;
 
-    RobotCommandsList* genCommGetBehindBox(RThread* RTinfo);
+     RobotCommandsList* genCommGetBehindBox(RThread* RTinfo, tuple <int, int, bool>& startingPushPositionAxis);
 
     RobotCommandsList* genCommPushBoxtoDoor(RThread* RTinfo);
 
     RobotCommandsList* genRobotsCommandsList(RThread* RTinfo);
 
-    RobotCommandsList* recordMovesFirstLegPush(RThread*RTinfo, tuple<int, int, bool> startingPushPosition);
     RobotCommandsList* recordMovesFirstLeg(RThread* RTinfo, tuple <int, int ,bool> startingPushPositionAxis);
 
-
-
-    }
+    string convertMoveEnumToWord(Moves move);
+    string convertDirEnumToWord(Direction dir);
 
     void fprintRobotsCommandsList(RThread* RTInfo);
     void destroyRobotsCommandsList(RThread* RTinfo);
     RobotCommandsList* recordMovesToBehindBox(tuple <int, int, bool> startingPushPosition, RThread* RTinfo);
     
     void printRobotsCommandsList(RobotCommandsList* RCL);
-    void recordMovesX(RobotCommandsList* RCList, tuple <int, int, bool> startingPushPositionAxis, int idx);
-    void recordMovesY(RobotCommandsList* RCList, tuple <int, int, bool> startingPushPositionAxis, int idx);
+    void recordMovesX(RobotCommandsList* RCList, pair<int, int> startinPoint, pair<int, int> destination, Moves move);
+    void recordMovesY(RobotCommandsList* RCList,  pair<int, int> startinPoint, pair<int, int> destination, Moves move);
     // bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround& goAround);
     void makeRegMove(Direction dir, int idx);
     void makePushMove(Direction dir, int idx);
