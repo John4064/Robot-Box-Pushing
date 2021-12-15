@@ -16,7 +16,7 @@
 #include <assert.h>
 #include <utility>
 #include<algorithm>
-#include <robot.h>
+//#include <Robot.h>
 //
 //
 #include "guiChoice.h"
@@ -245,11 +245,17 @@ void threadFunc(struct tArg arg){
 	uint doorI = arg.doorI;
 	//History of our movements
 	vector<uint> history;
-	cout << arg.doorI << " WE ARE GOING TO CALCULATE DISTANCE BETWEEN: "<<doorLoc[doorI]->first<<" "<<doorLoc[arg.doorI]->second<<endl;
-	cout << boxLoc[boxI]->first<< " "<< boxLoc[boxI]->second<< endl;
-	cout << robotLoc[robI]->first<< " "<<robotLoc[robI]->second <<endl;
+	//cout << arg.doorI << " WE ARE GOING TO CALCULATE DISTANCE BETWEEN: "<<doorLoc[doorI]->first<<" "<<doorLoc[arg.doorI]->second<<endl;
+	//cout << boxLoc[boxI]->first<< " "<< boxLoc[boxI]->second<< endl;
+	cout << "ROBOT POSITION:  "<<robotLoc[robI]->first<< " "<<robotLoc[robI]->second <<endl;
 	//While loop to move the first index of box to the door
 	//HERE TO ROBOT GOES TO THE CORRECT SPOT
+	if(robotLoc[robI]->first > boxLoc[boxI]->first){
+		
+	}else{
+
+	}
+	/*
 	while (boxLoc[boxI]->first != doorLoc[doorI]->first){
 		if(boxLoc[boxI]->first>doorLoc[doorI]->first){
 			boxLoc[boxI]->first -=1;
@@ -263,7 +269,7 @@ void threadFunc(struct tArg arg){
 		}
 	}
 	//HERE THE ROBOT GOES AROUND TO CORRECT INDEX
-	while (boxLoc[boxI]->second != doorLoc[doorI]->second - 1){
+	while (boxLoc[boxI]->second != doorLoc[doorI]->second){
 		if(boxLoc[boxI]->second>doorLoc[doorI]->second){
 			boxLoc[boxI]->second -=1;
 			cout << boxLoc[boxI]->second << ' '<< boxLoc[boxI]->second;
@@ -275,6 +281,7 @@ void threadFunc(struct tArg arg){
 			exit(10);
 		}
 	}
+	*/
 	//NOW FOR SECOND INDEX()
 	//This is now for the lateral cordinates
 	return;
