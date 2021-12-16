@@ -7,6 +7,9 @@
 //	This is public domain code.  By all means appropriate it and change is to your
 //	heart's content.
 
+#include <stdio.h>
+#include <iostream>
+
 
 #include <string>
 #include <cstdio>
@@ -17,6 +20,7 @@
 #include <vector>
 #include "Robot.h"
 #include <unistd.h>
+#include <fstream>
 
 //
 //
@@ -224,8 +228,7 @@ void speedupRobots(void)
 	}
 }
 
-void slowdownRobots(void)
-{
+void slowdownRobots(void){
 	//	increase sleep time by 20%
 	robotSleepTime = (12 * robotSleepTime) / 10;
 }
@@ -350,8 +353,12 @@ void initializeApplication(void)
         cout << "Printing RCL List: \n"<< endl;
         cout << "\tMOVE:\tDirection:" << endl;
 
-// printing to standard output
+		// printing to standard output
+		//PRINT TO OUPUT FILES NEED TO use string concation to determine which it is
 
+
+
+		//THIS FLUSHES ALL OUR MOVES TO STANDARD OUTPUT
         for (uint j = 0; j < RThread::commandsListHolder.size(); j++){
             cout << "List " << j << endl;
            for (uint i= 0; i < (RThread::commandsListHolder[j])->size(); i++) {

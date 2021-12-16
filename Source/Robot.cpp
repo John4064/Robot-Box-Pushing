@@ -10,6 +10,7 @@
 #include <cmath> 
 #include <set>
 #include <iostream>
+#include <fstream>
 
 
 extern uint** grid;
@@ -57,13 +58,26 @@ namespace Robot{
         cout << "behindBoxList->size()" <<  behindBoxList.size() << endl;
 
         cout << "Thread "<<RTinfo->index <<" has following Commands: " << endl;
-
+        /*
         for (uint i=0; i < behindBoxList.size(); i++){
             string moveString = convertMoveEnumToWord( (behindBoxList)[i].first);    
             string directionString = convertDirEnumToWord((behindBoxList)[i].second);
             cout << "'i' = " << i << endl;
             cout << "\t" << moveString << "\t" << directionString << endl;
         }
+        */ 
+        std::ofstream output_file("./robotSimulOut.txt");
+
+		for(uint i = 0; i < behindBoxList.size(); i++){
+        		//We iterated through the command list length, and then the size of the data
+                string moveString = convertMoveEnumToWord( (behindBoxList)[i].first);    
+                string directionString = convertDirEnumToWord((behindBoxList)[i].second);
+				//output_file >> moveString.c_str() >> directionString.c_str()>> endl;
+				output_file << "robot 1 ";
+                output_file << moveString<< " " << directionString<< endl;
+			}
+		//}
+	    output_file.close();
 
         return behindBoxList;
     }
