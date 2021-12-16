@@ -31,18 +31,18 @@ namespace Robot{
 
     extern vector<pair<uint, uint>*> robotLoc;
 
-    vector<pair<Moves, Direction>>  robotThreadFunc(void * arg){
+    vector<pair<Moves, Direction> >  robotThreadFunc(void * arg){
         cout << "hi again" << endl;
         fflush(stdout);
         RThread* RTinfo = (RThread*) arg;
-        vector<pair<Moves, Direction>> robotsList = genRobotsCommandsList(RTinfo);
+        vector<pair<Moves, Direction> > robotsList = genRobotsCommandsList(RTinfo);
         return robotsList;
     }
 
-    vector<pair<Moves, Direction>> genRobotsCommandsList(RThread* RTinfo){
+    vector<pair<Moves, Direction> > genRobotsCommandsList(RThread* RTinfo){
         tuple <int, int, startPushAxis> startingPushPositionAxis;
-        vector<pair<Moves, Direction>> behindBoxList = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
-        vector<pair<Moves, Direction>> pushFirstLegList = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
+        vector<pair<Moves, Direction> > behindBoxList = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
+        vector<pair<Moves, Direction> > pushFirstLegList = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
         cout << "behindBoxList->size()" <<  behindBoxList.size() << endl;
 
 
