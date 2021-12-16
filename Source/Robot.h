@@ -37,12 +37,12 @@ namespace Robot{
 
 
     typedef struct RThread {
-        static vector<vector<pair<Moves, Direction>>*> commandsListHolder;
+        static vector<vector<pair<Moves, Direction>>> commandsListHolder;
         pthread_t TID;
         uint index;  
     } RThread;
 
-    vector<pair<Moves, Direction>>  robotThreadFunc(void * arg);
+    void * robotThreadFunc(void * arg);
 
 
 
@@ -61,7 +61,7 @@ namespace Robot{
 
     vector<pair<Moves, Direction>> genCommPushBoxtoDoor(RThread* RTinfo);
 
-    vector<pair<Moves, Direction>> genRobotsCommandsList(RThread* RTinfo);
+    void genRobotsCommandsList(RThread* RTinfo);
 
     vector<pair<Moves, Direction>> recordMovesPushToDoor(RThread* RTinfo, tuple <int, int ,startPushAxis> startingPushPositionAxis);
 

@@ -9,7 +9,7 @@ using namespace std;
 
 namespace Robot{vector<pair<uint, uint>*> robotLoc;
 vector<pair<uint, uint>*> boxLoc;
-vector<uint> doorAssign;
+vector<uint> ;
 vector<pair<uint, uint>*> doorLoc;
 
 int numCols, numRows, numDoors, numBoxes;
@@ -62,8 +62,8 @@ int main(int argc, char** argv){
 
 	numRows = atoi(argv[1]);
 	numCols = atoi(argv[2]);
-	numDoors = atoi(argv[3]);
-	numBoxes = atoi(argv[4]);
+	numBoxes = atoi(argv[3]);
+	numDoors = atoi(argv[4]);
 
     robotRandomPlacement();
 	doorRandomPlacement();
