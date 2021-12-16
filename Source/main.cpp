@@ -103,7 +103,7 @@ vector<pair<uint, uint>*> doorLoc;
 
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
-	vector<vector<pair<Moves, Direction>>*> RThread::commandsListHolder;
+	extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
 };
 
 
@@ -123,29 +123,36 @@ void displayGridPane(void)
 	for (uint i = 0; i < RThread::commandsListHolder.size(); i++){
 
 			cout << "made it here .... yay1" << endl;
-			if(!(RThread::commandsListHolder[i]->empty())){
-			pair<Moves, Direction> command = RThread::commandsListHolder[i]->front();
+			if(!(RThread::commandsListHolder[i].empty())){
+			pair<Moves, Direction> command = RThread::commandsListHolder[i].front();
 			cout << "made it here .... yay2" << endl;
 			Moves move = command.first;
 			cout << "made it here .... yay3" << endl;
 			Direction dir = command.second;
 			cout << "made it here .... yay4" << endl;
 			if (move == MOVE){
+				cout << "a" << endl;
 				makeRegMove(dir, i);
+				cout << "b" << endl;
 			}
 			if (move == PUSH){
+				cout << "c" << endl;
 				makePushMove(dir, i);
+				cout << "d" << endl;
 			}
 			if (move == END){
-				RThread::commandsListHolder[i]->clear();
+				cout << "e" << endl;
+				RThread::commandsListHolder[i].clear();
+				cout << "d" << endl;
 			}
-			
-			RThread::commandsListHolder[i]->erase(RThread::commandsListHolder[i]->begin());
-			
+				cout << "e" << endl;
+			RThread::commandsListHolder[i].erase(RThread::commandsListHolder[i].begin());
+						cout << "f" << endl;
 			}
 			cout << "made it here .... yay7" << endl;
+			fflush(stdout);
 		}
-		usleep(500000);
+		usleep(robotSleepTime);
 	}
 
 	//	This is OpenGL/glut magic.  Don't touch
@@ -161,7 +168,7 @@ void displayGridPane(void)
 
 	for (uint i=0; i<numBoxes; i++)
 	{	//	here I would test if the robot thread is still live
-		if(!(Robot::RThread::commandsListHolder[i]->empty())){
+		if(!(Robot::RThread::commandsListHolder[i].empty())){
 			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
 			boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
 		}
@@ -280,6 +287,7 @@ int main(int argc, char** argv)
 	// abort program if these values do not match
 	assert (numBoxes == numRobots);
 
+
 #if CSC412_FP_USE_GUI
 	//	Even though we extracted the relevant information from the argument
 	//	list, I still need to pass argc and argv to the front-end init
@@ -290,7 +298,7 @@ int main(int argc, char** argv)
 	
 	//	Now we can do application-level initialization
 	initializeApplication();
-	
+
 #if CSC412_FP_USE_GUI
 	//	Now we enter the main loop of the program and to a large extend
 	//	"lose control" over its execution.  The callback functions that 
@@ -343,14 +351,7 @@ void initializeApplication(void)
 			cout << "okay ..." << endl;
 			fflush(stdout);
 			(rtInfo+i)->index = i;
-			cout << "yes" << endl;
-			vector<pair<Moves, Direction>>** pointerToPointer = new (vector<pair<Moves, Direction>>*);
-			*pointerToPointer = new (vector<pair<Moves, Direction>>);
-			RThread::commandsListHolder.push_back(*pointerToPointer);
-			vector<pair<Moves, Direction>> ithCommandsList = robotThreadFunc(rtInfo+i);
-			*(RThread::commandsListHolder[i]) = ithCommandsList;
-			cout << "hello" << endl;
-			cout << "hello145" << endl;
+			robotThreadFunc(rtInfo+i);
 			fflush(stdout);
 		}
 
@@ -359,12 +360,14 @@ void initializeApplication(void)
 
 // printing to standard output
 
+		cout << "command list holder size = " << RThread::commandsListHolder.size() << endl;
+
         for (uint j = 0; j < RThread::commandsListHolder.size(); j++){
             cout << "List " << j << endl;
-           for (uint i= 0; i < (RThread::commandsListHolder[j])->size(); i++) {
+           for (uint i= 0; i < RThread::commandsListHolder[j].size(); i++) {
             cout << "'i' = " << i << endl;
-            string moveString = convertMoveEnumToWord((*(RThread::commandsListHolder[j]))[i].first);
-			string directionString = convertDirEnumToWord((*(RThread::commandsListHolder[j]))[i].second);
+            string moveString = convertMoveEnumToWord(RThread::commandsListHolder[j][i].first);
+			string directionString = convertDirEnumToWord(RThread::commandsListHolder[j][i].second);
 	
             cout <<"\t" << moveString << "\t" << directionString << endl;
                      fflush(stdout);
@@ -488,8 +491,7 @@ bool checkIfNumExistsInVec(uint num, vector<uint> vec){
 
 void assignDoors(){
 	for (uint i=0; i < Robot::robotLoc.size() && i < doorLoc.size(); i++){
-		bool numWorked = false;
-		while (numWorked == false){
+		while (true){
 		uint randomDoor = random() % doorLoc.size();
 			if (!checkIfNumExistsInVec(randomDoor, doorAssign)){
 				doorAssign.push_back(randomDoor);
@@ -499,9 +501,11 @@ void assignDoors(){
 	}
 
 	for (uint i=doorLoc.size(); i < Robot::robotLoc.size(); i++){
+		while(true){
 		uint randomDoor = random() % doorLoc.size();
 			doorAssign.push_back(randomDoor);
 			break;
+		}
 	}	
 	cout << "assigned doors:\n";
 	printVector<vector<uint>>(doorAssign);
