@@ -1,3 +1,12 @@
+
+/**
+ * @brief Plan for multithreaded... 
+ * 
+ * finish adding in the random function stuff
+ * 
+ * Require a lock prior to writing to the common grid data structure
+ * 
+ */
 //
 //  main.cpp
 //  Final Project CSC412
@@ -17,6 +26,7 @@
 #include <vector>
 #include "Robot.h"
 #include <unistd.h>
+#include <random>
 
 //
 //
@@ -35,11 +45,12 @@ using namespace std;
 	void displayStatePane(void);
 #endif
 void initializeApplication(void);
-
-void robotRandomPlacement();
-void doorRandomPlacement();
-void boxRandomPlacement();
-void assignDoors();
+void robotRandomPlacement(uniform_int_distribution<int> rowDist, uniform_int_distribution<int> colDist,
+ default_random_engine myEngine);
+void doorRandomPlacement(uniform_int_distribution<int> rowDist, uniform_int_distribution<int> colDist,
+ default_random_engine myEngine);
+void boxRandomPlacement(default_random_engine myEngine);
+void assignDoors(uniform_int_distribution<int> randDoorDist, default_random_engine myEngine);
 
 template <typename T>
 void printVector(T vec);
@@ -96,11 +107,8 @@ vector<pair<uint, uint>*> doorLoc;
 
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
-<<<<<<< HEAD
+
 	extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
-=======
-	vector<vector<pair<Moves, Direction> >*> RThread::commandsListHolder;
->>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
 };
 
 
@@ -328,16 +336,22 @@ int main(int argc, char** argv)
 //==================================================================================
 
 
+
+
 void initializeApplication(void)
 {
-	//	seed the pseudo-random generator
-	srand((unsigned int) time(NULL));
+		random_device myRandDev;
+		default_random_engine myEngine(myRandDev());
+		uniform_int_distribution<int> robotRowDist(0, numRows - 1);
+		uniform_int_distribution<int> robotColDist(0, numCols - 1);
 
-		robotRandomPlacement();
-		doorRandomPlacement();
-		boxRandomPlacement();
+		robotRandomPlacement(robotRowDist, robotColDist, myEngine);
+		doorRandomPlacement(robotRowDist, robotColDist, myEngine);
+		boxRandomPlacement(myEngine);
 		printObjectPlacements();
-		assignDoors();
+		uniform_int_distribution<int> randDoorDist(0, doorLoc.size() - 1);
+		assignDoors(randDoorDist, myEngine);
+		cout << "made it here..." << endl;
 
 	{
 		using namespace Robot;
@@ -348,18 +362,7 @@ void initializeApplication(void)
 			cout << "okay ..." << endl;
 			fflush(stdout);
 			(rtInfo+i)->index = i;
-<<<<<<< HEAD
 			robotThreadFunc(rtInfo+i);
-=======
-			cout << "yes" << endl;
-			vector<pair<Moves, Direction> >** pointerToPointer = new (vector<pair<Moves, Direction> >*);
-			*pointerToPointer = new (vector<pair<Moves, Direction> >);
-			RThread::commandsListHolder.push_back(*pointerToPointer);
-			vector<pair<Moves, Direction> > ithCommandsList = robotThreadFunc(rtInfo+i);
-			*(RThread::commandsListHolder[i]) = ithCommandsList;
-			cout << "hello" << endl;
-			cout << "hello145" << endl;
->>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
 			fflush(stdout);
 		}
 
@@ -416,11 +419,16 @@ cout << "made it all the way down here ... "<< endl;
 		// robot should not occupy the sameposition as a door, a box, or as another robot);•  
 		// randomly assign a door as destination for a robot-box pair.
 
-void boxRandomPlacement(){
+	
+void boxRandomPlacement(default_random_engine myEngine){
+	uniform_int_distribution<int> robotRowDist(1, numRows - 2);
+	uniform_int_distribution<int> robotColDist(1, numCols - 2);
+	
 	for(uint i = 0; i < numBoxes; i++){
 		while(true){
-			uint boxRow = (random() % (numRows - 2))+1;
-			uint boxCol = (random() % (numCols - 2))+1;
+			// fell asleep... finish later.
+			uint boxRow = robotRowDist(myEngine);
+			uint boxCol = robotColDist(myEngine);
 			pair<uint, uint> proposedPair = make_pair(boxRow, boxCol);
 			if(!checkIfPairExists(proposedPair, boxLoc)){
 				boxLoc.push_back(new pair<uint, uint>(boxRow, boxCol));
@@ -431,11 +439,13 @@ void boxRandomPlacement(){
 }
 
 
-void robotRandomPlacement(){
+void robotRandomPlacement(uniform_int_distribution<int> robotRowDist, 
+uniform_int_distribution<int> robotColDist, default_random_engine myEngine){
+
 	for(uint i = 0; i < numRobots; i++){
 		while(true){
-			uint robotRow = random() % numRows;
-			uint robotCol = random() % numCols;
+			uint robotRow = robotRowDist(myEngine);
+			uint robotCol = robotColDist(myEngine);
 			pair<uint, uint> proposedPair = make_pair(robotRow, robotCol);
 			if(!checkIfPairExists(proposedPair, Robot::robotLoc) && !checkIfPairExists(proposedPair, boxLoc)){
 				Robot::robotLoc.push_back(new pair<uint, uint>(robotRow, robotCol));
@@ -445,11 +455,13 @@ void robotRandomPlacement(){
 	}
 }
 
-void doorRandomPlacement(){
+void doorRandomPlacement(uniform_int_distribution<int> robotRowDist, 
+uniform_int_distribution<int> robotColDist, default_random_engine myEngine){
+
 	for(uint i = 0; i < numDoors; i++){
 		while(true){
-			uint doorRow = random() % numRows;
-			uint doorCol = random() % numCols;
+			uint doorRow = robotRowDist(myEngine);
+			uint doorCol = robotColDist(myEngine);
 			pair<uint, uint> proposedPair = make_pair(doorRow, doorCol);
 			if(!checkIfPairExists(proposedPair, Robot::robotLoc) && !checkIfPairExists(proposedPair, boxLoc)
 				&& !checkIfPairExists(proposedPair, doorLoc)){
@@ -497,10 +509,12 @@ bool checkIfNumExistsInVec(uint num, vector<uint> vec){
 }
 
 
-void assignDoors(){
-	for (uint i=0; i < Robot::robotLoc.size() && i < doorLoc.size(); i++){
-		while (true){
-		uint randomDoor = random() % doorLoc.size();
+
+void assignDoors(uniform_int_distribution<int> randDoorDist, default_random_engine myEngine){
+
+		for (uint i=0; i < Robot::robotLoc.size() && i < doorLoc.size(); i++){
+			while (true){
+			uint randomDoor = randDoorDist(myEngine);
 			if (!checkIfNumExistsInVec(randomDoor, doorAssign)){
 				doorAssign.push_back(randomDoor);
 				break;
@@ -510,7 +524,7 @@ void assignDoors(){
 
 	for (uint i=doorLoc.size(); i < Robot::robotLoc.size(); i++){
 		while(true){
-		uint randomDoor = random() % doorLoc.size();
+		uint randomDoor = randDoorDist(myEngine);
 			doorAssign.push_back(randomDoor);
 			break;
 		}

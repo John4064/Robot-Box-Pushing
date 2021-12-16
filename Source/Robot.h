@@ -37,22 +37,12 @@ namespace Robot{
 
 
     typedef struct RThread {
-<<<<<<< HEAD
         static vector<vector<pair<Moves, Direction>>> commandsListHolder;
-=======
-        static vector<vector<pair<Moves, Direction> >*> commandsListHolder;
->>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
         pthread_t TID;
         uint index;  
     } RThread;
 
-<<<<<<< HEAD
     void * robotThreadFunc(void * arg);
-=======
-    vector<pair<Moves, Direction> >  robotThreadFunc(void * arg);
->>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
-
-
 
     // typedef enum NeedToGoAround{
 
@@ -69,11 +59,8 @@ namespace Robot{
 
     vector<pair<Moves, Direction> > genCommPushBoxtoDoor(RThread* RTinfo);
 
-<<<<<<< HEAD
+
     void genRobotsCommandsList(RThread* RTinfo);
-=======
-    vector<pair<Moves, Direction> > genRobotsCommandsList(RThread* RTinfo);
->>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
 
     vector<pair<Moves, Direction> > recordMovesPushToDoor(RThread* RTinfo, tuple <int, int ,startPushAxis> startingPushPositionAxis);
 
