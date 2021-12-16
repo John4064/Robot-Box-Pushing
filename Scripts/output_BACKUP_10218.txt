@@ -769,9 +769,133 @@ List 4
 'i' = 19
 	PUSH	SOUTH
 'i' = 20
+<<<<<<< HEAD
+	PUSH	NORTH
+'i' = 21
+	PUSH	NORTH
+'i' = 22
+	PUSH	NORTH
+'i' = 23
+	PUSH	NORTH
+'i' = 24
+	PUSH	NORTH
+'i' = 25
+	PUSH	NORTH
+'i' = 26
+	PUSH	NORTH
+'i' = 27
+	PUSH	NORTH
+'i' = 28
+	MOVE	EAST
+'i' = 29
+	MOVE	NORTH
+'i' = 30
+	PUSH	WEST
+'i' = 31
+	PUSH	WEST
+'i' = 32
+	PUSH	WEST
+'i' = 33
+	PUSH	WEST
+'i' = 34
+	PUSH	WEST
+List 5
+'i' = 0
+	MOVE	WEST
+'i' = 1
+	MOVE	NORTH
+'i' = 2
+	MOVE	NORTH
+'i' = 3
+	MOVE	NORTH
+'i' = 4
+	MOVE	NORTH
+'i' = 5
+	MOVE	NORTH
+'i' = 6
+	MOVE	NORTH
+'i' = 7
+	MOVE	NORTH
+'i' = 8
+	MOVE	NORTH
+'i' = 9
+	MOVE	NORTH
+'i' = 10
+	MOVE	NORTH
+'i' = 11
+	PUSH	SOUTH
+'i' = 12
+	PUSH	SOUTH
+'i' = 13
+	PUSH	SOUTH
+'i' = 14
+	PUSH	SOUTH
+'i' = 15
+	PUSH	SOUTH
+'i' = 16
+	MOVE	WEST
+'i' = 17
+	MOVE	SOUTH
+'i' = 18
+	PUSH	EAST
+'i' = 19
+	PUSH	EAST
+'i' = 20
+	PUSH	EAST
+'i' = 21
+	PUSH	EAST
+'i' = 22
+	PUSH	EAST
+List 6
+'i' = 0
+	MOVE	EAST
+'i' = 1
+	MOVE	EAST
+'i' = 2
+	MOVE	EAST
+'i' = 3
+	MOVE	EAST
+'i' = 4
+	MOVE	EAST
+'i' = 5
+	MOVE	EAST
+'i' = 6
+	MOVE	EAST
+'i' = 7
+	PUSH	NORTH
+'i' = 8
+	PUSH	NORTH
+'i' = 9
+	PUSH	NORTH
+'i' = 10
+	PUSH	NORTH
+'i' = 11
+	PUSH	NORTH
+'i' = 12
+	PUSH	NORTH
+'i' = 13
+	PUSH	NORTH
+'i' = 14
+	PUSH	NORTH
+'i' = 15
+	MOVE	EAST
+'i' = 16
+	MOVE	NORTH
+'i' = 17
+	PUSH	WEST
+'i' = 18
+	PUSH	WEST
+'i' = 19
+	PUSH	WEST
+'i' = 20
+	PUSH	WEST
+'i' = 21
+	PUSH	WEST
+=======
 	PUSH	SOUTH
 'i' = 21
 	PUSH	SOUTH
+>>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
 'i' = 22
 	PUSH	SOUTH
 'i' = 23
@@ -779,6 +903,9 @@ List 4
 'i' = 24
 	MOVE	WEST
 'i' = 25
+<<<<<<< HEAD
+	PUSH	WEST
+=======
 	MOVE	SOUTH
 'i' = 26
 	PUSH	EAST
@@ -800,6 +927,7 @@ List 4
 	PUSH	EAST
 'i' = 35
 	PUSH	EAST
+>>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
 made it here !!!
 made it all the way down here ... 
 made it here .... yay1
@@ -15081,9 +15209,14 @@ made it here .... yay7
 made it here .... yay1
 made it here .... yay7
 made it here .... yay1
+<<<<<<< HEAD
+made it here .... yay7
+made it here .... yay1
+=======
 made it here .... yay2
 made it here .... yay3
 made it here .... yay4
+>>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
 made it here .... yay7
 made it here .... yay1
 made it here .... yay7

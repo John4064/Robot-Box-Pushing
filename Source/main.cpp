@@ -8,13 +8,6 @@
 //	heart's content.
 
 
-/* Tasks:
-
-	John:
-		-- Add in error handling e.g., number of doors should not exceed 3.
-
-
-*/
 #include <string>
 #include <cstdio>
 #include <ctime>
@@ -103,7 +96,11 @@ vector<pair<uint, uint>*> doorLoc;
 
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
+<<<<<<< HEAD
 	extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
+=======
+	vector<vector<pair<Moves, Direction> >*> RThread::commandsListHolder;
+>>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
 };
 
 
@@ -351,7 +348,18 @@ void initializeApplication(void)
 			cout << "okay ..." << endl;
 			fflush(stdout);
 			(rtInfo+i)->index = i;
+<<<<<<< HEAD
 			robotThreadFunc(rtInfo+i);
+=======
+			cout << "yes" << endl;
+			vector<pair<Moves, Direction> >** pointerToPointer = new (vector<pair<Moves, Direction> >*);
+			*pointerToPointer = new (vector<pair<Moves, Direction> >);
+			RThread::commandsListHolder.push_back(*pointerToPointer);
+			vector<pair<Moves, Direction> > ithCommandsList = robotThreadFunc(rtInfo+i);
+			*(RThread::commandsListHolder[i]) = ithCommandsList;
+			cout << "hello" << endl;
+			cout << "hello145" << endl;
+>>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
 			fflush(stdout);
 		}
 
@@ -508,7 +516,7 @@ void assignDoors(){
 		}
 	}	
 	cout << "assigned doors:\n";
-	printVector<vector<uint>>(doorAssign);
+	printVector<vector<uint> >(doorAssign);
 }
 
 

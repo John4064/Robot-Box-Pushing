@@ -31,6 +31,7 @@ namespace Robot{
 
     extern vector<pair<uint, uint>*> robotLoc;
 
+<<<<<<< HEAD
     void* robotThreadFunc(void * arg){
         cout << "hi again" << endl;
         fflush(stdout);
@@ -48,6 +49,20 @@ namespace Robot{
         vector<pair<Moves, Direction>> behindBoxList = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
 
         vector<pair<Moves, Direction>> pushFirstLegList = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
+=======
+    vector<pair<Moves, Direction> >  robotThreadFunc(void * arg){
+        cout << "hi again" << endl;
+        fflush(stdout);
+        RThread* RTinfo = (RThread*) arg;
+        vector<pair<Moves, Direction> > robotsList = genRobotsCommandsList(RTinfo);
+        return robotsList;
+    }
+
+    vector<pair<Moves, Direction> > genRobotsCommandsList(RThread* RTinfo){
+        tuple <int, int, startPushAxis> startingPushPositionAxis;
+        vector<pair<Moves, Direction> > behindBoxList = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
+        vector<pair<Moves, Direction> > pushFirstLegList = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
+>>>>>>> e042d7a8981031efc4ce2e8dbea29fa6ae536ca1
         cout << "behindBoxList->size()" <<  behindBoxList.size() << endl;
 
 
