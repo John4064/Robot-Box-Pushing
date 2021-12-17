@@ -11,11 +11,15 @@
 #include <set>
 #include <iostream>
 #include <fstream>
+#include <unistd.h>
 
-
+extern int robotSleepTime;
 extern uint** grid;
 extern uint numRows;	//	height of the grid
-extern uint numCols;	//	width
+extern uint numCols;
+extern uint numBoxes;
+extern uint numDoors;
+	//	width
 // extern uint numBoxes;	//	also the number of robots
 // extern uint numDoors;	//	The number of doors.
 // extern uint& numRobots;
@@ -23,6 +27,7 @@ extern uint numCols;	//	width
 extern vector<pair<uint, uint>*> boxLoc;
 extern vector<uint> doorAssign;
 extern vector<pair<uint, uint>*> doorLoc;
+extern bool* GUIStartedP;
 
 typedef unsigned int uint;
 
@@ -32,61 +37,141 @@ namespace Robot{
 
     extern vector<pair<uint, uint>*> robotLoc;
 
-    vector<pair<Moves, Direction> >  robotThreadFunc(void * arg){
-        cout << "hi again" << endl;
+    void* robotThreadFunc(void * arg){
+
+        cout << "inside thread function \n\n\n\n\n\n\n\n" <<endl;
         fflush(stdout);
         RThread* RTinfo = (RThread*) arg;
-        vector<pair<Moves, Direction> > robotsList = genRobotsCommandsList(RTinfo);
-        return robotsList;
+        vector<pair<Moves, Direction>> threadsCommandList;
+        RTinfo->genRobotsCommandsList(RTinfo);
+        while(GUIStartedP[0] != 1){};
+        RTinfo->robotMakeMoves();
+        RTinfo->printARobotsCommandList();
+        return (new void*);
     }
 
-    vector<pair<Moves, Direction> > genRobotsCommandsList(RThread* RTinfo){
-        tuple <int, int, startPushAxis> startingPushPositionAxis;
-        vector<pair<Moves, Direction> > behindBoxList = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
-        vector<pair<Moves, Direction> > pushFirstLegList = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
-        cout << "behindBoxList->size()" <<  behindBoxList.size() << endl;
+    void RThread::printARobotsCommandList(){
+
+        ofstream myfile;
+        myfile.open("robotSimulOut.txt");
+
+        for(int i=0; i < thisRobotsMoves.size(); i++){
+            myfile << "rows: "<< numRows <<"; cols: "<<
+            numCols <<", "<< numBoxes <<", " << numDoors << endl;
+            myfile << "\n";
+            for(int i=0; i < doorLoc.size(); i++){
+                myfile << "Door " << i << "; row: " << doorLoc[i]->first 
+                << "col: "<< doorLoc[i]->second << endl;
+            }
+
+           for(int i=0; i < boxLoc.size(); i++){
+                myfile << "Box " << i << "; row: " << boxLoc[i]->first 
+                << "col: "<< boxLoc[i]->second << endl;
+            }
+
+            for(int i=0; i < robotLoc.size(); i++){
+                myfile << "Robot " << i << "; row: " << robotLoc[i]->first 
+                << "col: "<< robotLoc[i]->second << endl;
+            }
+            myfile << "\n"
+
+            for (int i = 0; i < )
+                myfile << "Robot Program: Robot" << << "\n";
 
 
-        //probably an easier way to do this...
-        for (uint i = 0; i < pushFirstLegList.size(); i++){
-            cout << "first leg list ["<< i<< "] equals " << pushFirstLegList[i].first << " " 
-            << pushFirstLegList[i].second << endl;
-
-            behindBoxList.push_back(pushFirstLegList[i]);
         }
+      
+        myfile.close();
+    }
 
-        RTinfo->commandsListHolder.push_back(behindBoxList);
-
-        cout << "behindBoxList->size()" <<  behindBoxList.size() << endl;
-
-        cout << "Thread "<<RTinfo->index <<" has following Commands: " << endl;
-        /*Old Code
-        for (uint i=0; i < behindBoxList.size(); i++){
-            string moveString = convertMoveEnumToWord( (behindBoxList)[i].first);    
-            string directionString = convertDirEnumToWord((behindBoxList)[i].second);
-            cout << "'i' = " << i << endl;
-            cout << "\t" << moveString << "\t" << directionString << endl;
+    void RThread::robotMakeMoves(){
+        while(!(thisRobotsMoves.empty())){
+            cout << "trying to make a move!!!!!" << endl;
+            cout << "the size of the robot moves vector is " << thisRobotsMoves.size() << endl;
+            pair<Moves,Direction> temp = thisRobotsMoves.front();
+            cout << "The move we are trying to make is "<< temp.first << " " << temp.second << endl;
+            pair<Moves, Direction> command = thisRobotsMoves.front();
+            cout << "made it here .... yay2" << endl;
+            if (command.first == MOVE){
+                cout << "a" << endl;
+                pthread_mutex_lock(&RThread::mutex);
+                makeRegMove(command.second, idx_of_robot);
+                pthread_mutex_unlock(&RThread::mutex);
+                cout << "b" << endl;
+            }
+            if (command.first == PUSH){
+                cout << "c" << endl;
+                pthread_mutex_lock(&RThread::mutex);
+                makePushMove(command.second, idx_of_robot);
+                pthread_mutex_unlock(&RThread::mutex);
+                cout << "d" << endl;
+            }
+            if (command.first == END){
+                cout << "e" << endl;
+                pthread_mutex_lock(&RThread::mutex);
+                thisRobotsMoves.clear();
+                pthread_mutex_unlock(&RThread::mutex);
+                cout << "d" << endl;
+            }
+                cout << "e" << endl;
+            pthread_mutex_lock(&RThread::mutex);
+            if(!thisRobotsMoves.empty()){
+                thisRobotsMoves.erase(thisRobotsMoves.begin());
+            }
+            pthread_mutex_unlock(&RThread::mutex);
+            cout << "f" << endl;
+            cout << "made it here .... yay7" << endl;
             fflush(stdout);
+            usleep(robotSleepTime);
         }
-        */ 
-        std::ofstream output_file("./robotSimulOut.txt");
-		for(uint i = 0; i < behindBoxList.size(); i++){
-        		//We iterated through the command list length, and then the size of the data
-                string moveString = convertMoveEnumToWord( (behindBoxList)[i].first);    
-                string directionString = convertDirEnumToWord((behindBoxList)[i].second);
-				output_file << "robot 1 ";
-                output_file << moveString<< " " << directionString<< endl;
-		}
-	    output_file.close();
-
-        return behindBoxList;
+        cout << "finished with the VECTOR in the THread" << idx_of_robot << endl;
     }
+
+ void RThread::genRobotsCommandsList(RThread* RTinfo){
+
+    tuple <int, int, startPushAxis> startingPushPositionAxis;
+
+    thisRobotsMoves = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
+
+    vector<pair<Moves, Direction>> movesToDoor = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
+    cout << "thisRobotsMoves->size()" <<  thisRobotsMoves.size() << endl;
+
+    //probably an easier way to do this...
+    for (uint i = 0; i < movesToDoor.size(); i++){
+        cout << "first leg list ["<< i<< "] equals " << movesToDoor[i].first << " " 
+        << movesToDoor[i].second << endl;
+        thisRobotsMoves.push_back(movesToDoor[i]);
+    }
+
+
+    pair<Moves, Direction>* lastCommand = new pair<Moves, Direction>();
+    lastCommand->first = END;
+    lastCommand->second = NOMOVEMENT;
+
+    thisRobotsMoves.push_back(*lastCommand);
+
+    RTinfo->commandsListHolder.push_back(thisRobotsMoves);
+
+    cout << "thisRobotsMoves->size()" <<  thisRobotsMoves.size() << endl;
+
+    cout << "Thread "<<RTinfo->idx_of_robot <<" has following Commands: " << endl;
+
+    for (uint i=0; i < thisRobotsMoves.size(); i++){
+        string moveString = convertMoveEnumToWord( (thisRobotsMoves)[i].first);    
+        string directionString = convertDirEnumToWord((thisRobotsMoves)[i].second);
+        cout << "'i' = " << i << endl;
+        cout << "\t" << moveString << "\t" << directionString << endl;
+        fflush(stdout);
+    }
+}
 
     vector<pair<Moves, Direction>> recordMovesPushToDoor(RThread* RTinfo, tuple <int, int, startPushAxis> startingPushPositionAxis){
 
+        bool secondPushLeg = false;
+
         vector<pair<Moves, Direction>>* movesPushtoDoor = new vector<pair<Moves, Direction>>();
 
-        int idx = RTinfo->index;
+        int idx = RTinfo->idx_of_robot;
         
         pair<uint,uint>* origStartingPoint = robotLoc[idx];
         pair<uint, uint>* destination = doorLoc[doorAssign[idx]];
@@ -96,20 +181,28 @@ namespace Robot{
         int origDistanceFromRobToDoorY = origStartingPoint->first - destination->first;
 
         if ((get<2> (startingPushPositionAxis)) == HORIZONTAL){
-            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH);        
-            movesPushtoDoor->pop_back();
+            secondPushLeg = false;
+            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, secondPushLeg);        
+            if (!movesPushtoDoor->empty()){
+                movesPushtoDoor->pop_back();
+            }
             // movesPushtoDoor->pop_back();
             recordMovesToSecondPushPosition(*movesPushtoDoor, startingPushPositionAxis, idx);
-            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH);
+            secondPushLeg = true;
+            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, secondPushLeg);
         }
 
         if ((get<2>(startingPushPositionAxis)) == VERTICAL){
-            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH);
-            movesPushtoDoor->pop_back();
+            secondPushLeg = false;
+            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, secondPushLeg);
+            if (!movesPushtoDoor->empty()){
+                movesPushtoDoor->pop_back();
+            }
             // movesPushtoDoor->pop_back();
             recordMovesToSecondPushPosition(*movesPushtoDoor, startingPushPositionAxis, idx);
-            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH);
-        }   
+            secondPushLeg = true;
+            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, secondPushLeg);
+        }
 
         return *movesPushtoDoor;
     }
@@ -129,7 +222,7 @@ namespace Robot{
 
    vector<pair<Moves, Direction>> recordMovesToBehindBox(tuple <int, int, startPushAxis> startingPushPositionAxis, RThread* RTinfo){
        cout << "hellowwwwwww" << endl;
-        int idx = RTinfo->index;
+        int idx = RTinfo->idx_of_robot;
         cout << "YESSSS" << endl;
 
         // may have to change this later if this doesn't work
@@ -139,10 +232,10 @@ namespace Robot{
         // bool verticalShouldBeFirst = collisionWithBoxAvoider(startingPushPositionAxis, idx, goAround);
 
         cout << "MAAAADEITHEREEEE" << endl;
-        recordMovesX(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second), make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE);
+        recordMovesX(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second), make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, false);
         cout << "HHHHHHHEEEEEYYYY" << endl;
         recordMovesY(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second),  
-        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE);
+        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, false);
 
         return *vec;
     }
@@ -275,15 +368,10 @@ namespace Robot{
        // variable where we store if this is situation where don't need to push at all in 
        // vertical axis default is that you do need to push vertically
 
-        cout << "hiii";
 
         startPushAxis axis = VERTICAL;
-
-        cout << "random word" << endl;
         // get current index of thread/robot
-        int idx = RTinfo->index;
-
-        cout << "idx = " << idx << endl;
+        int idx = RTinfo->idx_of_robot;
 
         int startPushTargY, startPushTargX;
 
@@ -292,10 +380,7 @@ namespace Robot{
         // with the Box.  In other words if it is a positive diff. Box - door or a negative difference.
         // If box - door is positive, the door is closer to the top row, and vice versa.
 
-        cout << "seg fualt after this line" << endl;
         int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[doorAssign[idx]]->first;
-
-        cout << "hellow" << endl;
 
         cout << "boxLoc[idx]->first:  \t"<< boxLoc[idx]->first << endl;
         cout << "doorLoc[doorAssign[idx]]->first:  \t" << doorLoc[doorAssign[idx]]->first << endl;
@@ -392,6 +477,8 @@ namespace Robot{
     }
 
     void makeRegMove(Direction dir, int idx){
+            cout << "the location of the robot before reg move was " << robotLoc[idx]->first << ", " << robotLoc[idx]->second << 
+            "before the move\n";
 
        switch (dir){
             case NORTH:
@@ -409,9 +496,14 @@ namespace Robot{
             case NOMOVEMENT:
                 break;
         }
+        cout << " the location of robot after reg the move is " << robotLoc[idx]->first <<robotLoc[idx]->second <<endl;
     }
     void makePushMove(Direction dir, int idx){
        switch (dir){
+            cout << "the location of the robot was " << robotLoc[idx]->first << ", " << robotLoc[idx]->second << 
+            "before the move\n";
+            cout << "the location of the box was " << boxLoc[idx]->first << ", " << boxLoc[idx]->second << 
+            "before the move\n";
             case NORTH:
                 robotLoc[idx]->first--;
                 boxLoc[idx]->first--;
@@ -431,6 +523,9 @@ namespace Robot{
             case NOMOVEMENT:
                 break;
         }
+        cout << " the location of the robot after the move is " << robotLoc[idx]->first <<robotLoc[idx]->second <<endl;
+        cout << "after move box is " << boxLoc[idx]->first << ", " << boxLoc[idx]->second << endl;
+
     }
 
     void destroyRobotsCommandsList(RThread* RTinfo){
@@ -440,42 +535,48 @@ namespace Robot{
 
 
 
-    void recordMovesX(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove){
+    void recordMovesX(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, bool pushCaseSecondLeg){
 
         int distanceFromRobToDestinationX = startingPoint.second - destination.second;
-        cout << "MADEEEEE" <<endl;
         if (distanceFromRobToDestinationX > 0){
+
             for (int i = 0; i < distanceFromRobToDestinationX; i++){
                     pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
                     robComm->second = WEST;
                     robComm->first = argmove;
-                    cout << "seg fault after this...." << endl;
                     RCList.push_back(*robComm);
-                    cout << "did i make it here?" << endl;
+                    if (pushCaseSecondLeg == true && i == distanceFromRobToDestinationX - 1){
+                        pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+                        robComm->second = WEST;
+                        robComm->first = MOVE;
+                        RCList.push_back(*robComm);
+                    }
             }
         }
-        cout << "ITTTT" << endl;
         if (distanceFromRobToDestinationX < 0) {
             for (int i = 0; i > distanceFromRobToDestinationX; i--){
                     pair<Moves, Direction>* robComm= new pair<Moves, Direction>();
                     robComm->second = EAST;
                     robComm->first = argmove;
-                    cout << "seg fault aft er here?" << endl;
-                RCList.push_back(*robComm);
-                cout << " i think so" << endl;
+                    RCList.push_back(*robComm);
+                    if (pushCaseSecondLeg == true && i == distanceFromRobToDestinationX + 1){
+                        pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+                        robComm->second = EAST;
+                        robComm->first = MOVE;
+                        RCList.push_back(*robComm);
+                    }
             }
         }
-        cout << "HEEERREE" << endl;
         if (distanceFromRobToDestinationX == 0){
-            cout << "no distance to travel X axis" << endl;
         }
-        cout << "DUDEEEE" << endl;
     }
 
 
-    void recordMovesY(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove){
+    void recordMovesY(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, 
+    Moves argmove, bool pushCaseSecondLeg){
 
-            // if this is NOT no_Y_Diff_Case... horizontal movement
+        // if this is NOT no_Y_Diff_Case... horizontal movement
+
         int distanceFromRobToDestinationY = startingPoint.first - destination.first;
 
         if (distanceFromRobToDestinationY > 0){
@@ -484,6 +585,12 @@ namespace Robot{
                     robComm->second = NORTH;
                     robComm->first = argmove;
                     RCList.push_back(*robComm);
+                    if (pushCaseSecondLeg == true && i == distanceFromRobToDestinationY - 1){
+                        pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+                        robComm->second = NORTH;
+                        robComm->first = MOVE;
+                        RCList.push_back(*robComm);
+                    }
             }
         }
 
@@ -493,6 +600,12 @@ namespace Robot{
                     robComm->second = SOUTH;
                     robComm->first = argmove;
                     RCList.push_back(*robComm);
+                    if (pushCaseSecondLeg == true && i == distanceFromRobToDestinationY + 1){
+                        pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+                        robComm->second = SOUTH;
+                        robComm->first = MOVE;
+                        RCList.push_back(*robComm);
+                    }
             }
         }
 

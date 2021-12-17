@@ -1,12 +1,4 @@
 
-/**
- * @brief Plan for multithreaded... 
- * 
- * finish adding in the random function stuff
- * 
- * Require a lock prior to writing to the common grid data structure
- * 
- */
 //
 //  main.cpp
 //  Final Project CSC412
@@ -16,7 +8,7 @@
 //	This is public domain code.  By all means appropriate it and change is to your
 //	heart's content.
 
-
+#include <string.h>			// for strerror()
 #include <string>
 #include <cstdio>
 #include <ctime>
@@ -25,10 +17,9 @@
 #include <algorithm>
 #include <vector>
 #include "Robot.h"
-#include <unistd.h>
 #include <random>
+#include <unistd.h>
 
-//
 //
 #include "guiChoice.h"
 #if CSC412_FP_USE_GUI
@@ -44,7 +35,7 @@ using namespace std;
 	void displayGridPane(void);
 	void displayStatePane(void);
 #endif
-void initializeApplication(void);
+void initializeApplication();
 void robotRandomPlacement(uniform_int_distribution<int> rowDist, uniform_int_distribution<int> colDist,
  default_random_engine myEngine);
 void doorRandomPlacement(uniform_int_distribution<int> rowDist, uniform_int_distribution<int> colDist,
@@ -87,7 +78,7 @@ int numLiveThreads = 0;		//	the number of live robot threads
 
 //	robot sleep time between moves (in microseconds)
 const int MIN_SLEEP_TIME = 1000;
-int robotSleepTime = 100000;
+int robotSleepTime = 500000;
 
 //	An array of C-string where you can store things you want displayed
 //	in the state pane to display (for debugging purposes?)
@@ -95,6 +86,9 @@ int robotSleepTime = 100000;
 const int MAX_NUM_MESSAGES = 8;
 const int MAX_LENGTH_MESSAGE = 32;
 char** message;
+
+bool* GUIStartedP = new bool[1];
+
 
 //-----------------------------
 //	Global Vectors
@@ -107,7 +101,8 @@ vector<pair<uint, uint>*> doorLoc;
 
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
-
+	pthread_mutex_t RThread::mutex;
+	extern Robot::RThread* RThread::RTinfo;
 	extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
 };
 
@@ -123,43 +118,10 @@ namespace Robot{
 void displayGridPane(void)
 {
 	//Do one move here...
-	{using namespace Robot;
-
-	for (uint i = 0; i < RThread::commandsListHolder.size(); i++){
-
-			cout << "made it here .... yay1" << endl;
-			if(!(RThread::commandsListHolder[i].empty())){
-			pair<Moves, Direction> command = RThread::commandsListHolder[i].front();
-			cout << "made it here .... yay2" << endl;
-			Moves move = command.first;
-			cout << "made it here .... yay3" << endl;
-			Direction dir = command.second;
-			cout << "made it here .... yay4" << endl;
-			if (move == MOVE){
-				cout << "a" << endl;
-				makeRegMove(dir, i);
-				cout << "b" << endl;
-			}
-			if (move == PUSH){
-				cout << "c" << endl;
-				makePushMove(dir, i);
-				cout << "d" << endl;
-			}
-			if (move == END){
-				cout << "e" << endl;
-				RThread::commandsListHolder[i].clear();
-				cout << "d" << endl;
-			}
-				cout << "e" << endl;
-			RThread::commandsListHolder[i].erase(RThread::commandsListHolder[i].begin());
-						cout << "f" << endl;
-			}
-			cout << "made it here .... yay7" << endl;
-			fflush(stdout);
-		}
-		usleep(robotSleepTime);
+	if (GUIStartedP[0] != 1){
+		cout << "THE GUI HAS BEEN STARTED\n\n\n\n\n";
+		GUIStartedP[0] = 1;
 	}
-
 	//	This is OpenGL/glut magic.  Don't touch
 	//---------------------------------------------
 	glutSetWindow(gSubwindow[GRID_PANE]);
@@ -171,13 +133,18 @@ void displayGridPane(void)
 	// flip the vertiucal axis pointing down, in regular "grid" orientation
 	glScalef(1.f, -1.f, 1.f);
 
+	cout << "testing 123" << endl;
+
 	for (uint i=0; i<numBoxes; i++)
 	{	//	here I would test if the robot thread is still live
-		if(!(Robot::RThread::commandsListHolder[i].empty())){
+			pthread_mutex_lock(&Robot::RThread::mutex);
 			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
 			boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
-		}
+			pthread_mutex_unlock(&Robot::RThread::mutex);
+
 	}
+
+	cout << "did I make it here???" << endl;
 
 	for (uint i=0; i<numDoors; i++)
 	{
@@ -286,9 +253,6 @@ int main(int argc, char** argv)
 	}
 
 
-
-
-
 	// abort program if these values do not match
 	assert (numBoxes == numRobots);
 
@@ -309,7 +273,16 @@ int main(int argc, char** argv)
 	//	"lose control" over its execution.  The callback functions that 
 	//	we set up earlier will be called when the corresponding event
 	//	occurs
+
 	glutMainLoop();
+
+
+	for (int i=0; i < numRobots; i++){
+
+		pthread_join(Robot::RThread::RTinfo[i].TID, NULL);
+
+	}
+
 #endif
 	
 	//	Free allocated resource before leaving (not absolutely needed, but
@@ -333,13 +306,11 @@ int main(int argc, char** argv)
 //
 //	This is a part that you have to edit and add to.
 //
-//==================================================================================
+//===================================	===============================================
 
-
-
-
-void initializeApplication(void)
-{
+void initializeApplication(){
+	GUIStartedP[0] = 0;
+	{ using namespace Robot;
 		random_device myRandDev;
 		default_random_engine myEngine(myRandDev());
 		uniform_int_distribution<int> robotRowDist(0, numRows - 1);
@@ -351,34 +322,46 @@ void initializeApplication(void)
 		printObjectPlacements();
 		uniform_int_distribution<int> randDoorDist(0, doorLoc.size() - 1);
 		assignDoors(randDoorDist, myEngine);
-		cout << "made it here..." << endl;
 
-	{
-		using namespace Robot;
-
-		RThread* rtInfo= new RThread();
-
+		RThread::RTinfo = new RThread[numRobots];
+		
 		for (uint i =0; i < numRobots; i++){
-			cout << "okay ..." << endl;
-			fflush(stdout);
-			(rtInfo+i)->index = i;
-			robotThreadFunc(rtInfo+i);
-			fflush(stdout);
+			(RThread::RTinfo+i)->idx_of_robot = i;
+			int errCode = pthread_create(&RThread::RTinfo->TID, NULL, robotThreadFunc, RThread::RTinfo+i);
+			if (errCode != 0){
+				printf ("could not pthread_create thread %d. %d/%s\n",
+				i, errCode, strerror(errCode));
+				exit (EXIT_FAILURE);
+			}
 		}
 
-        cout << "Printing RCL List: \n"<< endl;
-        cout << "\tMOVE:\tDirection:" << endl;
+	//printRobotsCommandsList();
 
-// printing to standard output
+	grid = new uint*[numRows];
+	for (uint i=0; i<numRows; i++)
+		grid[i] = new uint [numCols];
+	
+	message = (char**) malloc(MAX_NUM_MESSAGES*sizeof(char*));
+	for (uint k=0; k<MAX_NUM_MESSAGES; k++)
+		message[k] = (char*) malloc((MAX_LENGTH_MESSAGE+1)*sizeof(char));
+	}
+}
 
-		cout << "command list holder size = " << RThread::commandsListHolder.size() << endl;
+void printRobotsCommandsList(){
 
-        for (uint j = 0; j < RThread::commandsListHolder.size(); j++){
+	cout << "Printing RCL List: \n"<< endl;
+	cout << "\tMOVE:\tDirection:" << endl;
+
+	// printing to file
+
+		cout << "command list holder size = " << Robot::RThread::commandsListHolder.size() << endl;
+
+        for (uint j = 0; j < Robot::RThread::commandsListHolder.size(); j++){
             cout << "List " << j << endl;
-           for (uint i= 0; i < RThread::commandsListHolder[j].size(); i++) {
+           for (uint i= 0; i < Robot::RThread::commandsListHolder[j].size(); i++) {
             cout << "'i' = " << i << endl;
-            string moveString = convertMoveEnumToWord(RThread::commandsListHolder[j][i].first);
-			string directionString = convertDirEnumToWord(RThread::commandsListHolder[j][i].second);
+            string moveString = convertMoveEnumToWord(Robot::RThread::commandsListHolder[j][i].first);
+			string directionString = convertDirEnumToWord(Robot::RThread::commandsListHolder[j][i].second);
 	
             cout <<"\t" << moveString << "\t" << directionString << endl;
                      fflush(stdout);
@@ -388,38 +371,9 @@ void initializeApplication(void)
 		cout << "made it here !!!" << endl;
 		fflush(stdout);
 
-	}
-
-	// How we represent directions and orientations with respect to these objects also seems very
-	// important.
-
-	grid = new uint*[numRows];
-	for (uint i=0; i<numRows; i++)
-		grid[i] = new uint [numCols];
-	
-	message = (char**) malloc(MAX_NUM_MESSAGES*sizeof(char*));
-	for (uint k=0; k<MAX_NUM_MESSAGES; k++)
-		message[k] = (char*) malloc((MAX_LENGTH_MESSAGE+1)*sizeof(char));
-		
-	//---------------------------------------------------------------
-	//	All the code below to be replaced/removed
-	//	I initialize the grid's pixels to have something to look at
-	//---------------------------------------------------------------
-	
-	//	normally, here I would initialize the location of my doors, boxes,
-	//	and robots, and create threads (not necessarily in that order).
-	//	For the handout I have nothing to do.
-
-cout << "made it all the way down here ... "<< endl;
 }
-	// a random location for each door;•  an initial position of each box on the grid 
-		//(be careful that boxes should not be placed on theedges of the grid, that two boxes 
-		// should not occupy the same position, and that a box shouldnot be created at the same
-		//  location as a door),•  an initial position for each on the grid (be careful that a 
-		// robot should not occupy the sameposition as a door, a box, or as another robot);•  
-		// randomly assign a door as destination for a robot-box pair.
 
-	
+
 void boxRandomPlacement(default_random_engine myEngine){
 	uniform_int_distribution<int> robotRowDist(1, numRows - 2);
 	uniform_int_distribution<int> robotColDist(1, numCols - 2);
@@ -432,6 +386,7 @@ void boxRandomPlacement(default_random_engine myEngine){
 			pair<uint, uint> proposedPair = make_pair(boxRow, boxCol);
 			if(!checkIfPairExists(proposedPair, boxLoc)){
 				boxLoc.push_back(new pair<uint, uint>(boxRow, boxCol));
+
 				break;
 			}
 		}

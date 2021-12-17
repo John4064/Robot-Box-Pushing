@@ -1,0 +1,49 @@
+{
+	"files": [
+		{
+			"path": "Source/main.cpp",
+			"bookmarks": [
+				{
+					"line": 117,
+					"column": 0,
+					"label": ""
+				},
+				{
+					"line": 236,
+					"column": 0,
+					"label": ""
+				},
+				{
+					"line": 310,
+					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Source/gl_frontEnd.cpp",
+			"bookmarks": [
+				{
+					"line": 471,
+					"column": 17,
+					"label": ""
+				},
+				{
+					"line": 479,
+					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Source/Robot.cpp",
+			"bookmarks": [
+				{
+					"line": 39,
+					"column": 0,
+					"label": ""
+				}
+			]
+		}
+	]
+}
