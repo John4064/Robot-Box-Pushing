@@ -37,9 +37,7 @@ namespace Robot{
 
     extern vector<pair<uint, uint>*> robotLoc;
 
-    void* robotThreadFunc(void * arg){
-
-        cout << "inside thread function \n\n\n\n\n\n\n\n" <<endl;
+    void* robotThreadFunc(void * arg){;
         fflush(stdout);
         RThread* RTinfo = (RThread*) arg;
         vector<pair<Moves, Direction>> threadsCommandList;
@@ -155,16 +153,13 @@ namespace Robot{
 
         int idx = RTinfo->idx_of_robot;
         
-        pair<uint,uint>* origStartingPoint = robotLoc[idx];
+        // pair<uint,uint>* origStartingPoint = robotLoc[idx];
         pair<uint, uint>* destination = doorLoc[doorAssign[idx]];
         pair<int, int> pushStartingPoint = make_pair(get<0> (startingPushPositionAxis), get<1> (startingPushPositionAxis));
 
         if (pushStartingPoint.first - destination->first == 0 || pushStartingPoint.second - destination->second == 0){
             leg_status = legStatus::NO_SECOND_LEG;
         }
-
-        int origDistanceFromRobToDoorX = origStartingPoint->second - destination->second;
-        int origDistanceFromRobToDoorY = origStartingPoint->first - destination->first;
 
         if ((get<2> (startingPushPositionAxis)) == HORIZONTAL){
             recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, leg_status); 
@@ -357,6 +352,7 @@ namespace Robot{
             // exit(99);
         }
         cout << "AN ERROR OCCURRED...." << endl;
+        return make_pair(-1u, -1u);
         // exit(99);
     }
 
@@ -368,9 +364,8 @@ namespace Robot{
 
        // variable where we store if this is situation where don't need to push at all in 
        // vertical axis default is that you do need to push vertically
-
-
         axis axis = VERTICAL;
+
         // get current index of thread/robot
         int idx = RTinfo->idx_of_robot;
 
@@ -445,6 +440,7 @@ namespace Robot{
             break;
             case END:
                 moveAsString = "END";
+            break;
             default:
                 moveAsString ="";
             break;
@@ -500,11 +496,12 @@ namespace Robot{
         cout << " the location of robot after reg the move is " << robotLoc[idx]->first <<robotLoc[idx]->second <<endl;
     }
     void makePushMove(Direction dir, int idx){
-       switch (dir){
             cout << "the location of the robot was " << robotLoc[idx]->first << ", " << robotLoc[idx]->second << 
             "before the move\n";
             cout << "the location of the box was " << boxLoc[idx]->first << ", " << boxLoc[idx]->second << 
             "before the move\n";
+       switch (dir){
+
             case NORTH:
                 robotLoc[idx]->first--;
                 boxLoc[idx]->first--;

@@ -34,16 +34,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "Source/Robot.cpp",
-			"bookmarks": [
-				{
-					"line": 39,
-					"column": 0,
-					"label": ""
-				}
-			]
 		}
 	]
 }
