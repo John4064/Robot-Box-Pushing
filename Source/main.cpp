@@ -19,6 +19,7 @@
 #include "Robot.h"
 #include <random>
 #include <unistd.h>
+#include <fstream>
 
 //
 #include "guiChoice.h"
@@ -102,6 +103,7 @@ vector<pair<uint, uint>*> doorLoc;
 namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
 	pthread_mutex_t RThread::mutex;
+	pthread_mutex_t RThread::file_mutex;
 	extern Robot::RThread* RThread::RTinfo;
 	extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
 };
@@ -307,6 +309,38 @@ int main(int argc, char** argv)
 //	This is a part that you have to edit and add to.
 //
 //===================================	===============================================
+void Robot::printBeginningPartOfOutputFile(){
+
+	ofstream myfile;
+	myfile.open("robotSimulOut.txt");
+
+	myfile << "num of rows = " << numRows << "; num of cols = " << numCols << "; num of boxes = " 
+	<< numBoxes << "; num of doors = " << numDoors << endl;
+
+ 	myfile << "\n";
+
+	myfile << "Door locations:" << endl;
+	for(uint i=0; i < doorLoc.size(); i++){
+		myfile <<"\t"<< doorLoc[i]->first << ", "<<doorLoc[i]->second<< endl;
+	}
+
+	myfile << endl;
+	myfile << "Box locations:" << endl;
+	for(uint i=0; i < boxLoc.size(); i++){
+		myfile <<"\t"<< boxLoc[i]->first << ", "<<boxLoc[i]->second<< " location of dest door = " << 
+		doorLoc[doorAssign[i]]->first <<", " << doorLoc[doorAssign[i]]->second << endl;
+	}
+
+	myfile << endl;
+	myfile << "Robot locations:" << endl;
+	for(uint i=0; i < Robot::robotLoc.size(); i++){
+		myfile <<"\t"<< Robot::robotLoc[i]->first << ", "<<Robot::robotLoc[i]->second<< endl;
+	}
+
+	myfile << "\n";
+
+}
+
 
 void initializeApplication(){
 	GUIStartedP[0] = 0;
@@ -327,6 +361,7 @@ void initializeApplication(){
 		
 		for (uint i =0; i < numRobots; i++){
 			(RThread::RTinfo+i)->idx_of_robot = i;
+			printBeginningPartOfOutputFile();
 			int errCode = pthread_create(&RThread::RTinfo->TID, NULL, robotThreadFunc, RThread::RTinfo+i);
 			if (errCode != 0){
 				printf ("could not pthread_create thread %d. %d/%s\n",
@@ -384,9 +419,8 @@ void boxRandomPlacement(default_random_engine myEngine){
 			uint boxRow = robotRowDist(myEngine);
 			uint boxCol = robotColDist(myEngine);
 			pair<uint, uint> proposedPair = make_pair(boxRow, boxCol);
-			if(!checkIfPairExists(proposedPair, boxLoc)){
+			if(!checkIfPairExists(proposedPair, boxLoc) && !checkIfPairExists(proposedPair, Robot::robotLoc)){
 				boxLoc.push_back(new pair<uint, uint>(boxRow, boxCol));
-
 				break;
 			}
 		}

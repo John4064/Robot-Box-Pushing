@@ -52,36 +52,20 @@ namespace Robot{
 
     void RThread::printARobotsCommandList(){
 
+        pthread_mutex_lock(&file_mutex);
         ofstream myfile;
-        myfile.open("robotSimulOut.txt");
+        myfile.open("robotSimulOut.txt", ios_base::app);
 
-        for(int i=0; i < thisRobotsMoves.size(); i++){
-            myfile << "rows: "<< numRows <<"; cols: "<<
-            numCols <<", "<< numBoxes <<", " << numDoors << endl;
+        myfile << "Robot Program: Robot" << idx_of_robot << "\n";
+
+        for(int i=0; i < copy_of_robot_moves.size(); i++){
+            string moveString = convertMoveEnumToWord( copy_of_robot_moves[i].first);    
+            string directionString = convertDirEnumToWord(copy_of_robot_moves[i].second);
+            myfile << "\t" << moveString << "\t" << directionString << endl;
             myfile << "\n";
-            for(int i=0; i < doorLoc.size(); i++){
-                myfile << "Door " << i << "; row: " << doorLoc[i]->first 
-                << "col: "<< doorLoc[i]->second << endl;
-            }
-
-           for(int i=0; i < boxLoc.size(); i++){
-                myfile << "Box " << i << "; row: " << boxLoc[i]->first 
-                << "col: "<< boxLoc[i]->second << endl;
-            }
-
-            for(int i=0; i < robotLoc.size(); i++){
-                myfile << "Robot " << i << "; row: " << robotLoc[i]->first 
-                << "col: "<< robotLoc[i]->second << endl;
-            }
-            myfile << "\n"
-
-            for (int i = 0; i < )
-                myfile << "Robot Program: Robot" << << "\n";
-
-
         }
-      
         myfile.close();
+        pthread_mutex_unlock(&file_mutex);
     }
 
     void RThread::robotMakeMoves(){
@@ -129,7 +113,7 @@ namespace Robot{
 
  void RThread::genRobotsCommandsList(RThread* RTinfo){
 
-    tuple <int, int, startPushAxis> startingPushPositionAxis;
+    tuple <int, int, axis> startingPushPositionAxis;
 
     thisRobotsMoves = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
 
@@ -152,22 +136,20 @@ namespace Robot{
 
     RTinfo->commandsListHolder.push_back(thisRobotsMoves);
 
-    cout << "thisRobotsMoves->size()" <<  thisRobotsMoves.size() << endl;
-
-    cout << "Thread "<<RTinfo->idx_of_robot <<" has following Commands: " << endl;
 
     for (uint i=0; i < thisRobotsMoves.size(); i++){
-        string moveString = convertMoveEnumToWord( (thisRobotsMoves)[i].first);    
-        string directionString = convertDirEnumToWord((thisRobotsMoves)[i].second);
-        cout << "'i' = " << i << endl;
-        cout << "\t" << moveString << "\t" << directionString << endl;
-        fflush(stdout);
+
+        pair<Moves, Direction>* pairP = new pair<Moves, Direction>();
+        pairP->first = thisRobotsMoves[i].first;
+        pairP->second = thisRobotsMoves[i].second;
+        copy_of_robot_moves.push_back(*pairP);
     }
 }
 
-    vector<pair<Moves, Direction>> recordMovesPushToDoor(RThread* RTinfo, tuple <int, int, startPushAxis> startingPushPositionAxis){
+    vector<pair<Moves, Direction>> recordMovesPushToDoor(RThread* RTinfo, tuple <int, int, axis> startingPushPositionAxis){
 
-        bool secondPushLeg = false;
+        // the default is that we are on the first leg of the push trip
+        legStatus leg_status = legStatus::ON_MOVE_OR_FIRST_LEG_PUSH;
 
         vector<pair<Moves, Direction>>* movesPushtoDoor = new vector<pair<Moves, Direction>>();
 
@@ -177,37 +159,45 @@ namespace Robot{
         pair<uint, uint>* destination = doorLoc[doorAssign[idx]];
         pair<int, int> pushStartingPoint = make_pair(get<0> (startingPushPositionAxis), get<1> (startingPushPositionAxis));
 
+        if (pushStartingPoint.first - destination->first == 0 || pushStartingPoint.second - destination->second == 0){
+            leg_status = legStatus::NO_SECOND_LEG;
+        }
+
         int origDistanceFromRobToDoorX = origStartingPoint->second - destination->second;
         int origDistanceFromRobToDoorY = origStartingPoint->first - destination->first;
 
         if ((get<2> (startingPushPositionAxis)) == HORIZONTAL){
-            secondPushLeg = false;
-            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, secondPushLeg);        
-            if (!movesPushtoDoor->empty()){
+            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, leg_status); 
+            if (leg_status == NO_SECOND_LEG){
+                return *movesPushtoDoor;
+             }       
+            if (!movesPushtoDoor->empty() && leg_status != NO_SECOND_LEG){
                 movesPushtoDoor->pop_back();
             }
             // movesPushtoDoor->pop_back();
-            recordMovesToSecondPushPosition(*movesPushtoDoor, startingPushPositionAxis, idx);
-            secondPushLeg = true;
-            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, secondPushLeg);
+            pair<uint, uint> startingPushPosAfterRotation = recordRotationToSecondPushPos(*movesPushtoDoor, startingPushPositionAxis, idx);
+            leg_status = legStatus::ON_SECOND_LEG;
+            recordMovesY(*movesPushtoDoor,startingPushPosAfterRotation, *destination, PUSH, leg_status);
         }
 
         if ((get<2>(startingPushPositionAxis)) == VERTICAL){
-            secondPushLeg = false;
-            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, secondPushLeg);
-            if (!movesPushtoDoor->empty()){
+            recordMovesY(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, leg_status);
+            if (leg_status == NO_SECOND_LEG){
+                return *movesPushtoDoor;
+            }
+            if (!movesPushtoDoor->empty()&& leg_status != NO_SECOND_LEG){
                 movesPushtoDoor->pop_back();
             }
             // movesPushtoDoor->pop_back();
-            recordMovesToSecondPushPosition(*movesPushtoDoor, startingPushPositionAxis, idx);
-            secondPushLeg = true;
-            recordMovesX(*movesPushtoDoor, pushStartingPoint, *destination, PUSH, secondPushLeg);
+            pair<uint, uint> startingPushPosAfterRotation =  recordRotationToSecondPushPos(*movesPushtoDoor, startingPushPositionAxis, idx);
+            leg_status = legStatus::ON_SECOND_LEG;
+            recordMovesX(*movesPushtoDoor, startingPushPosAfterRotation, *destination, PUSH, leg_status);
         }
 
         return *movesPushtoDoor;
     }
 
-    vector<pair<Moves, Direction>> genCommGetBehindBox(RThread* RTinfo, tuple <int, int, startPushAxis>& startingPushPositionAxis){
+    vector<pair<Moves, Direction>> genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis){
         cout << "hi" << endl;
         // determine the starting push position 
         startingPushPositionAxis = determineStartingPushPositionAxis(RTinfo);
@@ -215,41 +205,36 @@ namespace Robot{
         cout << "\t y coord = " << get<0> (startingPushPositionAxis) << endl;
         cout << "\t x coord = " << get<1> (startingPushPositionAxis) << endl;
         cout << "\t axis = " << get<2> (startingPushPositionAxis) << endl;
-        cout << "what's up" << endl;
         return recordMovesToBehindBox(startingPushPositionAxis, RTinfo);
     }
 
 
-   vector<pair<Moves, Direction>> recordMovesToBehindBox(tuple <int, int, startPushAxis> startingPushPositionAxis, RThread* RTinfo){
-       cout << "hellowwwwwww" << endl;
+   vector<pair<Moves, Direction>> recordMovesToBehindBox(tuple <int, int, axis> startingPushPositionAxis, RThread* RTinfo){\
         int idx = RTinfo->idx_of_robot;
-        cout << "YESSSS" << endl;
+        legStatus leg_status = ON_MOVE_OR_FIRST_LEG_PUSH;
 
         // may have to change this later if this doesn't work
         vector<pair<Moves, Direction>>* vec = new  vector<pair<Moves, Direction>>();
-
-        cout << "NOOOO" << endl;
         // bool verticalShouldBeFirst = collisionWithBoxAvoider(startingPushPositionAxis, idx, goAround);
-
-        cout << "MAAAADEITHEREEEE" << endl;
-        recordMovesX(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second), make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, false);
-        cout << "HHHHHHHEEEEEYYYY" << endl;
+        recordMovesX(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second), make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, leg_status);
         recordMovesY(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second),  
-        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, false);
+        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, leg_status);
 
         return *vec;
     }
 
 
-    void recordMovesToSecondPushPosition(vector<pair<Moves, Direction>>& RCList, tuple <int, int, startPushAxis> 
+    pair <uint, uint> recordRotationToSecondPushPos(vector<pair<Moves, Direction>>& RCList, tuple <int, int, axis> 
         startingPushPositionAxis, int idx){
+        
+        uint startY = get<0>(startingPushPositionAxis);
+        uint startX = get<1>(startingPushPositionAxis);
 
-        int distanceFromOrigBoxToDoorY = get<0>(startingPushPositionAxis) - doorLoc[doorAssign[idx]]->first;
-        int distanceFromOrigBoxToDoorX = get<1>(startingPushPositionAxis) - doorLoc[doorAssign[idx]]->second;
-        startPushAxis pushToDoorAxis = get<2>(startingPushPositionAxis);
+        uint newPushPosX = startX, newPushPosY = startY;
 
-         cout << "\n\ndistanceFromRobToDoorX = \n" << distanceFromOrigBoxToDoorX << endl;
-         cout << "distanceFromRobToDoorY = " << distanceFromOrigBoxToDoorY <<"\n\n"<< endl;
+        int distanceFromOrigBoxToDoorY = startY - doorLoc[doorAssign[idx]]->first;
+        int distanceFromOrigBoxToDoorX = startX -  doorLoc[doorAssign[idx]]->second;
+        axis pushToDoorAxis = get<2>(startingPushPositionAxis);
          fflush(stdout);
          
 
@@ -259,23 +244,27 @@ namespace Robot{
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = EAST;
             robComm->first = MOVE;
+            newPushPosX++;
             RCList.push_back(*robComm);
             robComm = new pair<Moves, Direction>();
             robComm->second = NORTH;
             robComm->first = MOVE;
+            newPushPosY--;
             RCList.push_back(*robComm);
-            return;    
+            return (make_pair(newPushPosY, newPushPosX));    
         }
         if (pushToDoorAxis == VERTICAL && distanceFromOrigBoxToDoorY > 0 && distanceFromOrigBoxToDoorX < 0){
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = WEST;
             robComm->first = MOVE;
+            newPushPosX--;
             RCList.push_back(*robComm);
             robComm = new pair<Moves, Direction>();
             robComm->second = NORTH;
             robComm->first = MOVE;
+            newPushPosY--;
             RCList.push_back(*robComm);
-            return;    
+           return (make_pair(newPushPosY, newPushPosX));    
         }
 
         
@@ -283,23 +272,27 @@ namespace Robot{
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = EAST;
             robComm->first = MOVE;
+            newPushPosX++;
             RCList.push_back(*robComm);
             robComm = new pair<Moves, Direction>();
             robComm->second = SOUTH;
             robComm->first = MOVE;
+            newPushPosY++;
             RCList.push_back(*robComm);
-            return;    
+            return (make_pair(newPushPosY, newPushPosX));      
         }
         if (pushToDoorAxis == VERTICAL && distanceFromOrigBoxToDoorY < 0 && distanceFromOrigBoxToDoorX < 0){
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = WEST;
             robComm->first = MOVE;
+            newPushPosX--;
             RCList.push_back(*robComm);
             robComm = new pair<Moves, Direction>();
             robComm->second = SOUTH;
             robComm->first = MOVE;
+            newPushPosY++;
             RCList.push_back(*robComm);
-            return;    
+            return (make_pair(newPushPosY, newPushPosX));    
         }
 
 
@@ -307,23 +300,27 @@ namespace Robot{
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = SOUTH;
             robComm->first = MOVE;
+            newPushPosY++;
             RCList.push_back(*robComm);
             robComm = new pair<Moves, Direction>();
             robComm->second = WEST;
             robComm->first = MOVE;
+            newPushPosX--;
             RCList.push_back(*robComm);
-            return;    
+            return (make_pair(newPushPosY, newPushPosX));    
         }
         if (pushToDoorAxis == HORIZONTAL && distanceFromOrigBoxToDoorY > 0 && distanceFromOrigBoxToDoorX < 0){
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = SOUTH;
             robComm->first = MOVE;
+            newPushPosY++;
             RCList.push_back(*robComm);
             robComm = new pair<Moves, Direction>();
             robComm->second = EAST;
             robComm->first = MOVE;
+            newPushPosX++;
             RCList.push_back(*robComm);
-            return;    
+            return (make_pair(newPushPosY, newPushPosX));       
         }
 
         
@@ -331,24 +328,28 @@ namespace Robot{
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = NORTH;
             robComm->first = MOVE;
+            newPushPosY--;
             RCList.push_back(*robComm);
             robComm = new pair<Moves, Direction>();
             robComm->second = WEST;
             robComm->first = MOVE;
+            newPushPosX--;
             RCList.push_back(*robComm);
-            return;    
+            return (make_pair(newPushPosY, newPushPosX));     
         }
 
         if (pushToDoorAxis == HORIZONTAL && distanceFromOrigBoxToDoorY < 0 && distanceFromOrigBoxToDoorY < 0){
             pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
             robComm->second = NORTH;
             robComm->first = MOVE;
+            newPushPosY--;
             RCList.push_back(*robComm);
             robComm = new pair<Moves, Direction>();
             robComm->second = EAST;
             robComm->first = MOVE;
+            newPushPosX++;
             RCList.push_back(*robComm);
-            return;    
+            return (make_pair(newPushPosY, newPushPosX));      
         }
 
         if (distanceFromOrigBoxToDoorY == 0 || distanceFromOrigBoxToDoorX == 0) {
@@ -359,7 +360,7 @@ namespace Robot{
         // exit(99);
     }
 
-   tuple<int, int, startPushAxis> determineStartingPushPositionAxis(RThread * RTinfo){
+   tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo){
 
        // assume we will push vertically first, then horizontally
 
@@ -369,7 +370,7 @@ namespace Robot{
        // vertical axis default is that you do need to push vertically
 
 
-        startPushAxis axis = VERTICAL;
+        axis axis = VERTICAL;
         // get current index of thread/robot
         int idx = RTinfo->idx_of_robot;
 
@@ -535,36 +536,39 @@ namespace Robot{
 
 
 
-    void recordMovesX(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, bool pushCaseSecondLeg){
+    void recordMovesX(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, legStatus leg_status){
 
         int distanceFromRobToDestinationX = startingPoint.second - destination.second;
         if (distanceFromRobToDestinationX > 0){
 
             for (int i = 0; i < distanceFromRobToDestinationX; i++){
-                    pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
-                    robComm->second = WEST;
-                    robComm->first = argmove;
-                    RCList.push_back(*robComm);
-                    if (pushCaseSecondLeg == true && i == distanceFromRobToDestinationX - 1){
+                    if (i == distanceFromRobToDestinationX - 1 && (leg_status == ON_SECOND_LEG  || leg_status == NO_SECOND_LEG)){
                         pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
                         robComm->second = WEST;
                         robComm->first = MOVE;
                         RCList.push_back(*robComm);
+                        break;
                     }
+                    pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
+                    robComm->second = WEST;
+                    robComm->first = argmove;
+                    RCList.push_back(*robComm);
             }
         }
         if (distanceFromRobToDestinationX < 0) {
             for (int i = 0; i > distanceFromRobToDestinationX; i--){
-                    pair<Moves, Direction>* robComm= new pair<Moves, Direction>();
-                    robComm->second = EAST;
-                    robComm->first = argmove;
-                    RCList.push_back(*robComm);
-                    if (pushCaseSecondLeg == true && i == distanceFromRobToDestinationX + 1){
+                    if (i == distanceFromRobToDestinationX + 1 && (leg_status == ON_SECOND_LEG  || leg_status == NO_SECOND_LEG)){
                         pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
                         robComm->second = EAST;
                         robComm->first = MOVE;
                         RCList.push_back(*robComm);
+                        break;
                     }
+                    pair<Moves, Direction>* robComm= new pair<Moves, Direction>();
+                    robComm->second = EAST;
+                    robComm->first = argmove;
+                    RCList.push_back(*robComm);
+         
             }
         }
         if (distanceFromRobToDestinationX == 0){
@@ -573,7 +577,7 @@ namespace Robot{
 
 
     void recordMovesY(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, 
-    Moves argmove, bool pushCaseSecondLeg){
+    Moves argmove, legStatus leg_status){
 
         // if this is NOT no_Y_Diff_Case... horizontal movement
 
@@ -581,31 +585,34 @@ namespace Robot{
 
         if (distanceFromRobToDestinationY > 0){
             for (int i = 0; i < distanceFromRobToDestinationY; i++){
-                    pair<Moves, Direction>* robComm= new pair<Moves, Direction>();
-                    robComm->second = NORTH;
-                    robComm->first = argmove;
-                    RCList.push_back(*robComm);
-                    if (pushCaseSecondLeg == true && i == distanceFromRobToDestinationY - 1){
+                    if (i == distanceFromRobToDestinationY - 1 && (leg_status == ON_SECOND_LEG  || leg_status == NO_SECOND_LEG)){
                         pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
                         robComm->second = NORTH;
                         robComm->first = MOVE;
                         RCList.push_back(*robComm);
+                        break;
                     }
+                    pair<Moves, Direction>* robComm= new pair<Moves, Direction>();
+                    robComm->second = NORTH;
+                    robComm->first = argmove;
+                    RCList.push_back(*robComm);
             }
         }
 
         if (distanceFromRobToDestinationY < 0){
             for (int i = 0; i > distanceFromRobToDestinationY; i--){
-                    pair<Moves, Direction>* robComm= new pair<Moves, Direction>();
-                    robComm->second = SOUTH;
-                    robComm->first = argmove;
-                    RCList.push_back(*robComm);
-                    if (pushCaseSecondLeg == true && i == distanceFromRobToDestinationY + 1){
+
+                    if (i == distanceFromRobToDestinationY + 1 && (leg_status == ON_SECOND_LEG  || leg_status == NO_SECOND_LEG)){
                         pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
                         robComm->second = SOUTH;
                         robComm->first = MOVE;
                         RCList.push_back(*robComm);
-                    }
+                        break;
+                    }                
+                    pair<Moves, Direction>* robComm= new pair<Moves, Direction>();
+                    robComm->second = SOUTH;
+                    robComm->first = argmove;
+                    RCList.push_back(*robComm);
             }
         }
 
