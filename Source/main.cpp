@@ -88,8 +88,6 @@ const int MAX_NUM_MESSAGES = 8;
 const int MAX_LENGTH_MESSAGE = 32;
 char** message;
 
-bool* GUIStartedP = new bool[1];
-
 
 //-----------------------------
 //	Global Vectors
@@ -120,10 +118,6 @@ namespace Robot{
 void displayGridPane(void)
 {
 	//Do one move here...
-	if (GUIStartedP[0] != 1){
-		cout << "THE GUI HAS BEEN STARTED\n\n\n\n\n";
-		GUIStartedP[0] = 1;
-	}
 	//	This is OpenGL/glut magic.  Don't touch
 	//---------------------------------------------
 	glutSetWindow(gSubwindow[GRID_PANE]);
@@ -135,7 +129,6 @@ void displayGridPane(void)
 	// flip the vertiucal axis pointing down, in regular "grid" orientation
 	glScalef(1.f, -1.f, 1.f);
 
-	cout << "testing 123" << endl;
 
 	for (uint i=0; i<numBoxes; i++)
 	{	//	here I would test if the robot thread is still live
@@ -146,7 +139,6 @@ void displayGridPane(void)
 
 	}
 
-	cout << "did I make it here???" << endl;
 
 	for (uint i=0; i<numDoors; i++)
 	{
@@ -276,8 +268,10 @@ int main(int argc, char** argv)
 	//	we set up earlier will be called when the corresponding event
 	//	occurs
 
-	glutMainLoop();
+	// signal to worker threads that GUI starting now
+	pthread_mutex_unlock(&Robot::RThread::mutex);
 
+	glutMainLoop();
 
 	for (int i=0; i < numRobots; i++){
 
@@ -343,7 +337,6 @@ void Robot::printBeginningPartOfOutputFile(){
 
 
 void initializeApplication(){
-	GUIStartedP[0] = 0;
 	{ using namespace Robot;
 
 		if (pthread_mutex_init(&RThread::mutex, NULL) != 0) {                                    
@@ -369,6 +362,8 @@ void initializeApplication(){
 		assignDoors(randDoorDist, myEngine);
 
 		RThread::RTinfo = new RThread[numRobots];
+
+		pthread_mutex_lock(&RThread::mutex);
 		
 		for (uint i =0; i < numRobots; i++){
 			(RThread::RTinfo+i)->idx_of_robot = i;
@@ -381,8 +376,6 @@ void initializeApplication(){
 			}
 		}
 
-	//printRobotsCommandsList();
-
 	grid = new uint*[numRows];
 	for (uint i=0; i<numRows; i++)
 		grid[i] = new uint [numCols];
@@ -393,31 +386,6 @@ void initializeApplication(){
 	}
 }
 
-void printRobotsCommandsList(){
-
-	cout << "Printing RCL List: \n"<< endl;
-	cout << "\tMOVE:\tDirection:" << endl;
-
-	// printing to file
-
-		cout << "command list holder size = " << Robot::RThread::commandsListHolder.size() << endl;
-
-        for (uint j = 0; j < Robot::RThread::commandsListHolder.size(); j++){
-            cout << "List " << j << endl;
-           for (uint i= 0; i < Robot::RThread::commandsListHolder[j].size(); i++) {
-            cout << "'i' = " << i << endl;
-            string moveString = convertMoveEnumToWord(Robot::RThread::commandsListHolder[j][i].first);
-			string directionString = convertDirEnumToWord(Robot::RThread::commandsListHolder[j][i].second);
-	
-            cout <<"\t" << moveString << "\t" << directionString << endl;
-                     fflush(stdout);
-            }
-        }
-
-		cout << "made it here !!!" << endl;
-		fflush(stdout);
-
-}
 
 
 void boxRandomPlacement(default_random_engine myEngine){
@@ -542,3 +510,28 @@ void printVector(T vec)
 	cout << endl;
 }
 
+void printRobotsCommandsList(){
+
+	cout << "Printing RCL List: \n"<< endl;
+	cout << "\tMOVE:\tDirection:" << endl;
+
+	// printing to file
+
+		cout << "command list holder size = " << Robot::RThread::commandsListHolder.size() << endl;
+
+        for (uint j = 0; j < Robot::RThread::commandsListHolder.size(); j++){
+            cout << "List " << j << endl;
+           for (uint i= 0; i < Robot::RThread::commandsListHolder[j].size(); i++) {
+            cout << "'i' = " << i << endl;
+            string moveString = convertMoveEnumToWord(Robot::RThread::commandsListHolder[j][i].first);
+			string directionString = convertDirEnumToWord(Robot::RThread::commandsListHolder[j][i].second);
+	
+            cout <<"\t" << moveString << "\t" << directionString << endl;
+                     fflush(stdout);
+            }
+        }
+
+		cout << "made it here !!!" << endl;
+		fflush(stdout);
+
+}

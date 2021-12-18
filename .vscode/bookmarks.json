@@ -1,6 +1,26 @@
 {
 	"files": [
 		{
+			"path": "Source/main.cpp",
+			"bookmarks": [
+				{
+					"line": 117,
+					"column": 0,
+					"label": ""
+				},
+				{
+					"line": 230,
+					"column": 0,
+					"label": ""
+				},
+				{
+					"line": 338,
+					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
 			"path": "Source/gl_frontEnd.cpp",
 			"bookmarks": [
 				{
@@ -10,6 +30,16 @@
 				},
 				{
 					"line": 479,
+					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Source/Robot.cpp",
+			"bookmarks": [
+				{
+					"line": 38,
 					"column": 0,
 					"label": ""
 				}

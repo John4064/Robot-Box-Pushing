@@ -27,7 +27,6 @@ extern uint numDoors;
 extern vector<pair<uint, uint>*> boxLoc;
 extern vector<uint> doorAssign;
 extern vector<pair<uint, uint>*> doorLoc;
-extern bool* GUIStartedP;
 
 typedef unsigned int uint;
 
@@ -37,12 +36,14 @@ namespace Robot{
 
     extern vector<pair<uint, uint>*> robotLoc;
 
-    void* robotThreadFunc(void * arg){;
+    void* robotThreadFunc(void * arg){
+        // block until the GUI sets up.
+        pthread_mutex_lock(&RThread::mutex);
+        pthread_mutex_unlock(&RThread::mutex);
         fflush(stdout);
         RThread* RTinfo = (RThread*) arg;
         vector<pair<Moves, Direction>> threadsCommandList;
         RTinfo->genRobotsCommandsList(RTinfo);
-        while(GUIStartedP[0] != 1){};
         RTinfo->robotMakeMoves();
         
         // RTinfo->printARobotsCommandList();
