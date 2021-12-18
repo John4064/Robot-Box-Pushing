@@ -37,10 +37,10 @@ namespace Robot{
     extern vector<pair<uint, uint>*> robotLoc;
 
     void* robotThreadFunc(void * arg){
+
         // block until the GUI sets up.
         pthread_mutex_lock(&RThread::mutex);
         pthread_mutex_unlock(&RThread::mutex);
-        fflush(stdout);
         RThread* RTinfo = (RThread*) arg;
         vector<pair<Moves, Direction>> threadsCommandList;
         RTinfo->genRobotsCommandsList(RTinfo);
@@ -79,39 +79,36 @@ namespace Robot{
         pthread_mutex_unlock(&file_mutex);
     }
 
+    /**
+     * @brief The synchronization here is basically a reader writer problem.
+     *         the worker threads are writing to the robot and box arrays 
+     *         the gui is reading them. but the worker threads also act
+     *         as readers as well, when they have to iterate through 
+     *         every other location and test if a cell is occupied.
+     * 
+     */
     void RThread::robotMakeMoves(){
         while(!(thisRobotsMoves.empty())){
-            cout << "trying to make a move!!!!!" << endl;
-            cout << "the size of the robot moves vector is " << thisRobotsMoves.size() << endl;
             pair<Moves,Direction> temp = thisRobotsMoves.front();
-            cout << "The move we are trying to make is "<< temp.first << " " << temp.second << endl;
             pair<Moves, Direction> command = thisRobotsMoves.front();
-            cout << "made it here .... yay2" << endl;
             if (command.first == MOVE){
-                cout << "a" << endl;
                 pthread_mutex_lock(&RThread::mutex);
                 makeRegMove(command.second, idx_of_robot);
                 pthread_mutex_unlock(&RThread::mutex);
                 fprintRobotMove(command.first, command.second);
-                cout << "b" << endl;
             }
             if (command.first == PUSH){
-                cout << "c" << endl;
                 pthread_mutex_lock(&RThread::mutex);
                 makePushMove(command.second, idx_of_robot);
                 pthread_mutex_unlock(&RThread::mutex);
                 fprintRobotMove(command.first, command.second);
-                cout << "d" << endl;
             }
             if (command.first == END){
-                cout << "e" << endl;
                 pthread_mutex_lock(&RThread::mutex);
                 thisRobotsMoves.clear();
                 pthread_mutex_unlock(&RThread::mutex);
                 fprintRobotMove(command.first, command.second);
-                cout << "d" << endl;
             }
-                cout << "e" << endl;
             pthread_mutex_lock(&RThread::mutex);
             if(!thisRobotsMoves.empty()){
                 thisRobotsMoves.erase(thisRobotsMoves.begin());
@@ -120,7 +117,6 @@ namespace Robot{
             fflush(stdout);
             usleep(robotSleepTime);
         }
-        cout << "finished with the VECTOR in the THread" << idx_of_robot << endl;
     }
 
  void RThread::genRobotsCommandsList(RThread* RTinfo){
@@ -130,12 +126,9 @@ namespace Robot{
     thisRobotsMoves = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
 
     vector<pair<Moves, Direction>> movesToDoor = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
-    cout << "thisRobotsMoves->size()" <<  thisRobotsMoves.size() << endl;
 
     //probably an easier way to do this...
     for (uint i = 0; i < movesToDoor.size(); i++){
-        cout << "first leg list ["<< i<< "] equals " << movesToDoor[i].first << " " 
-        << movesToDoor[i].second << endl;
         thisRobotsMoves.push_back(movesToDoor[i]);
     }
 
@@ -156,6 +149,9 @@ namespace Robot{
         pairP->second = thisRobotsMoves[i].second;
         copy_of_robot_moves.push_back(*pairP);
     }
+    pthread_mutex_lock(&file_mutex);
+    cout << "robot command list generated" <<endl;
+    pthread_mutex_unlock(&file_mutex);
 }
 
     vector<pair<Moves, Direction>> recordMovesPushToDoor(RThread* RTinfo, tuple <int, int, axis> startingPushPositionAxis){
@@ -207,13 +203,8 @@ namespace Robot{
     }
 
     vector<pair<Moves, Direction>> genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis){
-        cout << "hi" << endl;
         // determine the starting push position 
         startingPushPositionAxis = determineStartingPushPositionAxis(RTinfo);
-        cout << "startingPushPositionAxis:" << endl;
-        cout << "\t y coord = " << get<0> (startingPushPositionAxis) << endl;
-        cout << "\t x coord = " << get<1> (startingPushPositionAxis) << endl;
-        cout << "\t axis = " << get<2> (startingPushPositionAxis) << endl;
         return recordMovesToBehindBox(startingPushPositionAxis, RTinfo);
     }
 
@@ -371,7 +362,6 @@ namespace Robot{
     }
 
    tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo){
-
        // assume we will push vertically first, then horizontally
 
        // first need to figure out if need to push vertically at all
@@ -379,10 +369,8 @@ namespace Robot{
        // variable where we store if this is situation where don't need to push at all in 
        // vertical axis default is that you do need to push vertically
         axis axis = VERTICAL;
-
         // get current index of thread/robot
         int idx = RTinfo->idx_of_robot;
-
         int startPushTargY, startPushTargX;
 
         // to figure out what side of the box we need to push, it needs to be whatever
@@ -390,11 +378,7 @@ namespace Robot{
         // with the Box.  In other words if it is a positive diff. Box - door or a negative difference.
         // If box - door is positive, the door is closer to the top row, and vice versa.
 
-        int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[doorAssign[idx]]->first;
-
-        cout << "boxLoc[idx]->first:  \t"<< boxLoc[idx]->first << endl;
-        cout << "doorLoc[doorAssign[idx]]->first:  \t" << doorLoc[doorAssign[idx]]->first << endl;
-        cout << "yDiffBoxDoor:  \t" << yDiffBoxDoor << endl;
+        int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[doorAssign[idx]]->first;        
 
         //if door closer to top, we want to push the box from one greater row number than the box
         if (yDiffBoxDoor > 0){
@@ -413,10 +397,6 @@ namespace Robot{
         }
 
         int xDiffBoxDoor = boxLoc[idx]->second - doorLoc[doorAssign[idx]]->second;
-        
-        cout << "boxLoc[idx]->second:  \t"<< boxLoc[idx]->second << endl;
-        cout << "doorLoc[idx]->second:  \t" << doorLoc[doorAssign[idx]]->second << endl;
-        cout << "xDiffBoxDoor:  \t" << xDiffBoxDoor << endl;
 
         if (axis == HORIZONTAL){
             if (xDiffBoxDoor > 0){
@@ -432,10 +412,6 @@ namespace Robot{
         else {
             startPushTargX = boxLoc[idx]->second;
         }
-
-        cout << "final values: \n";
-        cout << "startPushTargY  \t" << startPushTargY << endl;
-        cout << "startPushTargX \t" << startPushTargX << endl;
 
         // record start values and return tuple
         return make_tuple(startPushTargY, startPushTargX, axis);
@@ -488,8 +464,6 @@ namespace Robot{
     }
 
     void makeRegMove(Direction dir, int idx){
-            cout << "the location of the robot before reg move was " << robotLoc[idx]->first << ", " << robotLoc[idx]->second << 
-            "before the move\n";
 
        switch (dir){
             case NORTH:
@@ -507,15 +481,10 @@ namespace Robot{
             case NOMOVEMENT:
                 break;
         }
-        cout << " the location of robot after reg the move is " << robotLoc[idx]->first <<robotLoc[idx]->second <<endl;
     }
     void makePushMove(Direction dir, int idx){
-            cout << "the location of the robot was " << robotLoc[idx]->first << ", " << robotLoc[idx]->second << 
-            "before the move\n";
-            cout << "the location of the box was " << boxLoc[idx]->first << ", " << boxLoc[idx]->second << 
-            "before the move\n";
-       switch (dir){
 
+       switch (dir){
             case NORTH:
                 robotLoc[idx]->first--;
                 boxLoc[idx]->first--;
@@ -535,9 +504,6 @@ namespace Robot{
             case NOMOVEMENT:
                 break;
         }
-        cout << " the location of the robot after the move is " << robotLoc[idx]->first <<robotLoc[idx]->second <<endl;
-        cout << "after move box is " << boxLoc[idx]->first << ", " << boxLoc[idx]->second << endl;
-
     }
 
     void destroyRobotsCommandsList(RThread* RTinfo){

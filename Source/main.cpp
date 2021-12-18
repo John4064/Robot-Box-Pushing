@@ -8,6 +8,42 @@
 //	This is public domain code.  By all means appropriate it and change is to your
 //	heart's content.
 
+
+/**
+ * @file main.cpp
+ * @author David Shawver and John Parkhurst
+ * @brief 
+ * 
+ * 
+ * Notes:
+ * 
+ * The critical sections of this program are as follows:
+ * 
+ * 	Writing:
+ *		(1) When writing to file
+ * 		(2) When writing the commands to robot or box array, 
+ * 			values are incremented (i.e. written)
+ * 		(3) If we write to standard output we should also be using locks
+ * 	
+ *  Reading:
+ * 		(1) When a thread checks if the next cell (the robot when moving or
+ * 			the box when pushing) that will be visited is already occupied,
+ * 			it reads the robotLoc and boxLoc arrays.
+ *
+ * 		(2) In gridDisplayPane() when the GUI reads the values of the array
+ * 
+ * 		For Reading number 1, we are going to try to implement reader-writers solution.
+ * 		
+ * 			
+ * 
+ * @version 0.1
+ * @date 2021-12-18
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
+
 #include <string.h>			// for strerror()
 #include <string>
 #include <cstdio>
@@ -103,6 +139,10 @@ namespace Robot{
 	pthread_mutex_t RThread::file_mutex;
 	extern Robot::RThread* RThread::RTinfo;
 	extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
+	vector<pthread_mutex_t*> RThread::boxLocReadingMutexVec;
+    vector<pthread_mutex_t*> RThread::boxLocWritingMutexVec;
+    vector<pthread_mutex_t*> RThread::robotLocWritingMutexVec;
+    vector<pthread_mutex_t*> RThread::robotLocReadingMutexVec;
 };
 
 
@@ -137,8 +177,8 @@ void displayGridPane(void)
 			pthread_mutex_unlock(&Robot::RThread::mutex);
 	}
 
-
 	for (uint i=0; i<numDoors; i++)
+
 	{
 		drawDoor(i, doorLoc[i]->first, doorLoc[i]->second);
 	}
@@ -146,6 +186,9 @@ void displayGridPane(void)
 	//	This call does nothing important. It only draws lines
 	//	There is nothing to synchronize here
 	drawGrid();
+
+	
+
 
 	//	This is OpenGL/glut magic.  Don't touch
 	glutSwapBuffers();
@@ -267,6 +310,7 @@ int main(int argc, char** argv)
 	//	occurs
 
 	// signal to worker threads that GUI starting now
+
 	pthread_mutex_unlock(&Robot::RThread::mutex);
 
 	glutMainLoop();
@@ -334,29 +378,56 @@ void Robot::printBeginningPartOfOutputFile(){
 }
 
 void Robot::RThread::initializeMutexes(){
+	
+	// an all purpose mutex used as a mutex gate when initializing gui 
+	// and for reading data in single-threaded version
 	if (pthread_mutex_init(&RThread::mutex, NULL) != 0) {                                    
 		perror("mutex_lock");                                                       
 		exit(1);                                                                    
 	}    
 
+	// a mutex to be used for opening and writing the robot commands to file
 	if (pthread_mutex_init(&RThread::file_mutex, NULL) != 0) {                                    
 		perror("mutex_lock");                                                       
 		exit(1);                                                                    
 	}   
 	
-	// initialize a mutex lock array for robot cells
+	// declare and initialize two mutex arrays for each box loc
+	// robot loc arrays ... one for reading one for writing
 
-	for (int i = 0; i < numRows; i++){
-		vector<pthread_mutex_t*> *vecPointer=new vector<pthread_mutex_t*>();
-		for (int j = 0; j < numCols; j++){
-			pthread_mutex_t *mutexP = new pthread_mutex_t();
-			if(pthread_mutex_init(mutexP, NULL) != 0){
-				perror("mutex_lock");                                                       
-				exit(1);   
-			}
-			vecPointer->push_back(mutexP);
+	for (int j = 0; j < boxLoc.size(); j++){
+		pthread_mutex_t *mutexP = new pthread_mutex_t();
+		if(pthread_mutex_init(mutexP, NULL) != 0){
+			perror("mutex_lock");                                                       
+			exit(1);   
 		}
-		RThread::mutex_2d_vec.push_back(vecPointer);
+		boxLocReadingMutexVec.push_back(mutexP);
+	}
+
+	for (int j = 0; j < boxLoc.size(); j++){
+		pthread_mutex_t *mutexP = new pthread_mutex_t();
+		if(pthread_mutex_init(mutexP, NULL) != 0){
+			perror("mutex_lock");                                                       
+			exit(1);   
+		}
+		boxLocWritingMutexVec.push_back(mutexP);
+	}
+
+	for (int j = 0; j < robotLoc.size(); j++){
+		pthread_mutex_t *mutexP = new pthread_mutex_t();
+		if(pthread_mutex_init(mutexP, NULL) != 0){
+			perror("mutex_lock");                                                       
+			exit(1);   
+		}
+		robotLocReadingMutexVec.push_back(mutexP);
+	}
+		for (int j = 0; j < robotLoc.size(); j++){
+		pthread_mutex_t *mutexP = new pthread_mutex_t();
+		if(pthread_mutex_init(mutexP, NULL) != 0){
+			perror("mutex_lock");                                                       
+			exit(1);   
+		}
+		robotLocWritingMutexVec.push_back(mutexP);
 	}
 }
 
@@ -369,8 +440,6 @@ void Robot::placeRobots(){
 	robotRandomPlacement(robotRowDist, robotColDist, myEngine);
 	doorRandomPlacement(robotRowDist, robotColDist, myEngine);
 	boxRandomPlacement(myEngine);
-	placeRobots();
-
 	uniform_int_distribution<int> randDoorDist(0, doorLoc.size() - 1);
 	assignDoors(randDoorDist, myEngine);
 }
@@ -381,12 +450,18 @@ void initializeApplication(){
 		
 	RThread::initializeMutexes();
 
+
 	//printObjectPlacements();
+	placeRobots();
+
 
 	RThread::RTinfo = new RThread[numRobots];
 
+	// the main thread's lock, which blocks the worker threads from proceeding
+	// until unlock called after main gui loop entered.
 	pthread_mutex_lock(&RThread::mutex);
-	
+
+
 	for (uint i =0; i < numRobots; i++){
 		(RThread::RTinfo+i)->idx_of_robot = i;
 		printBeginningPartOfOutputFile();
@@ -397,6 +472,7 @@ void initializeApplication(){
 			exit (EXIT_FAILURE);
 		}
 	}
+
 
 	grid = new uint*[numRows];
 	for (uint i=0; i<numRows; i++)
@@ -446,7 +522,6 @@ uniform_int_distribution<int> robotColDist, default_random_engine myEngine){
 
 void doorRandomPlacement(uniform_int_distribution<int> robotRowDist, 
 uniform_int_distribution<int> robotColDist, default_random_engine myEngine){
-
 	for(uint i = 0; i < numDoors; i++){
 		while(true){
 			uint doorRow = robotRowDist(myEngine);
@@ -552,8 +627,5 @@ void printRobotsCommandsList(){
                      fflush(stdout);
             }
         }
-
-		cout << "made it here !!!" << endl;
-		fflush(stdout);
 
 }

@@ -46,7 +46,10 @@ namespace Robot{
     typedef struct RThread {
         static pthread_mutex_t mutex; 
         static pthread_mutex_t file_mutex;
-        static vector<vector<pthread_mutex_t*>*> mutex_2d_vec;
+        static vector<pthread_mutex_t*> boxLocReadingMutexVec;
+        static vector<pthread_mutex_t*> boxLocWritingMutexVec;
+        static vector<pthread_mutex_t*> robotLocWritingMutexVec;
+        static vector<pthread_mutex_t*> robotLocReadingMutexVec;
         static RThread* RTinfo;
         pthread_t TID;
         static vector<vector<pair<Moves, Direction>>> commandsListHolder;
