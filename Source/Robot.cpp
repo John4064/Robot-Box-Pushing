@@ -44,8 +44,20 @@ namespace Robot{
         RTinfo->genRobotsCommandsList(RTinfo);
         while(GUIStartedP[0] != 1){};
         RTinfo->robotMakeMoves();
-        RTinfo->printARobotsCommandList();
+        
+        // RTinfo->printARobotsCommandList();
         return (new void*);
+    }
+
+    void RThread::fprintRobotMove(Moves move, Direction direction){
+        pthread_mutex_lock(&file_mutex);
+        ofstream myfile;
+        myfile.open("robotSimulOut.txt", ios_base::app);
+        string moveString = convertMoveEnumToWord( move);    
+        string directionString = convertDirEnumToWord(direction);
+        myfile << "robot " << idx_of_robot << "   \t"<< moveString << "   \t" << directionString << "\n";
+        myfile.close();
+        pthread_mutex_unlock(&file_mutex);
     }
 
     void RThread::printARobotsCommandList(){
@@ -79,6 +91,7 @@ namespace Robot{
                 pthread_mutex_lock(&RThread::mutex);
                 makeRegMove(command.second, idx_of_robot);
                 pthread_mutex_unlock(&RThread::mutex);
+                fprintRobotMove(command.first, command.second);
                 cout << "b" << endl;
             }
             if (command.first == PUSH){
@@ -86,6 +99,7 @@ namespace Robot{
                 pthread_mutex_lock(&RThread::mutex);
                 makePushMove(command.second, idx_of_robot);
                 pthread_mutex_unlock(&RThread::mutex);
+                fprintRobotMove(command.first, command.second);
                 cout << "d" << endl;
             }
             if (command.first == END){
@@ -93,6 +107,7 @@ namespace Robot{
                 pthread_mutex_lock(&RThread::mutex);
                 thisRobotsMoves.clear();
                 pthread_mutex_unlock(&RThread::mutex);
+                fprintRobotMove(command.first, command.second);
                 cout << "d" << endl;
             }
                 cout << "e" << endl;
@@ -101,8 +116,6 @@ namespace Robot{
                 thisRobotsMoves.erase(thisRobotsMoves.begin());
             }
             pthread_mutex_unlock(&RThread::mutex);
-            cout << "f" << endl;
-            cout << "made it here .... yay7" << endl;
             fflush(stdout);
             usleep(robotSleepTime);
         }
@@ -453,19 +466,19 @@ namespace Robot{
         string dirAsString;
         switch(dir){
             case NORTH:
-                dirAsString = "NORTH";
+                dirAsString = "N";
             break;
             case SOUTH:
-                dirAsString = "SOUTH";
+                dirAsString = "S";
             break;
             case EAST:
-                dirAsString = "EAST";
+                dirAsString = "E";
             break;
             case WEST:
-                dirAsString = "WEST";
+                dirAsString = "W";
             break;
             case NOMOVEMENT:
-                dirAsString = "NOMOVEMENT";
+                dirAsString = "";
             break;
             default:
                 dirAsString ="";

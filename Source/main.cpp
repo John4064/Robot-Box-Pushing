@@ -415,7 +415,6 @@ void boxRandomPlacement(default_random_engine myEngine){
 	
 	for(uint i = 0; i < numBoxes; i++){
 		while(true){
-			// fell asleep... finish later.
 			uint boxRow = robotRowDist(myEngine);
 			uint boxCol = robotColDist(myEngine);
 			pair<uint, uint> proposedPair = make_pair(boxRow, boxCol);

@@ -54,6 +54,7 @@ namespace Robot{
         uint idx_of_robot;  
         void genRobotsCommandsList(RThread* RTinfo);
         void printARobotsCommandList();
+        void fprintRobotMove(Moves move, Direction direction);
         void robotMakeMoves();
     } RThread;
 
