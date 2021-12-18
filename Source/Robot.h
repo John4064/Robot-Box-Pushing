@@ -46,10 +46,13 @@ namespace Robot{
     typedef struct RThread {
         static pthread_mutex_t mutex; 
         static pthread_mutex_t file_mutex;
-        static vector<pthread_mutex_t*> boxLocReadingMutexVec;
+        static vector<pthread_mutex_t*> boxLocProtectReaderCountMutexVec;
         static vector<pthread_mutex_t*> boxLocWritingMutexVec;
         static vector<pthread_mutex_t*> robotLocWritingMutexVec;
-        static vector<pthread_mutex_t*> robotLocReadingMutexVec;
+        static vector<pthread_mutex_t*> robotLocProtectReaderCountMutexVec;
+        static vector<vector<pthread_mutex_t*>*> gridMutexVector;
+        static vector<uint> robotLocReaderCountVec;
+        static vector<uint> boxLocReaderCountVec;
         static RThread* RTinfo;
         pthread_t TID;
         static vector<vector<pair<Moves, Direction>>> commandsListHolder;
@@ -58,6 +61,8 @@ namespace Robot{
         uint idx_of_robot;  
         void genRobotsCommandsList(RThread* RTinfo);
         void printARobotsCommandList();
+        pair<uint, uint> determineLocCommBringsUsTo(pair<Moves, Direction> command);
+        bool checkLocAlreadyExists(pair<uint, uint> locMovingTo);
         void fprintRobotMove(Moves move, Direction direction);
         void robotMakeMoves();
         static void initializeMutexes();
@@ -73,8 +78,6 @@ namespace Robot{
     vector<pair<Moves, Direction> > genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis);
 
     vector<pair<Moves, Direction> > genCommPushBoxtoDoor(RThread* RTinfo);
-
-
 
     vector<pair<Moves, Direction> > recordMovesPushToDoor(RThread* RTinfo, tuple <int, int ,axis> startingPushPositionAxis);
     
