@@ -173,8 +173,8 @@ void displayGridPane(void)
 	using namespace Robot;
 	for (uint i=0; i<numBoxes; i++)
 	{	//	here I would test if the robot thread is still live
-			 pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
-				RThread::robotLocReaderCountVec[i]++;
+			pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
+			RThread::robotLocReaderCountVec[i]++;
 			cout << "reader count vec from display first one: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;				
 			if (RThread::robotLocReaderCountVec[i] == 1){
                 pthread_mutex_lock(RThread::robotLocWritingMutexVec[i]);
@@ -186,7 +186,7 @@ void displayGridPane(void)
 			pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
 			 RThread::robotLocReaderCountVec[i]--;
 			 cout << "reader count vec from display: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;
-			  if (RThread::robotLocReaderCountVec[i] == 0){
+			if (RThread::robotLocReaderCountVec[i] == 0){
                 pthread_mutex_unlock(RThread::robotLocWritingMutexVec[i]);
             }
 			pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);

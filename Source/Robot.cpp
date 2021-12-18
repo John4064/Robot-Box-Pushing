@@ -92,8 +92,8 @@ namespace Robot{
         // read/check all the boxes
 
         // now read/check all the robots
-        for(int i=0; i<robotLoc.size(); i++){
-            cout << "made it here" << endl;
+    for(int i=0; i<robotLoc.size(); i++){
+        cout << "made it here" << endl;
 
     
         if (isReader == true){
@@ -109,8 +109,8 @@ namespace Robot{
             pthread_mutex_unlock(robotLocProtectReaderCountMutexVec[i]);
         }
 
-        if (locMovingTo.first == robotLoc[i]->first && locMovingTo.second == robotLoc[i]->second
-            ||locMovingTo.first == boxLoc[i]->first && locMovingTo.second == boxLoc[i]->second){
+        if ((locMovingTo.first == robotLoc[i]->first && locMovingTo.second == robotLoc[i]->second
+            || locMovingTo.first == boxLoc[i]->first && locMovingTo.second == boxLoc[i]->second) && i != idx_of_robot){
                 exists = true;
                 cout << "it exists" << endl;
         }
@@ -199,46 +199,55 @@ namespace Robot{
      */
     void RThread::robotMakeMoves(){
         while(!(thisRobotsMoves.empty())){
+   
             pair<Moves, Direction> command = thisRobotsMoves.front();
+            if (command.first == END){
+                break;
+            }
+
             pair<uint, uint> newLocBox;
+            bool couldMakeMove = false;
             
             pair<uint, uint> newLocRobot = determineLocCommBringsUsToMOVE(command.second);
 
             int oldLocRobotY = robotLoc[idx_of_robot]->first;
             int oldLocRobotX = robotLoc[idx_of_robot]->second;
 
-            if(command.second == PUSH){
+            if(command.first == PUSH){
                 newLocBox = determineLocCommBringsUsToPUSH(command.second);
                 cout << "the new B location is " << newLocBox.first << newLocBox.second << endl;
             }
             cout << "the new R location is " << newLocRobot.first << newLocRobot.second << endl;
-   
-             int count = 0;
 
-            if (command.second == MOVE){
+            if (command.first == MOVE){
                 while (checkLocAlreadyExists(newLocRobot, true)){};
                 pthread_mutex_lock((*gridMutexVector[newLocRobot.first])[newLocRobot.second]);
             }
-            count = 0;
-            if (command.second == PUSH){
+            if (command.first == PUSH){
                 while (checkLocAlreadyExists(newLocBox, true)){};
                 pthread_mutex_lock((*gridMutexVector[newLocBox.first])[newLocBox.second]);
+            }
+            if (command.first == END){
+                pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
             }
             pthread_mutex_lock(robotLocWritingMutexVec[idx_of_robot]);
             if (command.first == MOVE){
                 if(!checkLocAlreadyExists(newLocRobot, false)){
                     makeRegMove(command.second, idx_of_robot);
+                    couldMakeMove = true;
                 }
             }
             if (command.first == PUSH){
                 if(!checkLocAlreadyExists(newLocBox, false)){
                     makePushMove(command.second, idx_of_robot);
+                    couldMakeMove = true;
                 }
             }
             pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
             pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
+            
 
-            if(!thisRobotsMoves.empty()){
+            if(!thisRobotsMoves.empty() && couldMakeMove == true){
                 cout << "hi561" << endl;
                 thisRobotsMoves.erase(thisRobotsMoves.begin());
             }
