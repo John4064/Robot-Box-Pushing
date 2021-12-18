@@ -345,6 +345,17 @@ void Robot::printBeginningPartOfOutputFile(){
 void initializeApplication(){
 	GUIStartedP[0] = 0;
 	{ using namespace Robot;
+
+		if (pthread_mutex_init(&RThread::mutex, NULL) != 0) {                                    
+			perror("mutex_lock");                                                       
+			exit(1);                                                                    
+		}    
+
+		if (pthread_mutex_init(&RThread::file_mutex, NULL) != 0) {                                    
+			perror("mutex_lock");                                                       
+			exit(1);                                                                    
+		}   
+
 		random_device myRandDev;
 		default_random_engine myEngine(myRandDev());
 		uniform_int_distribution<int> robotRowDist(0, numRows - 1);

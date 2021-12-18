@@ -1,26 +1,6 @@
 {
 	"files": [
 		{
-			"path": "Source/main.cpp",
-			"bookmarks": [
-				{
-					"line": 119,
-					"column": 0,
-					"label": ""
-				},
-				{
-					"line": 238,
-					"column": 0,
-					"label": ""
-				},
-				{
-					"line": 344,
-					"column": 0,
-					"label": ""
-				}
-			]
-		},
-		{
 			"path": "Source/gl_frontEnd.cpp",
 			"bookmarks": [
 				{

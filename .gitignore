@@ -53,3 +53,6 @@ dkms.conf
 
 robotsv1
 output.txt
+robotSimulOut.txt
+prog
+"testing random functs.cpp"
