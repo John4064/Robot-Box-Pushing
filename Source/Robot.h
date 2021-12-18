@@ -46,6 +46,7 @@ namespace Robot{
     typedef struct RThread {
         static pthread_mutex_t mutex; 
         static pthread_mutex_t file_mutex;
+        static vector<vector<pthread_mutex_t*>*> mutex_2d_vec;
         static RThread* RTinfo;
         pthread_t TID;
         static vector<vector<pair<Moves, Direction>>> commandsListHolder;
@@ -56,13 +57,15 @@ namespace Robot{
         void printARobotsCommandList();
         void fprintRobotMove(Moves move, Direction direction);
         void robotMakeMoves();
+        static void initializeMutexes();
     } RThread;
 
     void * robotThreadFunc(void * arg);
 
     tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo);
     void printBeginningPartOfOutputFile();
-    
+
+    void placeRobots();
 
     vector<pair<Moves, Direction> > genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis);
 

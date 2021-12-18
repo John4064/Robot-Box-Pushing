@@ -93,7 +93,6 @@ char** message;
 //	Global Vectors
 //-----------------------------
 
-
 vector<pair<uint, uint>*> boxLoc;
 vector<uint> doorAssign;
 vector<pair<uint, uint>*> doorLoc;
@@ -136,7 +135,6 @@ void displayGridPane(void)
 			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
 			boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
 			pthread_mutex_unlock(&Robot::RThread::mutex);
-
 	}
 
 
@@ -335,46 +333,70 @@ void Robot::printBeginningPartOfOutputFile(){
 
 }
 
+void Robot::RThread::initializeMutexes(){
+	if (pthread_mutex_init(&RThread::mutex, NULL) != 0) {                                    
+		perror("mutex_lock");                                                       
+		exit(1);                                                                    
+	}    
+
+	if (pthread_mutex_init(&RThread::file_mutex, NULL) != 0) {                                    
+		perror("mutex_lock");                                                       
+		exit(1);                                                                    
+	}   
+	
+	// initialize a mutex lock array for robot cells
+
+	for (int i = 0; i < numRows; i++){
+		vector<pthread_mutex_t*> *vecPointer=new vector<pthread_mutex_t*>();
+		for (int j = 0; j < numCols; j++){
+			pthread_mutex_t *mutexP = new pthread_mutex_t();
+			if(pthread_mutex_init(mutexP, NULL) != 0){
+				perror("mutex_lock");                                                       
+				exit(1);   
+			}
+			vecPointer->push_back(mutexP);
+		}
+		RThread::mutex_2d_vec.push_back(vecPointer);
+	}
+}
+
+void Robot::placeRobots(){
+	random_device myRandDev;
+	default_random_engine myEngine(myRandDev());
+	uniform_int_distribution<int> robotRowDist(0, numRows - 1);
+	uniform_int_distribution<int> robotColDist(0, numCols - 1);
+
+	robotRandomPlacement(robotRowDist, robotColDist, myEngine);
+	doorRandomPlacement(robotRowDist, robotColDist, myEngine);
+	boxRandomPlacement(myEngine);
+	placeRobots();
+
+	uniform_int_distribution<int> randDoorDist(0, doorLoc.size() - 1);
+	assignDoors(randDoorDist, myEngine);
+}
 
 void initializeApplication(){
-	{ using namespace Robot;
 
-		if (pthread_mutex_init(&RThread::mutex, NULL) != 0) {                                    
-			perror("mutex_lock");                                                       
-			exit(1);                                                                    
-		}    
-
-		if (pthread_mutex_init(&RThread::file_mutex, NULL) != 0) {                                    
-			perror("mutex_lock");                                                       
-			exit(1);                                                                    
-		}   
-
-		random_device myRandDev;
-		default_random_engine myEngine(myRandDev());
-		uniform_int_distribution<int> robotRowDist(0, numRows - 1);
-		uniform_int_distribution<int> robotColDist(0, numCols - 1);
-
-		robotRandomPlacement(robotRowDist, robotColDist, myEngine);
-		doorRandomPlacement(robotRowDist, robotColDist, myEngine);
-		boxRandomPlacement(myEngine);
-		printObjectPlacements();
-		uniform_int_distribution<int> randDoorDist(0, doorLoc.size() - 1);
-		assignDoors(randDoorDist, myEngine);
-
-		RThread::RTinfo = new RThread[numRobots];
-
-		pthread_mutex_lock(&RThread::mutex);
+	{using namespace Robot;
 		
-		for (uint i =0; i < numRobots; i++){
-			(RThread::RTinfo+i)->idx_of_robot = i;
-			printBeginningPartOfOutputFile();
-			int errCode = pthread_create(&RThread::RTinfo->TID, NULL, robotThreadFunc, RThread::RTinfo+i);
-			if (errCode != 0){
-				printf ("could not pthread_create thread %d. %d/%s\n",
-				i, errCode, strerror(errCode));
-				exit (EXIT_FAILURE);
-			}
+	RThread::initializeMutexes();
+
+	//printObjectPlacements();
+
+	RThread::RTinfo = new RThread[numRobots];
+
+	pthread_mutex_lock(&RThread::mutex);
+	
+	for (uint i =0; i < numRobots; i++){
+		(RThread::RTinfo+i)->idx_of_robot = i;
+		printBeginningPartOfOutputFile();
+		int errCode = pthread_create(&RThread::RTinfo->TID, NULL, robotThreadFunc, RThread::RTinfo+i);
+		if (errCode != 0){
+			printf ("could not pthread_create thread %d. %d/%s\n",
+			i, errCode, strerror(errCode));
+			exit (EXIT_FAILURE);
 		}
+	}
 
 	grid = new uint*[numRows];
 	for (uint i=0; i<numRows; i++)
@@ -384,6 +406,7 @@ void initializeApplication(){
 	for (uint k=0; k<MAX_NUM_MESSAGES; k++)
 		message[k] = (char*) malloc((MAX_LENGTH_MESSAGE+1)*sizeof(char));
 	}
+
 }
 
 
@@ -408,7 +431,6 @@ void boxRandomPlacement(default_random_engine myEngine){
 
 void robotRandomPlacement(uniform_int_distribution<int> robotRowDist, 
 uniform_int_distribution<int> robotColDist, default_random_engine myEngine){
-
 	for(uint i = 0; i < numRobots; i++){
 		while(true){
 			uint robotRow = robotRowDist(myEngine);
