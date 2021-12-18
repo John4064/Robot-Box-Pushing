@@ -46,13 +46,10 @@ namespace Robot{
     typedef struct RThread {
         static pthread_mutex_t mutex; 
         static pthread_mutex_t file_mutex;
-        static vector<pthread_mutex_t*> boxLocProtectReaderCountMutexVec;
-        static vector<pthread_mutex_t*> boxLocWritingMutexVec;
         static vector<pthread_mutex_t*> robotLocWritingMutexVec;
         static vector<pthread_mutex_t*> robotLocProtectReaderCountMutexVec;
         static vector<vector<pthread_mutex_t*>*> gridMutexVector;
         static vector<uint> robotLocReaderCountVec;
-        static vector<uint> boxLocReaderCountVec;
         static RThread* RTinfo;
         pthread_t TID;
         static vector<vector<pair<Moves, Direction>>> commandsListHolder;
@@ -61,13 +58,14 @@ namespace Robot{
         uint idx_of_robot;  
         void genRobotsCommandsList(RThread* RTinfo);
         void printARobotsCommandList();
-        pair<uint, uint> determineLocCommBringsUsTo(pair<Moves, Direction> command);
-        bool checkLocAlreadyExists(pair<uint, uint> locMovingTo);
+        pair<uint, uint> determineLocCommBringsUsToPUSH(Direction command);
+        pair<uint, uint> determineLocCommBringsUsToMOVE(Direction command);
+        bool checkLocAlreadyExists(pair<uint, uint> locMovingTo, bool isReader);
         void fprintRobotMove(Moves move, Direction direction);
         void robotMakeMoves();
-        static void initializeMutexes();
-    } RThread;
 
+    } RThread;
+    void initializeMutexes();
     void * robotThreadFunc(void * arg);
 
     tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo);

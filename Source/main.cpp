@@ -79,6 +79,7 @@ void doorRandomPlacement(uniform_int_distribution<int> rowDist, uniform_int_dist
  default_random_engine myEngine);
 void boxRandomPlacement(default_random_engine myEngine);
 void assignDoors(uniform_int_distribution<int> randDoorDist, default_random_engine myEngine);
+void Robot::initializeMutexes();
 
 template <typename T>
 void printVector(T vec);
@@ -137,14 +138,11 @@ namespace Robot{
 	vector<pair<uint, uint>*> robotLoc;
 	pthread_mutex_t RThread::mutex;
 	pthread_mutex_t RThread::file_mutex;
-	extern Robot::RThread* RThread::RTinfo;
+	Robot::RThread* RThread::RTinfo;
 	extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
-	vector<pthread_mutex_t*> RThread::boxLocProtectReaderCountMutexVec;
-    vector<pthread_mutex_t*> RThread::boxLocWritingMutexVec;
-	vector<uint> RThread::boxLocReaderCountVec;
 	vector<uint> RThread::robotLocReaderCountVec;
+	vector<pthread_mutex_t*> RThread::robotLocProtectReaderCountMutexVec;
     vector<pthread_mutex_t*> RThread::robotLocWritingMutexVec;
-    vector<pthread_mutex_t*> RThread::robotLocProtectReaderCountMutexVec;
 	vector<vector<pthread_mutex_t*>*> RThread::gridMutexVector;
 };
 
@@ -175,32 +173,22 @@ void displayGridPane(void)
 	using namespace Robot;
 	for (uint i=0; i<numBoxes; i++)
 	{	//	here I would test if the robot thread is still live
-			 pthread_mutex_lock(RThread::boxLocProtectReaderCountMutexVec[i]);
 			 pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
-            	RThread::boxLocReaderCountVec[i]++;
 				RThread::robotLocReaderCountVec[i]++;
-            if (RThread::boxLocReaderCountVec[i] == 1){
-                pthread_mutex_lock(RThread::boxLocWritingMutexVec[i]);
-            }
+			cout << "reader count vec from display first one: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;				
 			if (RThread::robotLocReaderCountVec[i] == 1){
                 pthread_mutex_lock(RThread::robotLocWritingMutexVec[i]);
             }
-            pthread_mutex_unlock(RThread::boxLocProtectReaderCountMutexVec[i]);
 			pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
 			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
 			boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
-       
-            pthread_mutex_lock(RThread::boxLocProtectReaderCountMutexVec[i]);
+
 			pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
-            RThread::boxLocReaderCountVec[i]--;
 			 RThread::robotLocReaderCountVec[i]--;
-            if (RThread::boxLocReaderCountVec[i] == 0){
-                pthread_mutex_unlock(RThread::boxLocWritingMutexVec[i]);
-            }
+			 cout << "reader count vec from display: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;
 			  if (RThread::robotLocReaderCountVec[i] == 0){
                 pthread_mutex_unlock(RThread::robotLocWritingMutexVec[i]);
             }
-            pthread_mutex_unlock(RThread::boxLocProtectReaderCountMutexVec[i]);
 			pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
 	}
 	}
@@ -405,7 +393,9 @@ void Robot::printBeginningPartOfOutputFile(){
 
 }
 
-void Robot::RThread::initializeMutexes(){
+void Robot::initializeMutexes(){
+	cout << "inside initialize mutexes" << endl;
+	fflush(stdout);
 	
 	// an all purpose mutex used as a mutex gate when initializing gui 
 	// and for reading data in single-threaded version
@@ -422,23 +412,15 @@ void Robot::RThread::initializeMutexes(){
 	
 	// declare and initialize two mutex arrays for each box loc
 	// robot loc arrays ... one for reading one for writing
+	cout << "still inside intialize mutexes" << endl;
 
-	for (int j = 0; j < boxLoc.size(); j++){
+	for (int j = 0; j < robotLoc.size(); j++){
 		pthread_mutex_t *mutexP = new pthread_mutex_t();
 		if(pthread_mutex_init(mutexP, NULL) != 0){
 			perror("mutex_lock");                                                       
 			exit(1);   
 		}
-		boxLocProtectReaderCountMutexVec.push_back(mutexP);
-	}
-
-	for (int j = 0; j < boxLoc.size(); j++){
-		pthread_mutex_t *mutexP = new pthread_mutex_t();
-		if(pthread_mutex_init(mutexP, NULL) != 0){
-			perror("mutex_lock");                                                       
-			exit(1);   
-		}
-		boxLocWritingMutexVec.push_back(mutexP);
+		RThread::robotLocProtectReaderCountMutexVec.push_back(mutexP);
 	}
 
 	for (int j = 0; j < robotLoc.size(); j++){
@@ -447,30 +429,17 @@ void Robot::RThread::initializeMutexes(){
 			perror("mutex_lock");                                                       
 			exit(1);   
 		}
-		robotLocProtectReaderCountMutexVec.push_back(mutexP);
+		RThread::robotLocWritingMutexVec.push_back(mutexP);
 	}
 
 	for (int j = 0; j < robotLoc.size(); j++){
-		pthread_mutex_t *mutexP = new pthread_mutex_t();
-		if(pthread_mutex_init(mutexP, NULL) != 0){
-			perror("mutex_lock");                                                       
-			exit(1);   
-		}
-		robotLocWritingMutexVec.push_back(mutexP);
-	}
-
-	for (int j = 0; j < robotLoc.size(); j++){
-		robotLocReaderCountVec.push_back(0);
-	}
-
-	for (int j = 0; j < boxLoc.size(); j++){
-		boxLocReaderCountVec.push_back(0);
+		RThread::robotLocReaderCountVec.push_back(0);
 	}
 
 	// make grid mutexes to aid in waking up waiting threads
-	for (int i=0; i < numCols; i++){
+	for (int i=0; i < numRows; i++){
 		vector<pthread_mutex_t*>* tempVec = new vector<pthread_mutex_t*>();
-		for (int j=0; j < numRows; j++){
+		for (int j=0; j < numCols; j++){
 		pthread_mutex_t *mutexP = new pthread_mutex_t();
 		if(pthread_mutex_init(mutexP, NULL) != 0){
 			perror("mutex_lock");                                                       
@@ -478,8 +447,25 @@ void Robot::RThread::initializeMutexes(){
 		}
 		tempVec->push_back(mutexP);
 	}
-	gridMutexVector.push_back(tempVec);
+	RThread::gridMutexVector.push_back(tempVec);
 	}
+
+	vector<vector<int>> mutex_mimic_vec(numRows, std::vector<int>(numCols, 0));
+
+	for (uint i = 0; i < robotLoc.size(); i++){
+		for (uint j = 0; j < RThread::gridMutexVector[i]->size();j++){
+			pair<uint, uint> temp = make_pair(i, j);
+			if (checkIfPairExists(temp, boxLoc) || checkIfPairExists(temp, robotLoc)){
+				pthread_mutex_lock((*RThread::gridMutexVector[i])[j]);
+				mutex_mimic_vec[i][j] = 1;
+			}
+		}
+	}
+
+	for (int i = 0; i < mutex_mimic_vec.size(); i++){
+		printVector(mutex_mimic_vec[i]);
+	}
+	
 }
 
 void Robot::placeRobots(){
@@ -498,11 +484,12 @@ void Robot::placeRobots(){
 void initializeApplication(){
 
 	{using namespace Robot;
-		
-	RThread::initializeMutexes();
+	
+	placeRobots();
+	initializeMutexes();
 
 	//printObjectPlacements();
-	placeRobots();
+	
 
 	RThread::RTinfo = new RThread[numRobots];
 
@@ -521,10 +508,6 @@ void initializeApplication(){
 			exit (EXIT_FAILURE);
 		}
 	}
-
-	
-
-
 	grid = new uint*[numRows];
 	for (uint i=0; i<numRows; i++)
 		grid[i] = new uint [numCols];
@@ -535,8 +518,6 @@ void initializeApplication(){
 	}
 
 }
-
-
 
 void boxRandomPlacement(default_random_engine myEngine){
 	uniform_int_distribution<int> robotRowDist(1, numRows - 2);

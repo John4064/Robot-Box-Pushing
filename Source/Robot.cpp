@@ -81,71 +81,69 @@ namespace Robot{
     }
 
     // Check if the cell you want to move 
-    bool RThread::checkLocAlreadyExists(pair<uint, uint> locMovingTo){
+    bool RThread::checkLocAlreadyExists(pair<uint, uint> locMovingTo, bool isReader){
         
+        // test if we can even access this mutex location
+        cout << "hellow2222" << endl;
+
         // switch this to true if find a conflict in occupancy of the cell moving to
         bool exists = false;
         cout << "12312312" << endl;
         // read/check all the boxes
-        for(int i=0; i<boxLoc.size(); i++){
-            cout << "hellow" << endl;
-            pthread_mutex_lock((boxLocProtectReaderCountMutexVec[i]));
-                 cout << "hiii" << endl;
-            pthread_mutex_lock(&file_mutex);
-            cout << "1111112312312" << endl;
-             fflush(stdout);
-            pthread_mutex_unlock(&file_mutex);
-            boxLocReaderCountVec[i]++;
-            if (boxLocReaderCountVec[i] == 1){
-                pthread_mutex_lock(boxLocWritingMutexVec[i]);
-            }
-            pthread_mutex_unlock(boxLocProtectReaderCountMutexVec[i]);
-            if (locMovingTo.first == boxLoc[i]->first && locMovingTo.second == boxLoc[i]->second){
-                exists = true;
-                       cout << "1212312212121212312" << endl;
-            }
-            pthread_mutex_lock(boxLocProtectReaderCountMutexVec[i]);
-            boxLocReaderCountVec[i]--;
-            if (boxLocReaderCountVec[i] == 0){
-                pthread_mutex_unlock(boxLocWritingMutexVec[i]);
-            }
-            pthread_mutex_unlock(boxLocProtectReaderCountMutexVec[i]);
-        }
 
         // now read/check all the robots
         for(int i=0; i<robotLoc.size(); i++){
+            cout << "made it here" << endl;
+
+    
+        if (isReader == true){
             pthread_mutex_lock(robotLocProtectReaderCountMutexVec[i]);
             robotLocReaderCountVec[i]++;
+			 cout << "reader count vec from inside function: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;;
+
             if (robotLocReaderCountVec[i] == 1){
                 pthread_mutex_lock(robotLocWritingMutexVec[i]);
+                cout << "exists acquired the writing lock" << endl;
             }
+                    cout << "did I make it here" << endl;
             pthread_mutex_unlock(robotLocProtectReaderCountMutexVec[i]);
-            if (locMovingTo.first == robotLoc[i]->first && locMovingTo.second == robotLoc[i]->second){
+        }
+
+        if (locMovingTo.first == robotLoc[i]->first && locMovingTo.second == robotLoc[i]->second
+            ||locMovingTo.first == boxLoc[i]->first && locMovingTo.second == boxLoc[i]->second){
                 exists = true;
-            }
+                cout << "it exists" << endl;
+        }
+                    cout << "did I make it here" << endl;
+        if (isReader == true){
             pthread_mutex_lock(robotLocProtectReaderCountMutexVec[i]);
             robotLocReaderCountVec[i]--;
+             cout << "reader count vec from inside function second: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;;
+
             if (robotLocReaderCountVec[i] == 0){
                 pthread_mutex_unlock(robotLocWritingMutexVec[i]);
             }
             pthread_mutex_unlock(robotLocProtectReaderCountMutexVec[i]);
+                    cout << "did I make it here all the way" << endl;
+            }
         }
 
         // if bool is true, will need to write in the next function call
         // now that you are going to be writing, will need to place lock on and check everything again
         // while the lock still on.
-
+        cout << "returning " << exists << endl;
         return exists;
     }
 
 
-    pair<uint, uint> RThread::determineLocCommBringsUsTo(pair<Moves, Direction> command){
+    pair<uint, uint> RThread::determineLocCommBringsUsToMOVE(Direction direction){
       
         int locY = robotLoc[idx_of_robot]->first;
         int locX = robotLoc[idx_of_robot]->second;
-        
-        if (command.first == MOVE){
-            switch (command.second){
+
+        cout << "original robotLoc " << locY << " " << locX << endl;
+
+            switch (direction){
                     case NORTH:
                         locY = robotLoc[idx_of_robot]->first - 1;
                         break;
@@ -161,13 +159,17 @@ namespace Robot{
                     case NOMOVEMENT:
                         break;
                 }
-        }
-        if (command.first == PUSH){
+        return (make_pair(locY, locX));
+    }
 
-        locY = boxLoc[idx_of_robot]->first;
-        locX = boxLoc[idx_of_robot]->second;
+   pair<uint, uint> RThread::determineLocCommBringsUsToPUSH(Direction direction){
+        uint locY = boxLoc[idx_of_robot]->first;
+        uint locX = boxLoc[idx_of_robot]->second;
 
-        switch (command.second){
+         cout << "original boxLoc " << locY << " " << locX << endl;
+        
+
+        switch (direction){
             case NORTH:
                 locY = boxLoc[idx_of_robot]->first - 1;
                 break;
@@ -182,11 +184,10 @@ namespace Robot{
                 break;
             case NOMOVEMENT:
                 break;
-            }
         }
-
         return (make_pair(locY, locX));
     }
+
 
     /**
      * @brief The synchronization here is basically a reader writer problem.
@@ -197,50 +198,52 @@ namespace Robot{
      * 
      */
     void RThread::robotMakeMoves(){
-        pthread_mutex_lock(&Robot::RThread::file_mutex);
-        cout << "inside make moves" << endl;
-             pthread_mutex_unlock(&Robot::RThread::file_mutex);
         while(!(thisRobotsMoves.empty())){
             pair<Moves, Direction> command = thisRobotsMoves.front();
-                  pthread_mutex_lock(&RThread::file_mutex);
-            cout << "hi " << endl;
-             pthread_mutex_unlock(&RThread::file_mutex);
-            pair<uint, uint> newLoc = determineLocCommBringsUsTo(command);
-               pthread_mutex_lock(&RThread::file_mutex);
-            cout << "my name is dave" <<  endl;
-             pthread_mutex_unlock(&RThread::file_mutex);
-            while (checkLocAlreadyExists(newLoc)){
-                pthread_mutex_lock((*gridMutexVector[newLoc.first])[newLoc.second]);
-                cout << "my name is dave7" <<  endl;
+            pair<uint, uint> newLocBox;
+            
+            pair<uint, uint> newLocRobot = determineLocCommBringsUsToMOVE(command.second);
+
+            int oldLocRobotY = robotLoc[idx_of_robot]->first;
+            int oldLocRobotX = robotLoc[idx_of_robot]->second;
+
+            if(command.second == PUSH){
+                newLocBox = determineLocCommBringsUsToPUSH(command.second);
+                cout << "the new B location is " << newLocBox.first << newLocBox.second << endl;
+            }
+            cout << "the new R location is " << newLocRobot.first << newLocRobot.second << endl;
+   
+             int count = 0;
+
+            if (command.second == MOVE){
+                while (checkLocAlreadyExists(newLocRobot, true)){};
+                pthread_mutex_lock((*gridMutexVector[newLocRobot.first])[newLocRobot.second]);
+            }
+            count = 0;
+            if (command.second == PUSH){
+                while (checkLocAlreadyExists(newLocBox, true)){};
+                pthread_mutex_lock((*gridMutexVector[newLocBox.first])[newLocBox.second]);
             }
             pthread_mutex_lock(robotLocWritingMutexVec[idx_of_robot]);
-            cout << "hi6" << endl;
-                //check the move again
-            if(!checkLocAlreadyExists(newLoc)){
- cout << "hi5" << endl;
-            pthread_mutex_unlock((*gridMutexVector[robotLoc[idx_of_robot]->first])[robotLoc[idx_of_robot]->second]);
-             cout << "hi4" << endl;
             if (command.first == MOVE){
-                makeRegMove(command.second, idx_of_robot);
-                 cout << "hi3" << endl;
+                if(!checkLocAlreadyExists(newLocRobot, false)){
+                    makeRegMove(command.second, idx_of_robot);
+                }
             }
             if (command.first == PUSH){
-                makePushMove(command.second, idx_of_robot);
-                 cout << "hi2" << endl;
-            }
-            if (command.first == END){
-                thisRobotsMoves.clear();
-                 cout << "hi1" << endl;
+                if(!checkLocAlreadyExists(newLocBox, false)){
+                    makePushMove(command.second, idx_of_robot);
                 }
             }
             pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
-                   cout << "h31" << endl;
+            pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
+
             if(!thisRobotsMoves.empty()){
                 cout << "hi561" << endl;
                 thisRobotsMoves.erase(thisRobotsMoves.begin());
             }
                    cout << "hi671" << endl;
-        usleep(robotSleepTime);
+            usleep(robotSleepTime);
         }
     }
 
