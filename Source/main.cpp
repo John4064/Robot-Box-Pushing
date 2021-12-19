@@ -169,28 +169,28 @@ void displayGridPane(void)
 	glTranslatef(0.f, GRID_PANE_WIDTH, 0.f);
 	// flip the vertiucal axis pointing down, in regular "grid" orientation
 	glScalef(1.f, -1.f, 1.f);
-	{
-	using namespace Robot;
-	for (uint i=0; i<numBoxes; i++)
-	{	//	here I would test if the robot thread is still live
-			pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
-			RThread::robotLocReaderCountVec[i]++;
-			cout << "reader count vec from display first one: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;				
-			if (RThread::robotLocReaderCountVec[i] == 1){
-                pthread_mutex_lock(RThread::robotLocWritingMutexVec[i]);
-            }
-			pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
-			drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
-			boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
+	{using namespace Robot;
+		for (uint i=0; i<numBoxes; i++) {	//	here I would test if the robot thread is still live
+			if(RThread::RTinfo[i].stillAlive == true){
+				pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
+				RThread::robotLocReaderCountVec[i]++;
+				cout << "reader count vec from display first one: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;				
+				if (RThread::robotLocReaderCountVec[i] == 1){
+					pthread_mutex_lock(RThread::robotLocWritingMutexVec[i]);
+				}
+				pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
+				drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
+				boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
 
-			pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
-			 RThread::robotLocReaderCountVec[i]--;
-			 cout << "reader count vec from display: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;
-			if (RThread::robotLocReaderCountVec[i] == 0){
-                pthread_mutex_unlock(RThread::robotLocWritingMutexVec[i]);
-            }
-			pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
-	}
+				pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
+				RThread::robotLocReaderCountVec[i]--;
+				cout << "reader count vec from display: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;
+				if (RThread::robotLocReaderCountVec[i] == 0){
+					pthread_mutex_unlock(RThread::robotLocWritingMutexVec[i]);
+				}
+				pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
+			}
+		}
 	}
 
 	for (uint i=0; i<numDoors; i++)
@@ -489,17 +489,14 @@ void initializeApplication(){
 	initializeMutexes();
 
 	//printObjectPlacements();
-	
-
-	RThread::RTinfo = new RThread[numRobots];
-
 	// the main thread's lock, which blocks the worker threads from proceeding
 	// until unlock called after main gui loop entered.
 	pthread_mutex_lock(&RThread::mutex);
-
+	RThread::RTinfo = new RThread[numRobots];
 
 	for (uint i =0; i < numRobots; i++){
 		(RThread::RTinfo+i)->idx_of_robot = i;
+		(RThread::RTinfo+i)->stillAlive = true;
 		printBeginningPartOfOutputFile();
 		int errCode = pthread_create(&RThread::RTinfo->TID, NULL, robotThreadFunc, RThread::RTinfo+i);
 		if (errCode != 0){

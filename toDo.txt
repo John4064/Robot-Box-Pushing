@@ -1,0 +1,2 @@
+(1) add in the boolean for isAlive to the Thread Struct
+(2) add in check for whether the thread is alive before trying 

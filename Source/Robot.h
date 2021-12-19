@@ -44,6 +44,7 @@ namespace Robot{
 
 
     typedef struct RThread {
+        bool stillAlive;
         static pthread_mutex_t mutex; 
         static pthread_mutex_t file_mutex;
         static vector<pthread_mutex_t*> robotLocWritingMutexVec;

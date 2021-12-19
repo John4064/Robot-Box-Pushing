@@ -198,15 +198,19 @@ namespace Robot{
      * 
      */
     void RThread::robotMakeMoves(){
-        while(!(thisRobotsMoves.empty())){
+
+        while(!(thisRobotsMoves.empty()) && stillAlive == true){
    
             pair<Moves, Direction> command = thisRobotsMoves.front();
+     
             if (command.first == END){
+                stillAlive = false;
                 break;
             }
 
-            pair<uint, uint> newLocBox;
             bool couldMakeMove = false;
+            pair<uint, uint> newLocBox;
+  
             
             pair<uint, uint> newLocRobot = determineLocCommBringsUsToMOVE(command.second);
 
@@ -245,15 +249,24 @@ namespace Robot{
             }
             pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
             pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
-            
 
             if(!thisRobotsMoves.empty() && couldMakeMove == true){
-                cout << "hi561" << endl;
                 thisRobotsMoves.erase(thisRobotsMoves.begin());
             }
-                   cout << "hi671" << endl;
+            if(thisRobotsMoves.empty()){
+                stillAlive = false;
+            }
             usleep(robotSleepTime);
         }
+
+        if (thisRobotsMoves.empty()){
+            pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
+            pthread_mutex_unlock((*gridMutexVector[robotLoc[idx_of_robot]->first])[robotLoc[idx_of_robot]->second]);
+            boxLoc[idx_of_robot]->first = -1;
+            boxLoc[idx_of_robot]->second = -1;
+            stillAlive = false;
+        }
+
     }
 
  void RThread::genRobotsCommandsList(RThread* RTinfo){
@@ -285,9 +298,6 @@ namespace Robot{
         pairP->second = thisRobotsMoves[i].second;
         copy_of_robot_moves.push_back(*pairP);
     }
-    pthread_mutex_lock(&file_mutex);
-    cout << "robot command list generated" <<endl;
-    pthread_mutex_unlock(&file_mutex);
 }
 
     vector<pair<Moves, Direction>> recordMovesPushToDoor(RThread* RTinfo, tuple <int, int, axis> startingPushPositionAxis){
@@ -653,7 +663,6 @@ namespace Robot{
 
         int distanceFromRobToDestinationX = startingPoint.second - destination.second;
         if (distanceFromRobToDestinationX > 0){
-
             for (int i = 0; i < distanceFromRobToDestinationX; i++){
                     if (i == distanceFromRobToDestinationX - 1 && (leg_status == ON_SECOND_LEG  || leg_status == NO_SECOND_LEG)){
                         pair<Moves, Direction>* robComm = new pair<Moves, Direction>();
