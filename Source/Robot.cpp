@@ -47,9 +47,7 @@ namespace Robot{
         RTinfo->genRobotsCommandsList(RTinfo);
         RTinfo->robotMakeMovesnPrint();
         //RTinfo->printARobotsCommandList();
-        int * exitStatus = new int[1];
-        *exitStatus = 0;
-        return ((void*)exitStatus);
+        return (NULL);
     }
 
     void RThread::fprintRobotMove(Moves move, Direction direction){
@@ -210,13 +208,15 @@ namespace Robot{
      
             if (command.first == END){
                 fprintRobotMove(command.first, command.second);
-                thisRobotsMoves.clear();
                 this->stillAlive = false;
+                thisRobotsMoves.clear();
                 break;
             }
 
             if (thisRobotsMoves.size() == 2){
                 pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
+                boxLoc[idx_of_robot]->first = -1;
+                boxLoc[idx_of_robot]->second = -1;
             }
 
             bool couldMakeMove = false;
@@ -228,9 +228,7 @@ namespace Robot{
 
             if(command.first == PUSH){
                 newLocBox = determineLocCommBringsUsToPUSH(command.second);
-                cout << "the new B location is " << newLocBox.first << newLocBox.second << endl;
             }
-            cout << "the new R location is " << newLocRobot.first << newLocRobot.second << endl;
 
             if (command.first == MOVE){
                 while (checkLocAlreadyExists(newLocRobot, true)){};
@@ -240,7 +238,9 @@ namespace Robot{
                 while (checkLocAlreadyExists(newLocBox, true)){};
                 pthread_mutex_lock((*gridMutexVector[newLocBox.first])[newLocBox.second]);
             }
+
             pthread_mutex_lock(robotLocWritingMutexVec[idx_of_robot]);
+
             if (command.first == MOVE){
                 if(!checkLocAlreadyExists(newLocRobot, false)){
                     makeRegMove(command.second, idx_of_robot);
@@ -258,15 +258,8 @@ namespace Robot{
             pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
             pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
 
-            if (thisRobotsMoves.size() == 2){
-                pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
-            }
-
             if(!thisRobotsMoves.empty() && couldMakeMove == true){
                 thisRobotsMoves.erase(thisRobotsMoves.begin());
-            }
-            if(thisRobotsMoves.empty()){
-                this->stillAlive = false;
             }
             usleep(robotSleepTime);
         }
@@ -274,8 +267,6 @@ namespace Robot{
         if (thisRobotsMoves.empty()){
             // pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
             pthread_mutex_unlock((*gridMutexVector[robotLoc[idx_of_robot]->first])[robotLoc[idx_of_robot]->second]);
-            boxLoc[idx_of_robot]->first = -1;
-            boxLoc[idx_of_robot]->second = -1;
             robotLoc[idx_of_robot]->first = -1;
             robotLoc[idx_of_robot]->second = -1;
         }
@@ -518,16 +509,24 @@ namespace Robot{
         // exit(99);
     }
 
-   tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo){
-       // assume we will push vertically first, then horizontally
+   tuple<int, int, axis> RThread::determineStartingPushPositionAxis(RThread * RTinfo){
 
-       // first need to figure out if need to push vertically at all
+       axis preferredAxis;
 
-       // variable where we store if this is situation where don't need to push at all in 
-       // vertical axis default is that you do need to push vertically
-        axis axis = VERTICAL;
-        // get current index of thread/robot
-        int idx = RTinfo->idx_of_robot;
+       if (boxLoc[idx_of_robot]->first == robotLoc[idx_of_robot]->first){
+           preferredAxis = HORIZONTAL;
+       }
+       if (boxLoc[idx_of_robot]->second == robotLoc[idx_of_robot]->second){
+           preferredAxis = VERTICAL;
+       }
+    
+        if (robotLoc[idx_of_robot]->first == doorLoc[doorAssign[idx_of_robot]]->first){
+           preferredAxis = VERTICAL;
+       }
+       if (robotLoc[idx_of_robot]->second == doorLoc[doorAssign[idx_of_robot]]->second){
+           preferredAxis = HORIZONTAL;
+       }
+
         int startPushTargY, startPushTargX;
 
         // to figure out what side of the box we need to push, it needs to be whatever
@@ -535,39 +534,42 @@ namespace Robot{
         // with the Box.  In other words if it is a positive diff. Box - door or a negative difference.
         // If box - door is positive, the door is closer to the top row, and vice versa.
 
-        int yDiffBoxDoor = boxLoc[idx]->first - doorLoc[doorAssign[idx]]->first;        
+        int yDiffBoxDoor = boxLoc[idx_of_robot]->first - doorLoc[doorAssign[idx_of_robot]]->first; 
+
+        if (preferredAxis == VERTICAL){
 
         //if door closer to top, we want to push the box from one greater row number than the box
-        if (yDiffBoxDoor > 0){
-            startPushTargY = boxLoc[idx]->first + 1;
-            cout << "startPushTargY (>) = \t" << startPushTargY << endl;
-        }
-          // if door closer to top, we want to push the box from one lesser row number than the box
-        if (yDiffBoxDoor < 0){
-            startPushTargY = boxLoc[idx]->first -1;
-            cout << "startPushTargY (<) = \t" << startPushTargY << endl;
-        }
-        // if door is the same, there is no distance to travel
-        if (yDiffBoxDoor == 0){
-            startPushTargY = boxLoc[idx]->first;
-            axis = HORIZONTAL;
+            if (yDiffBoxDoor > 0){
+                startPushTargY = boxLoc[idx_of_robot]->first + 1;
+                cout << "startPushTargY (>) = \t" << startPushTargY << endl;
+            }
+            // if door closer to top, we want to push the box from one lesser row number than the box
+            if (yDiffBoxDoor < 0){
+                startPushTargY = boxLoc[idx_of_robot]->first -1;
+                cout << "startPushTargY (<) = \t" << startPushTargY << endl;
+            }
+            // if door is the same, there is no distance to travel
+            if (yDiffBoxDoor == 0){
+                startPushTargY = boxLoc[idx_of_robot]->first;
+            }
+
         }
 
-        int xDiffBoxDoor = boxLoc[idx]->second - doorLoc[doorAssign[idx]]->second;
+        int xDiffBoxDoor = boxLoc[idx_of_robot]->second - doorLoc[doorAssign[idx_of_robot]]->second;
 
         if (axis == HORIZONTAL){
             if (xDiffBoxDoor > 0){
-                startPushTargX = boxLoc[idx]->second + 1;
+                startPushTargX = boxLoc[idx_of_robot]->second + 1;
             }
             else if (xDiffBoxDoor < 0){
-                startPushTargX = boxLoc[idx]->second - 1;
+                startPushTargX = boxLoc[idx_of_robot]->second - 1;
             }
             else {
                 cerr << "Error, the robot is on top of its target box" << endl;
             }
         }
         else {
-            startPushTargX = boxLoc[idx]->second;
+            startPushTargX = boxLoc[idx_of_robot]->second;
         }
 
         // record start values and return tuple

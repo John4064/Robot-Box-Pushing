@@ -121,6 +121,9 @@ void drawRobotAndBox(int id,
 
 	//	my boxes are brown with a contour the same color as destination door
 	
+
+	if (boxRow >= 0 && boxCol >= 0){
+
 	glColor4f(0.25f, 0.25f, 0.f, 1.f);
 	glPushMatrix();
 	glTranslatef((boxCol+ 0.125f)*DH, (boxRow+0.125f)*DV, 0.f);
@@ -142,7 +145,9 @@ void drawRobotAndBox(int id,
 	char boxStr[4];
 	sprintf(boxStr, "B%d", id);
 	displayTextualInfo(boxStr, boxCol*DH + DH/4, boxRow*DV + DV/3, 0);
+	}
 
+	if (robotRow >= 0 && robotCol >= 0){
 	//	my robots are dark gray with a contour the same color as destination door
 	glColor4f(0.25f, 0.25f, 0.f, 1.f);
 	glPushMatrix();
@@ -165,6 +170,7 @@ void drawRobotAndBox(int id,
 	char robotStr[4];
 	sprintf(robotStr, "R%d", id);
 	displayTextualInfo(robotStr, robotCol*DH + DH/4, robotRow*DV + DV/3, 0);
+	}
 }
 
 //	This function assigns a color to the door based on its number

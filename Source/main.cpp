@@ -179,7 +179,6 @@ void displayGridPane(void)
 				pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
 				drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
 				boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
-
 				pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
 				RThread::robotLocReaderCountVec[i]--;
 				if (RThread::robotLocReaderCountVec[i] == 0){
@@ -327,7 +326,9 @@ int main(int argc, char** argv)
 	pthread_mutex_unlock(&Robot::RThread::mutex);
 	pthread_t joinThread;
 
+
 	pthread_create(&joinThread, NULL, Robot::joinThreads, NULL);
+
 
 	glutMainLoop();
 
@@ -357,9 +358,10 @@ void* Robot::joinThreads(void*){
 	numLiveThreads++;
 	for (int i=0; i < numRobots; i++){
 		int * status;
-		pthread_join(Robot::RThread::RTinfo[i].TID, (void**) &status);	
+		pthread_join(Robot::RThread::RTinfo[i].TID, NULL);	
+		cout << "HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << endl;
 		numLiveThreads--;
-		printf("Thread %d returned status is %d\n", i, *status);
+		printf("Thread %d returned");
 		}
 }
 

@@ -64,17 +64,17 @@ namespace Robot{
         pair<uint, uint> determineLocCommBringsUsToPUSH(Direction command);
         pair<uint, uint> determineLocCommBringsUsToMOVE(Direction command);
         bool checkLocAlreadyExists(pair<uint, uint> locMovingTo, bool isReader);
+        tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo);
         void fprintRobotMove(Moves move, Direction direction);
         void robotMakeMovesnPrint();
 
     } RThread;
 
     void* joinThreads(void*);
-
+    template <typename T> int sgn(T val);
     void initializeMutexes();
     void * robotThreadFunc(void * arg);
 
-    tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo);
     void printBeginningPartOfOutputFile();
 
     void placeRobots();

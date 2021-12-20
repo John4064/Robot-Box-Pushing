@@ -7,4 +7,4 @@ g++-11 -Wall ../Source/main.cpp ../Source/gl_frontEnd.cpp ../Source/Robot.cpp -l
 #MacOS
 
 
-./robotsv1 20 20 5 3
+./robotsv1 20 20 8 3
