@@ -350,23 +350,68 @@ namespace Robot{
         return *movesPushtoDoor;
     }
 
-    vector<pair<Moves, Direction>> genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis){
+    vector<pair<Moves, Direction>> RThread::genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis){
         // determine the starting push position 
         startingPushPositionAxis = determineStartingPushPositionAxis(RTinfo);
         return recordMovesToBehindBox(startingPushPositionAxis, RTinfo);
     }
 
 
-   vector<pair<Moves, Direction>> recordMovesToBehindBox(tuple <int, int, axis> startingPushPositionAxis, RThread* RTinfo){\
-        int idx = RTinfo->idx_of_robot;
+// true = y first, false = x first
+ bool RThread::recordYfirst(tuple <int, int, axis> startingPushPositionAxis){
+
+    int destY = get<0>(startingPushPositionAxis);
+    int destX = get<1>(startingPushPositionAxis);
+    int robtY = robotLoc[idx_of_robot]->first;
+    int robtX = robotLoc[idx_of_robot]->second;
+
+    int yDiff = destY - robtY;
+    int xDiff = destX - robtX;
+
+    int dogLegDest_Yfirst_y = destY;
+        int dogLegDest_Yfirst_x = robtX;
+    int dogLegDest_Xfirst_y = robtY;
+    int dogLegDest_Xfirst_x = destX;
+
+    int doorY = doorLoc[doorAssign[idx_of_robot]]->first;
+    int doorX = doorLoc[doorAssign[idx_of_robot]]->second;
+
+
+    double distFromDoorDoglegPosYfirst = sqrt(pow((dogLegDest_Yfirst_y - doorY), 2) + pow((dogLegDest_Yfirst_x - doorX), 2));
+    double distFromDoorDoglegPosXfirst = sqrt(pow((dogLegDest_Xfirst_y - doorY), 2) + pow((dogLegDest_Xfirst_x - doorX), 2));
+
+   
+    if (distFromDoorDoglegPosYfirst >= distFromDoorDoglegPosXfirst ){
+        return false;
+    }
+
+     if (distFromDoorDoglegPosYfirst < distFromDoorDoglegPosXfirst){
+        return true;
+    }
+
+    cout << "something went wrong..." << endl;
+    return false;
+ }
+
+   vector<pair<Moves, Direction>> RThread::recordMovesToBehindBox(tuple <int, int, axis> startingPushPositionAxis, RThread* RTinfo){
+        int idx = idx_of_robot;
         legStatus leg_status = ON_MOVE_OR_FIRST_LEG_PUSH;
 
         // may have to change this later if this doesn't work
         vector<pair<Moves, Direction>>* vec = new  vector<pair<Moves, Direction>>();
+        bool recordYFirst =  recordYfirst(startingPushPositionAxis);
+        if (recordYFirst){
+            recordMovesY(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second),  
+            make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, leg_status);
+            recordMovesX(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second), make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, leg_status);
         // bool verticalShouldBeFirst = collisionWithBoxAvoider(startingPushPositionAxis, idx, goAround);
-        recordMovesX(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second), make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, leg_status);
-        recordMovesY(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second),  
-        make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, leg_status);
+        }
+    if (!recordYFirst){
+         recordMovesX(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second), make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, leg_status);
+            recordMovesY(*vec, make_pair(robotLoc[idx]->first, robotLoc[idx]->second),  
+            make_pair(get<0>(startingPushPositionAxis), get<1>(startingPushPositionAxis)), MOVE, leg_status);
+        // bool verticalShouldBeFirst = collisionWithBoxAvoider(startingPushPositionAxis, idx, goAround);
+        }
 
         return *vec;
     }
@@ -511,20 +556,20 @@ namespace Robot{
 
    tuple<int, int, axis> RThread::determineStartingPushPositionAxis(RThread * RTinfo){
 
-       axis preferredAxis;
+       axis preferredFirstAxis;
 
        if (boxLoc[idx_of_robot]->first == robotLoc[idx_of_robot]->first){
-           preferredAxis = HORIZONTAL;
+           preferredFirstAxis = HORIZONTAL;
        }
        if (boxLoc[idx_of_robot]->second == robotLoc[idx_of_robot]->second){
-           preferredAxis = VERTICAL;
+           preferredFirstAxis = VERTICAL;
        }
     
-        if (robotLoc[idx_of_robot]->first == doorLoc[doorAssign[idx_of_robot]]->first){
-           preferredAxis = VERTICAL;
+        if (boxLoc[idx_of_robot]->first == doorLoc[doorAssign[idx_of_robot]]->first){
+           preferredFirstAxis = HORIZONTAL;
        }
-       if (robotLoc[idx_of_robot]->second == doorLoc[doorAssign[idx_of_robot]]->second){
-           preferredAxis = HORIZONTAL;
+       if (boxLoc[idx_of_robot]->second == doorLoc[doorAssign[idx_of_robot]]->second){
+           preferredFirstAxis = VERTICAL;
        }
 
         int startPushTargY, startPushTargX;
@@ -535,45 +580,42 @@ namespace Robot{
         // If box - door is positive, the door is closer to the top row, and vice versa.
 
         int yDiffBoxDoor = boxLoc[idx_of_robot]->first - doorLoc[doorAssign[idx_of_robot]]->first; 
+        int xDiffBoxDoor = boxLoc[idx_of_robot]->second - doorLoc[doorAssign[idx_of_robot]]->second;
 
-        if (preferredAxis == VERTICAL){
-
+        if (preferredFirstAxis == VERTICAL){
         //if door closer to top, we want to push the box from one greater row number than the box
             if (yDiffBoxDoor > 0){
                 startPushTargY = boxLoc[idx_of_robot]->first + 1;
-                cout << "startPushTargY (>) = \t" << startPushTargY << endl;
             }
             // if door closer to top, we want to push the box from one lesser row number than the box
             if (yDiffBoxDoor < 0){
                 startPushTargY = boxLoc[idx_of_robot]->first -1;
-                cout << "startPushTargY (<) = \t" << startPushTargY << endl;
             }
             // if door is the same, there is no distance to travel
             if (yDiffBoxDoor == 0){
                 startPushTargY = boxLoc[idx_of_robot]->first;
             }
-
-        }
-
-        int xDiffBoxDoor = boxLoc[idx_of_robot]->second - doorLoc[doorAssign[idx_of_robot]]->second;
-
-        if (axis == HORIZONTAL){
-            if (xDiffBoxDoor > 0){
-                startPushTargX = boxLoc[idx_of_robot]->second + 1;
-            }
-            else if (xDiffBoxDoor < 0){
-                startPushTargX = boxLoc[idx_of_robot]->second - 1;
-            }
-            else {
-                cerr << "Error, the robot is on top of its target box" << endl;
-            }
-        }
-        else {
             startPushTargX = boxLoc[idx_of_robot]->second;
         }
 
+        if (preferredFirstAxis == HORIZONTAL){
+        //if door closer to top, we want to push the box from one greater row number than the box
+            if (xDiffBoxDoor > 0){
+                startPushTargX = boxLoc[idx_of_robot]->second + 1;
+            }
+            // if door closer to top, we want to push the box from one lesser row number than the box
+            if (xDiffBoxDoor < 0){
+                startPushTargX = boxLoc[idx_of_robot]->second -1;
+            }
+            // if door is the same, there is no distance to travel
+            if (xDiffBoxDoor == 0){
+                startPushTargX = boxLoc[idx_of_robot]->second;
+            }
+            startPushTargY = boxLoc[idx_of_robot]->first;
+        }
+
         // record start values and return tuple
-        return make_tuple(startPushTargY, startPushTargX, axis);
+        return make_tuple(startPushTargY, startPushTargX, preferredFirstAxis);
     }
 
 

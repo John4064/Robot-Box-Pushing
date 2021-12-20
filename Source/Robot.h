@@ -67,6 +67,9 @@ namespace Robot{
         tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo);
         void fprintRobotMove(Moves move, Direction direction);
         void robotMakeMovesnPrint();
+        vector<pair<Moves, Direction> > genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis);
+        bool recordYfirst(tuple <int, int, axis> startingPushPositionAxis);
+           vector<pair<Moves, Direction>> recordMovesToBehindBox(tuple <int, int, axis> startingPushPositionAxis, RThread* RTinfo);
 
     } RThread;
 
@@ -79,7 +82,7 @@ namespace Robot{
 
     void placeRobots();
 
-    vector<pair<Moves, Direction> > genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis);
+
 
     vector<pair<Moves, Direction> > genCommPushBoxtoDoor(RThread* RTinfo);
 
@@ -90,7 +93,6 @@ namespace Robot{
 
     void printRobotsCommandsList(RThread* RTInfo);
     void destroyRobotsCommandsList(RThread* RTinfo);
-    vector<pair<Moves, Direction> > recordMovesToBehindBox(tuple <int, int, axis> startingPushPosition, RThread* RTinfo);
     
     void recordMovesX(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, legStatus leg_status);
     void recordMovesY(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, legStatus leg_status);
