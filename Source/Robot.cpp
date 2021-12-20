@@ -19,6 +19,7 @@ extern uint numRows;	//	height of the grid
 extern uint numCols;
 extern uint numBoxes;
 extern uint numDoors;
+extern uint numLiveThreads;
 	//	width
 // extern uint numBoxes;	//	also the number of robots
 // extern uint numDoors;	//	The number of doors.
@@ -37,18 +38,18 @@ namespace Robot{
     extern vector<pair<uint, uint>*> robotLoc;
 
     void* robotThreadFunc(void * arg){
-
+        numLiveThreads++;
         // block until the GUI sets up.
         pthread_mutex_lock(&RThread::mutex);
         pthread_mutex_unlock(&RThread::mutex);
         RThread* RTinfo = (RThread*) arg;
         vector<pair<Moves, Direction>> threadsCommandList;
         RTinfo->genRobotsCommandsList(RTinfo);
-        cout << "before make moves" << endl;
-        RTinfo->robotMakeMoves();
-        
-        // RTinfo->printARobotsCommandList();
-        return (new void*);
+        RTinfo->robotMakeMovesnPrint();
+        //RTinfo->printARobotsCommandList();
+        int * exitStatus = new int[1];
+        *exitStatus = 0;
+        return ((void*)exitStatus);
     }
 
     void RThread::fprintRobotMove(Moves move, Direction direction){
@@ -105,7 +106,7 @@ namespace Robot{
                 pthread_mutex_lock(robotLocWritingMutexVec[i]);
                 cout << "exists acquired the writing lock" << endl;
             }
-                    cout << "did I make it here" << endl;
+                    cout << " 11" << endl;
             pthread_mutex_unlock(robotLocProtectReaderCountMutexVec[i]);
         }
 
@@ -114,7 +115,7 @@ namespace Robot{
                 exists = true;
                 cout << "it exists" << endl;
         }
-                    cout << "did I make it here" << endl;
+                    cout << "22" << endl;
         if (isReader == true){
             pthread_mutex_lock(robotLocProtectReaderCountMutexVec[i]);
             robotLocReaderCountVec[i]--;
@@ -189,6 +190,10 @@ namespace Robot{
     }
 
 
+
+
+
+
     /**
      * @brief The synchronization here is basically a reader writer problem.
      *         the worker threads are writing to the robot and box arrays 
@@ -197,21 +202,25 @@ namespace Robot{
      *         every other location and test if a cell is occupied.
      * 
      */
-    void RThread::robotMakeMoves(){
+    void RThread::robotMakeMovesnPrint(){
 
-        while(!(thisRobotsMoves.empty()) && stillAlive == true){
+        while(!(thisRobotsMoves.empty()) && this->stillAlive == true){
    
             pair<Moves, Direction> command = thisRobotsMoves.front();
      
             if (command.first == END){
-                stillAlive = false;
+                fprintRobotMove(command.first, command.second);
+                thisRobotsMoves.clear();
+                this->stillAlive = false;
                 break;
+            }
+
+            if (thisRobotsMoves.size() == 2){
+                pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
             }
 
             bool couldMakeMove = false;
             pair<uint, uint> newLocBox;
-  
-            
             pair<uint, uint> newLocRobot = determineLocCommBringsUsToMOVE(command.second);
 
             int oldLocRobotY = robotLoc[idx_of_robot]->first;
@@ -231,42 +240,45 @@ namespace Robot{
                 while (checkLocAlreadyExists(newLocBox, true)){};
                 pthread_mutex_lock((*gridMutexVector[newLocBox.first])[newLocBox.second]);
             }
-            if (command.first == END){
-                pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
-            }
             pthread_mutex_lock(robotLocWritingMutexVec[idx_of_robot]);
             if (command.first == MOVE){
                 if(!checkLocAlreadyExists(newLocRobot, false)){
                     makeRegMove(command.second, idx_of_robot);
                     couldMakeMove = true;
+                    fprintRobotMove(command.first, command.second);
                 }
             }
             if (command.first == PUSH){
                 if(!checkLocAlreadyExists(newLocBox, false)){
                     makePushMove(command.second, idx_of_robot);
                     couldMakeMove = true;
+                    fprintRobotMove(command.first, command.second);
                 }
             }
             pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
             pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
 
+            if (thisRobotsMoves.size() == 2){
+                pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
+            }
+
             if(!thisRobotsMoves.empty() && couldMakeMove == true){
                 thisRobotsMoves.erase(thisRobotsMoves.begin());
             }
             if(thisRobotsMoves.empty()){
-                stillAlive = false;
+                this->stillAlive = false;
             }
             usleep(robotSleepTime);
         }
 
         if (thisRobotsMoves.empty()){
-            pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
+            // pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
             pthread_mutex_unlock((*gridMutexVector[robotLoc[idx_of_robot]->first])[robotLoc[idx_of_robot]->second]);
             boxLoc[idx_of_robot]->first = -1;
             boxLoc[idx_of_robot]->second = -1;
-            stillAlive = false;
+            robotLoc[idx_of_robot]->first = -1;
+            robotLoc[idx_of_robot]->second = -1;
         }
-
     }
 
  void RThread::genRobotsCommandsList(RThread* RTinfo){
@@ -292,7 +304,6 @@ namespace Robot{
 
 
     for (uint i=0; i < thisRobotsMoves.size(); i++){
-
         pair<Moves, Direction>* pairP = new pair<Moves, Direction>();
         pairP->first = thisRobotsMoves[i].first;
         pairP->second = thisRobotsMoves[i].second;

@@ -14,6 +14,8 @@ typedef unsigned int uint;
 
 namespace Robot{
 
+   
+
     typedef enum Direction {
 								NORTH = 0,
 								WEST = 1,
@@ -63,9 +65,12 @@ namespace Robot{
         pair<uint, uint> determineLocCommBringsUsToMOVE(Direction command);
         bool checkLocAlreadyExists(pair<uint, uint> locMovingTo, bool isReader);
         void fprintRobotMove(Moves move, Direction direction);
-        void robotMakeMoves();
+        void robotMakeMovesnPrint();
 
     } RThread;
+
+    void* joinThreads(void*);
+
     void initializeMutexes();
     void * robotThreadFunc(void * arg);
 

@@ -39,7 +39,7 @@ extern int numCols;
 extern int numBoxes;
 extern int numDoors;
 
-extern int numLiveThreads;
+extern uint numLiveThreads;
 
 
 //	Defined in main.c
@@ -120,6 +120,7 @@ void drawRobotAndBox(int id,
 				DV = 1.f*GRID_PANE_HEIGHT / numRows;
 
 	//	my boxes are brown with a contour the same color as destination door
+	
 	glColor4f(0.25f, 0.25f, 0.f, 1.f);
 	glPushMatrix();
 	glTranslatef((boxCol+ 0.125f)*DH, (boxRow+0.125f)*DV, 0.f);

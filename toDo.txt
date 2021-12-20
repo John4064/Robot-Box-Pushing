@@ -1,2 +1,5 @@
 (1) add in the boolean for isAlive to the Thread Struct
 (2) add in check for whether the thread is alive before trying 
+
+when determining starting push position, need to pick the one that makes it so you don't travel 
+through the box... 

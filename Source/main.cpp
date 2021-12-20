@@ -112,7 +112,7 @@ uint numBoxes = -1;	//	also the number of robots
 uint numDoors = -1;	//	The number of doors.
 uint& numRobots = numBoxes;
 
-int numLiveThreads = 0;		//	the number of live robot threads
+uint numLiveThreads = 0;		//	the number of live robot threads
 
 //	robot sleep time between moves (in microseconds)
 const int MIN_SLEEP_TIME = 1000;
@@ -160,7 +160,6 @@ void displayGridPane(void)
 	//Do one move here...
 	//	This is OpenGL/glut magic.  Don't touch
 	//---------------------------------------------
-	cout << "this is in the grid pane" << endl;
 	glutSetWindow(gSubwindow[GRID_PANE]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
@@ -173,8 +172,7 @@ void displayGridPane(void)
 		for (uint i=0; i<numBoxes; i++) {	//	here I would test if the robot thread is still live
 			if(RThread::RTinfo[i].stillAlive == true){
 				pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
-				RThread::robotLocReaderCountVec[i]++;
-				cout << "reader count vec from display first one: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;				
+				RThread::robotLocReaderCountVec[i]++;			
 				if (RThread::robotLocReaderCountVec[i] == 1){
 					pthread_mutex_lock(RThread::robotLocWritingMutexVec[i]);
 				}
@@ -184,7 +182,6 @@ void displayGridPane(void)
 
 				pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
 				RThread::robotLocReaderCountVec[i]--;
-				cout << "reader count vec from display: i =" << i << "RCV = "<< RThread::robotLocReaderCountVec[i] << endl;
 				if (RThread::robotLocReaderCountVec[i] == 0){
 					pthread_mutex_unlock(RThread::robotLocWritingMutexVec[i]);
 				}
@@ -328,14 +325,14 @@ int main(int argc, char** argv)
 	// signal to worker threads that GUI starting now
 
 	pthread_mutex_unlock(&Robot::RThread::mutex);
+	pthread_t joinThread;
+
+	pthread_create(&joinThread, NULL, Robot::joinThreads, NULL);
 
 	glutMainLoop();
 
-	for (int i=0; i < numRobots; i++){
-
-		pthread_join(Robot::RThread::RTinfo[i].TID, NULL);
-
-	}
+	pthread_join(joinThread, NULL);
+	numLiveThreads--;
 
 #endif
 	
@@ -355,6 +352,16 @@ int main(int argc, char** argv)
 	return 0;
 }
 
+
+void* Robot::joinThreads(void*){
+	numLiveThreads++;
+	for (int i=0; i < numRobots; i++){
+		int * status;
+		pthread_join(Robot::RThread::RTinfo[i].TID, (void**) &status);	
+		numLiveThreads--;
+		printf("Thread %d returned status is %d\n", i, *status);
+		}
+}
 
 //==================================================================================
 //
