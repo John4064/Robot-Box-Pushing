@@ -139,7 +139,7 @@ namespace Robot{
 	pthread_mutex_t RThread::mutex;
 	pthread_mutex_t RThread::file_mutex;
 	Robot::RThread* RThread::RTinfo;
-	extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
+	//extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
 	vector<uint> RThread::robotLocReaderCountVec;
 	vector<pthread_mutex_t*> RThread::robotLocProtectReaderCountMutexVec;
     vector<pthread_mutex_t*> RThread::robotLocWritingMutexVec;
@@ -643,7 +643,7 @@ void printVector(T vec)
 	}
 	cout << endl;
 }
-
+/*
 void printRobotsCommandsList(){
 
 	cout << "Printing RCL List: \n"<< endl;
@@ -666,3 +666,4 @@ void printRobotsCommandsList(){
         }
 
 }
+*/

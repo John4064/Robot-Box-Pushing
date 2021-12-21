@@ -38,8 +38,7 @@ extern int numRows;
 extern int numCols;
 extern int numBoxes;
 extern int numDoors;
-
-extern uint numLiveThreads;
+extern unsigned int numLiveThreads;
 
 
 //	Defined in main.c

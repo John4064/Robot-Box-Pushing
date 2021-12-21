@@ -291,7 +291,7 @@ namespace Robot{
 
     thisRobotsMoves.push_back(*lastCommand);
 
-    RTinfo->commandsListHolder.push_back(thisRobotsMoves);
+    //RTinfo->commandsListHolder.push_back(thisRobotsMoves);
 
 
     for (uint i=0; i < thisRobotsMoves.size(); i++){
