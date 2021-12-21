@@ -12,39 +12,22 @@
 /**
  * @file main.cpp
  * @author David Shawver and John Parkhurst
- * @brief 
+ * @brief CSC 412 Final Project:
  * 
+ * Version:  MULTITHREADED WITH WITH MUTUAL EXCLUSION
  * 
- * Notes:
+ * The following program is a robot deadlock simulation that allows you to visualize deadlock 
+ * when robots are not able to move around each other.
  * 
- * The critical sections of this program are as follows:
- * 
- * 	Writing:
- *		(1) When writing to file
- * 		(2) When writing the commands to robot or box array, 
- * 			values are incremented (i.e. written)
- * 		(3) If we write to standard output we should also be using locks
- * 	
- *  Reading:
- * 		(1) When a thread checks if the next cell (the robot when moving or
- * 			the box when pushing) that will be visited is already occupied,
- * 			it reads the robotLoc and boxLoc arrays.
- *
- * 		(2) In gridDisplayPane() when the GUI reads the values of the array
- * 
- * 		For Reading number 1, we are going to try to implement reader-writers solution.
- * 		
- * 			
  * 
  * @version 0.1
  * @date 2021-12-18
  * 
  * @copyright Copyright (c) 2021
- * 
  */
 
 
-#include <string.h>			// for strerror()
+#include <string.h>	
 #include <string>
 #include <cstdio>
 #include <ctime>
@@ -57,12 +40,14 @@
 #include <unistd.h>
 #include <fstream>
 
-//
+ /** Note: We are not including a non-GUI version here
+  */
+
+
 #include "guiChoice.h"
 #if CSC412_FP_USE_GUI
 	#include "gl_frontEnd.h"
 #endif
-
 using namespace std;
 
 //==================================================================================
@@ -72,6 +57,9 @@ using namespace std;
 	void displayGridPane(void);
 	void displayStatePane(void);
 #endif
+
+/* Functions that initialize the positions of the robots, boxes, and doors,
+	functions that initialize synchronization locks for use later in the program */
 void initializeApplication();
 void robotRandomPlacement(uniform_int_distribution<int> rowDist, uniform_int_distribution<int> colDist,
  default_random_engine myEngine);
@@ -93,7 +81,7 @@ bool checkIfNumExistsInVec(uint unum, vector<uint> vec);
 //	Application-level global variables
 //==================================================================================
 
-//	Don't touch
+
 #if CSC412_FP_USE_GUI
 	extern int	GRID_PANE, STATE_PANE;
 	extern int	gMainWindow, gSubwindow[2];
@@ -102,8 +90,6 @@ bool checkIfNumExistsInVec(uint unum, vector<uint> vec);
 #endif
 
 
-//	Don't rename any of these variables
-//-------------------------------------
 //	The state grid and its dimensions (arguments to the program)
 uint** grid;
 uint numRows = -1;	//	height of the grid
@@ -130,31 +116,45 @@ char** message;
 //	Global Vectors
 //-----------------------------
 
+// A global vector that stores the locations of the boxes
 vector<pair<uint, uint>*> boxLoc;
+// A global vector that stores the assignments of each box to a door
 vector<uint> doorAssign;
+// A global vector that holds the locations of the doors
 vector<pair<uint, uint>*> doorLoc;
 
+// We made a namespace for fun
 namespace Robot{
+	// A namespace scoped vector that holds the locations of the robots
 	vector<pair<uint, uint>*> robotLoc;
-	pthread_mutex_t RThread::mutex;
+
+	// A mutex used for synchronizing the child threads with the main thread
+ 	pthread_mutex_t RThread::mutex;
+
+	// A mutex used for synchronizing multiple threads writing to file
 	pthread_mutex_t RThread::file_mutex;
+	
+	// The array of thread structs -- contains miscellaneous info and methods used by structs
 	Robot::RThread* RThread::RTinfo;
-	//extern vector<vector<pair<Moves, Direction>>> RThread::commandsListHolder;
+
+	// A vector to hold the number of readers of each of the respective robot and box array cells
+	// for the reader writer problem solution implementation
 	vector<uint> RThread::robotLocReaderCountVec;
+
+	// A mutex lock vector to lock the alteration and reading from the reader count vector
 	vector<pthread_mutex_t*> RThread::robotLocProtectReaderCountMutexVec;
+	// A mutex lock vector to lock writing ot the robot and box location arrays
     vector<pthread_mutex_t*> RThread::robotLocWritingMutexVec;
+	// A vector to hold a mutex lock for each of the cells in the N by M display grid
 	vector<vector<pthread_mutex_t*>*> RThread::gridMutexVector;
 };
 
-
-//==================================================================================
-//	These are the functions that tie the simulation with the rendering.
-//	Some parts are "don't touch."  Other parts need your intervention
-//	to make sure that access to critical section is properly synchronized
-//==================================================================================
-
 #if CSC412_FP_USE_GUI
 
+
+/**
+ * @brief A function that displays the grid pane with updated locations for the robots and boxes
+ */
 void displayGridPane(void)
 {
 	//Do one move here...
@@ -208,6 +208,9 @@ void displayGridPane(void)
 	glutSetWindow(gMainWindow);
 }
 
+/**
+ * @brief A function that updates display state information
+ */
 void displayStatePane(void)
 {
 	//	This is OpenGL/glut magic.  Don't touch
@@ -246,6 +249,11 @@ void displayStatePane(void)
 //	You shouldn't have to touch this one.  Definitely if you don't
 //	add the "producer" threads, and probably not even if you do.
 //------------------------------------------------------------------------
+/**
+ * @brief The function speeds up robots after hitting the "." and slows down
+ * after hitting the "," keys
+ * 
+ */
 void speedupRobots(void)
 {
 	//	decrease sleep time by 20%, but don't get too small
@@ -262,11 +270,14 @@ void slowdownRobots(void)
 	//	increase sleep time by 20%
 	robotSleepTime = (12 * robotSleepTime) / 10;
 }
+
+
+/** @param: length of argv string array array of the inputs
+ * @brief: Will check the inputs are valid inputs
+ * @return: nothing
+ */
 void inputCheck(int argc,char** argv){
-	/** @param: length of argv string array array of the inputs
-	 * @brief: Will check the inputs are valid inputs
-	 * @return: nothing
-	 */
+
 	
 	for(int x = 1; x < argc;x++ ){
 		if(!isdigit(*argv[x])){
@@ -277,19 +288,8 @@ void inputCheck(int argc,char** argv){
 }
 
 
-//------------------------------------------------------------------------
-//	You shouldn't have to change anything in the main function besides
-//	the initialization of numRows, numCos, numDoors, numBoxes.
-//------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-	//	We know that the arguments  of the program  are going
-	//	to be the width (number of columns) and height (number of rows) of the
-	//	grid, the number of boxes (and robots), and the number of doors.
-	//	You are going to have to extract these.  For the time being,
-	//	I hard code-some values
-	//WARNING ROBOTS = BOXES or Seg fault
-	//ERROR HANDLING
 	inputCheck(argc,argv);
 	numRows = atoi(argv[1]);
 	numCols = atoi(argv[2]);
@@ -324,11 +324,10 @@ int main(int argc, char** argv)
 	// signal to worker threads that GUI starting now
 
 	pthread_mutex_unlock(&Robot::RThread::mutex);
+
 	pthread_t joinThread;
 
-
 	pthread_create(&joinThread, NULL, Robot::joinThreads, NULL);
-
 
 	glutMainLoop();
 
@@ -359,7 +358,7 @@ void* Robot::joinThreads(void*){
 	for (int i=0; i < numRobots; i++){
 		int * status;
 		pthread_join(Robot::RThread::RTinfo[i].TID, NULL);	
-		cout << "HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << endl;
+		delete (RThread::RTinfo + i);
 		numLiveThreads--;
 		printf("Thread %d returned");
 		}
@@ -370,6 +369,11 @@ void* Robot::joinThreads(void*){
 //	This is a part that you have to edit and add to.
 //
 //===================================	===============================================
+
+/**
+ * @brief A function that introduces the printing that each thread does
+ * 
+ */
 void Robot::printBeginningPartOfOutputFile(){
 
 	ofstream myfile;
@@ -402,6 +406,11 @@ void Robot::printBeginningPartOfOutputFile(){
 
 }
 
+/**
+ * @brief A functiont that creates and initializes mutexes used for synchronization of
+ * changes to the grid location data
+ * 
+ */
 void Robot::initializeMutexes(){
 	cout << "inside initialize mutexes" << endl;
 	fflush(stdout);
@@ -431,7 +440,6 @@ void Robot::initializeMutexes(){
 		}
 		RThread::robotLocProtectReaderCountMutexVec.push_back(mutexP);
 	}
-cout << "111111111" << endl;
 	for (int j = 0; j < robotLoc.size(); j++){
 		pthread_mutex_t *mutexP = new pthread_mutex_t();
 		if(pthread_mutex_init(mutexP, NULL) != 0){
@@ -440,11 +448,9 @@ cout << "111111111" << endl;
 		}
 		RThread::robotLocWritingMutexVec.push_back(mutexP);
 	}
-cout << "222222221111" << endl;
 	for (int j = 0; j < robotLoc.size(); j++){
 		RThread::robotLocReaderCountVec.push_back(0);
 	}
-		cout << "22222222" << endl;
 	// make grid mutexes to aid in waking up waiting threads
 	for (int i=0; i < numRows; i++){
 		vector<pthread_mutex_t*>* tempVec = new vector<pthread_mutex_t*>();
@@ -458,9 +464,7 @@ cout << "222222221111" << endl;
 	}
 	RThread::gridMutexVector.push_back(tempVec);
 	}
-		cout << "11111 intialize mutexes" << endl;
 	vector<vector<int>> mutex_mimic_vec(numRows, std::vector<int>(numCols, 0));
-cout << "2222222211111111111111111" << endl;
 	for (uint i = 0; i < RThread::gridMutexVector.size(); i++){
 		for (uint j = 0; j < RThread::gridMutexVector[i]->size();j++){
 			pair<uint, uint> temp = make_pair(i, j);
@@ -470,13 +474,15 @@ cout << "2222222211111111111111111" << endl;
 			}
 		}
 	}
-		cout << "ssfdsfsdfsd still inside intialize mutexes" << endl;
 	for (int i = 0; i < mutex_mimic_vec.size(); i++){
 		printVector(mutex_mimic_vec[i]);
 	}
-		cout << "still still inside intialize mutexes" << endl;
 }
 
+/**
+ * @brief A function that sets the locations for the robots in the robotLoc vector
+ * 
+ */
 void Robot::placeRobots(){
 	random_device myRandDev;
 	default_random_engine myEngine(myRandDev());
@@ -489,17 +495,24 @@ void Robot::placeRobots(){
 	assignDoors(randDoorDist, myEngine);
 }
 
+/**
+ * @brief  A function that initialize the positions of the robots, boxes, and doors,
+ * functions that initialize synchronization locks for use later in the program 
+ */
 void initializeApplication(){
 
 	{using namespace Robot;
 	
 	placeRobots();
+
 	initializeMutexes();
 
-	//printObjectPlacements();
-	// the main thread's lock, which blocks the worker threads from proceeding
-	// until unlock called after main gui loop entered.
+	// give the main thread the lock so that the threads don't begin until the GUI starts
+
 	pthread_mutex_lock(&RThread::mutex);
+
+	// create threads to do the robot movement processing
+
 	RThread::RTinfo = new RThread[numRobots];
 
 	for (uint i =0; i < numRobots; i++){
@@ -643,6 +656,8 @@ void printVector(T vec)
 	}
 	cout << endl;
 }
+
+
 /*
 void printRobotsCommandsList(){
 
@@ -667,3 +682,25 @@ void printRobotsCommandsList(){
 
 }
 */
+
+
+//  * Notes:
+//  * 
+//  * The critical sections of this program are as follows:
+//  * 
+//  * 	Writing:
+//  *		(1) When writing to file
+//  * 		(2) When writing the commands to robot or box array, 
+//  * 			values are incremented (i.e. written)
+//  * 		(3) If we write to standard output we should also be using locks
+//  * 	
+//  *  Reading:
+//  * 		(1) When a thread checks if the next cell (the robot when moving or
+//  * 			the box when pushing) that will be visited is already occupied,
+//  * 			it reads the robotLoc and boxLoc arrays.
+//  *
+//  * 		(2) In gridDisplayPane() when the GUI reads the values of the array
+//  * 
+//  * 		For Reading number 1, we are going to try to implement reader-writers solution.
+//  * 		
+//  * 			

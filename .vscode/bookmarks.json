@@ -9,22 +9,17 @@
 					"label": ""
 				},
 				{
-					"line": 277,
-					"column": 0,
-					"label": ""
-				},
-				{
-					"line": 394,
+					"line": 398,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 400,
+					"line": 404,
 					"column": 0,
 					"label": ""
 				},
 				{
-					"line": 488,
+					"line": 494,
 					"column": 0,
 					"label": ""
 				}
@@ -39,7 +34,7 @@
 					"label": ""
 				},
 				{
-					"line": 487,
+					"line": 494,
 					"column": 0,
 					"label": ""
 				}
@@ -49,12 +44,17 @@
 			"path": "Source/Robot.cpp",
 			"bookmarks": [
 				{
-					"line": 202,
+					"line": 45,
+					"column": 2,
+					"label": ""
+				},
+				{
+					"line": 219,
 					"column": 3,
 					"label": ""
 				},
 				{
-					"line": 304,
+					"line": 332,
 					"column": 3,
 					"label": "Moves to Door!1"
 				}

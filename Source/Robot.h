@@ -57,7 +57,7 @@ namespace Robot{
         pthread_t TID;
         static vector<vector<pair<Moves, Direction>>> commandsListHolder;
         vector<pair<Moves, Direction>> thisRobotsMoves;
-        vector<pair<Moves, Direction>> copy_of_robot_moves;
+        vector<pair<Moves, Direction>*> copy_of_robot_moves;
         uint idx_of_robot;  
         void genRobotsCommandsList(RThread* RTinfo);
         void printARobotsCommandList();
@@ -70,7 +70,7 @@ namespace Robot{
         vector<pair<Moves, Direction> > genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis);
         bool recordYfirst(tuple <int, int, axis> startingPushPositionAxis);
            vector<pair<Moves, Direction>> recordMovesToBehindBox(tuple <int, int, axis> startingPushPositionAxis, RThread* RTinfo);
-
+        void freeThreadMemory();
     } RThread;
 
     void* joinThreads(void*);

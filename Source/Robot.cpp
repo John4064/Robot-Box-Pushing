@@ -37,24 +37,45 @@ namespace Robot{
 
     extern vector<pair<uint, uint>*> robotLoc;
 
+    /**
+     * @brief A function that 
+     * 
+     * @param arg 
+     * @return void* 
+     */
     void* robotThreadFunc(void * arg){
+        
+        // for each thread this number goes up until the thread completes
         numLiveThreads++;
+
         // block until the GUI sets up.
         pthread_mutex_lock(&RThread::mutex);
+        // unlock after GUI sets up... lock no longer needed
         pthread_mutex_unlock(&RThread::mutex);
         RThread* RTinfo = (RThread*) arg;
-        vector<pair<Moves, Direction>> threadsCommandList;
         RTinfo->genRobotsCommandsList(RTinfo);
         RTinfo->robotMakeMovesnPrint();
-        //RTinfo->printARobotsCommandList();
+        
+        RTinfo->freeThreadMemory();
+
         return (NULL);
+    }
+
+    /**
+     * @brief A function that frees the dynamic memory used by the Thread
+     * 
+     */
+    void RThread::freeThreadMemory(){
+        for (int i=0; i < copy_of_robot_moves.size();i++){
+            delete(copy_of_robot_moves[i]);
+        }
     }
 
     void RThread::fprintRobotMove(Moves move, Direction direction){
         pthread_mutex_lock(&file_mutex);
         ofstream myfile;
         myfile.open("robotSimulOut.txt", ios_base::app);
-        string moveString = convertMoveEnumToWord( move);    
+        string moveString = convertMoveEnumToWord(move);    
         string directionString = convertDirEnumToWord(direction);
         myfile << "robot " << idx_of_robot << "   \t"<< moveString << "   \t" << directionString << "\n";
         myfile.close();
@@ -70,8 +91,8 @@ namespace Robot{
         myfile << "Robot Program: Robot" << idx_of_robot << "\n";
 
         for(int i=0; i < copy_of_robot_moves.size(); i++){
-            string moveString = convertMoveEnumToWord( copy_of_robot_moves[i].first);    
-            string directionString = convertDirEnumToWord(copy_of_robot_moves[i].second);
+            string moveString = convertMoveEnumToWord( copy_of_robot_moves[i]->first);    
+            string directionString = convertDirEnumToWord(copy_of_robot_moves[i]->second);
             myfile << "\t" << moveString << "\t" << directionString << endl;
             myfile << "\n";
         }
@@ -188,10 +209,6 @@ namespace Robot{
     }
 
 
-
-
-
-
     /**
      * @brief The synchronization here is basically a reader writer problem.
      *         the worker threads are writing to the robot and box arrays 
@@ -259,7 +276,9 @@ namespace Robot{
             pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
 
             if(!thisRobotsMoves.empty() && couldMakeMove == true){
+                // pair<Moves, Direction> *movePointer = &thisRobotsMoves[0];
                 thisRobotsMoves.erase(thisRobotsMoves.begin());
+                // delete movePointer;
             }
             usleep(robotSleepTime);
         }
@@ -272,33 +291,42 @@ namespace Robot{
         }
     }
 
+/**
+ * @brief The main function that generates the list of commands that are executed by each robot
+ * 
+ * @param RTinfo 
+ */
  void RThread::genRobotsCommandsList(RThread* RTinfo){
 
+     // A tuple that holds both the coordinates for the starting position from which the robot begins
+     // "pushing" and the third element is the axis down which the robot pushes
     tuple <int, int, axis> startingPushPositionAxis;
 
+    // This function returns the moves that are required to get to the push position
     thisRobotsMoves = genCommGetBehindBox(RTinfo, startingPushPositionAxis);
 
+    // This function returns rest of the moves
     vector<pair<Moves, Direction>> movesToDoor = recordMovesPushToDoor(RTinfo, startingPushPositionAxis);
 
-    //probably an easier way to do this...
+    // the moves are pushed back into a member variable
     for (uint i = 0; i < movesToDoor.size(); i++){
         thisRobotsMoves.push_back(movesToDoor[i]);
     }
 
+    // we tag on the last command here
     pair<Moves, Direction>* lastCommand = new pair<Moves, Direction>();
     lastCommand->first = END;
     lastCommand->second = NOMOVEMENT;
 
     thisRobotsMoves.push_back(*lastCommand);
 
-    //RTinfo->commandsListHolder.push_back(thisRobotsMoves);
-
-
+    // we make a copy of the moves array just in case we need it since we are 
+    // going to 
     for (uint i=0; i < thisRobotsMoves.size(); i++){
         pair<Moves, Direction>* pairP = new pair<Moves, Direction>();
         pairP->first = thisRobotsMoves[i].first;
         pairP->second = thisRobotsMoves[i].second;
-        copy_of_robot_moves.push_back(*pairP);
+        copy_of_robot_moves.push_back(pairP);
     }
 }
 

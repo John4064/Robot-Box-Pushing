@@ -482,7 +482,14 @@ void myTimerFunc(int val)
 	glutPostRedisplay();
 }
 
-
+/**
+ * @brief A function that initializes the front end display
+ * 
+ * @param argc 
+ * @param argv 
+ * @param gridDisplayCB 
+ * @param stateDisplayCB 
+ */
 void initializeFrontEnd(int argc, char** argv, void (*gridDisplayCB)(void),
 						void (*stateDisplayCB)(void))
 {
