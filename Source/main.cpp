@@ -431,7 +431,7 @@ void Robot::initializeMutexes(){
 		}
 		RThread::robotLocProtectReaderCountMutexVec.push_back(mutexP);
 	}
-
+cout << "111111111" << endl;
 	for (int j = 0; j < robotLoc.size(); j++){
 		pthread_mutex_t *mutexP = new pthread_mutex_t();
 		if(pthread_mutex_init(mutexP, NULL) != 0){
@@ -440,11 +440,11 @@ void Robot::initializeMutexes(){
 		}
 		RThread::robotLocWritingMutexVec.push_back(mutexP);
 	}
-
+cout << "222222221111" << endl;
 	for (int j = 0; j < robotLoc.size(); j++){
 		RThread::robotLocReaderCountVec.push_back(0);
 	}
-
+		cout << "22222222" << endl;
 	// make grid mutexes to aid in waking up waiting threads
 	for (int i=0; i < numRows; i++){
 		vector<pthread_mutex_t*>* tempVec = new vector<pthread_mutex_t*>();
@@ -458,10 +458,10 @@ void Robot::initializeMutexes(){
 	}
 	RThread::gridMutexVector.push_back(tempVec);
 	}
-
+		cout << "11111 intialize mutexes" << endl;
 	vector<vector<int>> mutex_mimic_vec(numRows, std::vector<int>(numCols, 0));
-
-	for (uint i = 0; i < robotLoc.size(); i++){
+cout << "2222222211111111111111111" << endl;
+	for (uint i = 0; i < RThread::gridMutexVector.size(); i++){
 		for (uint j = 0; j < RThread::gridMutexVector[i]->size();j++){
 			pair<uint, uint> temp = make_pair(i, j);
 			if (checkIfPairExists(temp, boxLoc) || checkIfPairExists(temp, robotLoc)){
@@ -470,11 +470,11 @@ void Robot::initializeMutexes(){
 			}
 		}
 	}
-
+		cout << "ssfdsfsdfsd still inside intialize mutexes" << endl;
 	for (int i = 0; i < mutex_mimic_vec.size(); i++){
 		printVector(mutex_mimic_vec[i]);
 	}
-	
+		cout << "still still inside intialize mutexes" << endl;
 }
 
 void Robot::placeRobots(){
@@ -482,10 +482,9 @@ void Robot::placeRobots(){
 	default_random_engine myEngine(myRandDev());
 	uniform_int_distribution<int> robotRowDist(0, numRows - 1);
 	uniform_int_distribution<int> robotColDist(0, numCols - 1);
-
 	robotRandomPlacement(robotRowDist, robotColDist, myEngine);
-	doorRandomPlacement(robotRowDist, robotColDist, myEngine);
 	boxRandomPlacement(myEngine);
+	doorRandomPlacement(robotRowDist, robotColDist, myEngine);
 	uniform_int_distribution<int> randDoorDist(0, doorLoc.size() - 1);
 	assignDoors(randDoorDist, myEngine);
 }

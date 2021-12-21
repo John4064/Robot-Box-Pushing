@@ -360,34 +360,39 @@ namespace Robot{
 // true = y first, false = x first
  bool RThread::recordYfirst(tuple <int, int, axis> startingPushPositionAxis){
 
-    int destY = get<0>(startingPushPositionAxis);
-    int destX = get<1>(startingPushPositionAxis);
+    int pushDestY = get<0>(startingPushPositionAxis);
+    int pushDestX = get<1>(startingPushPositionAxis);
     int robtY = robotLoc[idx_of_robot]->first;
     int robtX = robotLoc[idx_of_robot]->second;
-
-    int yDiff = destY - robtY;
-    int xDiff = destX - robtX;
-
-    int dogLegDest_Yfirst_y = destY;
-        int dogLegDest_Yfirst_x = robtX;
-    int dogLegDest_Xfirst_y = robtY;
-    int dogLegDest_Xfirst_x = destX;
-
-    int doorY = doorLoc[doorAssign[idx_of_robot]]->first;
-    int doorX = doorLoc[doorAssign[idx_of_robot]]->second;
+    int boxLocY = boxLoc[idx_of_robot]->first;
+    int boxLocX = boxLoc[idx_of_robot]->second;
 
 
-    double distFromDoorDoglegPosYfirst = sqrt(pow((dogLegDest_Yfirst_y - doorY), 2) + pow((dogLegDest_Yfirst_x - doorX), 2));
-    double distFromDoorDoglegPosXfirst = sqrt(pow((dogLegDest_Xfirst_y - doorY), 2) + pow((dogLegDest_Xfirst_x - doorX), 2));
+    int dogLegDest1Y = pushDestY;
+    int dogLegDest1X = robtX;
+    int dogLegDest2Y = robtY;
+    int dogLegDest2X = pushDestX;
 
-   
-    if (distFromDoorDoglegPosYfirst >= distFromDoorDoglegPosXfirst ){
-        return false;
-    }
+    // case where 
+    if (((dogLegDest1X > robtX && dogLegDest1X < pushDestX ||
+        dogLegDest1X > pushDestX && dogLegDest1X < robtX) && dogLegDest1Y == pushDestY)
+        || 
+        ((dogLegDest1Y > robtY && dogLegDest1Y < pushDestY ||
+        dogLegDest1Y > pushDestY && dogLegDest1Y < robtY) && dogLegDest1X == pushDestX)) {
+            return false;
+        }
 
-     if (distFromDoorDoglegPosYfirst < distFromDoorDoglegPosXfirst){
-        return true;
-    }
+    if (((dogLegDest2X > robtX && dogLegDest2X < pushDestX ||
+        dogLegDest2X > pushDestX && dogLegDest2X < robtX) && dogLegDest2Y == pushDestY)
+        || 
+        ((dogLegDest2Y > robtY && dogLegDest2Y < pushDestY ||
+        dogLegDest2Y > pushDestY && dogLegDest2Y < robtY) && dogLegDest2X == pushDestX)) {
+        }
+        {
+            return true;  
+        }
+
+
 
     cout << "something went wrong..." << endl;
     return false;
