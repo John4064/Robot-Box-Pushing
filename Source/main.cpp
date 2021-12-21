@@ -348,9 +348,14 @@ int main(int argc, char** argv)
 		delete(Robot::RThread::robotLocWritingMutexVec[i]);
 	}
 
+	for (int i=0; i < Robot::RThread::gridMutexVector.size(); i++){
+		for (int j=0; j < Robot::RThread::gridMutexVector[i]->size(); j++){
+			delete((*Robot::RThread::gridMutexVector[i])[j]);
+		}
+		delete(Robot::RThread::gridMutexVector[i]);
+	}
 
 	//finish this later
-
 
 
 	for(int i=0; i< Robot::robotLoc.size();i++){
@@ -365,15 +370,13 @@ int main(int argc, char** argv)
 		delete(boxLoc[i]);
 	}
 
-	for(int i=0; i < )
-
-
 	for (uint i=0; i< numRows; i++)
 		delete []grid[i];
 	delete []grid;
 	for (int k=0; k<MAX_NUM_MESSAGES; k++)
 		free(message[k]);
 	free(message);
+
 
 
 
