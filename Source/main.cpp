@@ -189,8 +189,7 @@ void displayGridPane(void)
 			if (guiIndexer < 5000){
 				guiIndexer++;
 			}
-			usleep(500000);
-
+			usleep(robotSleepTime);
 	}
 
 	for (uint i=0; i<numDoors; i++)
