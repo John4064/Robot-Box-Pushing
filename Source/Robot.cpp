@@ -213,51 +213,51 @@ namespace Robot{
             }
 
             if (thisRobotsMoves->size() == 2){
-                pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
+                // pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
                 boxLoc[idx_of_robot]->first = -1;
                 boxLoc[idx_of_robot]->second = -1;
             }
 
-            bool couldMakeMove = false;
+            // bool couldMakeMove = false;
             pair<uint, uint> newLocBox;
             pair<uint, uint> newLocRobot = determineLocCommBringsUsToMOVE(command->second);
 
-            int oldLocRobotY = robotLoc[idx_of_robot]->first;
-            int oldLocRobotX = robotLoc[idx_of_robot]->second;
+            // int oldLocRobotY = robotLoc[idx_of_robot]->first;
+            // int oldLocRobotX = robotLoc[idx_of_robot]->second;
 
             if(command->first == PUSH){
                 newLocBox = determineLocCommBringsUsToPUSH(command->second);
             }
 
-            if (command->first == MOVE){
-                while (checkLocAlreadyExists(newLocRobot, true)){};
-                pthread_mutex_lock((*gridMutexVector[newLocRobot.first])[newLocRobot.second]);
-            }
-            if (command->first == PUSH){
-                while (checkLocAlreadyExists(newLocBox, true)){};
-                pthread_mutex_lock((*gridMutexVector[newLocBox.first])[newLocBox.second]);
-            }
+            // if (command->first == MOVE){
+            //     // while (checkLocAlreadyExists(newLocRobot, true)){};
+            //     // pthread_mutex_lock((*gridMutexVector[newLocRobot.first])[newLocRobot.second]);
+            // }
+            // if (command->first == PUSH){
+            //     while (checkLocAlreadyExists(newLocBox, true)){};
+            //     pthread_mutex_lock((*gridMutexVector[newLocBox.first])[newLocBox.second]);
+            // }
 
             pthread_mutex_lock(robotLocWritingMutexVec[idx_of_robot]);
 
             if (command->first == MOVE){
-                if(!checkLocAlreadyExists(newLocRobot, false)){
+                // if(!checkLocAlreadyExists(newLocRobot, false)){
                     makeRegMove(command->second, idx_of_robot);
-                    couldMakeMove = true;
+                    // couldMakeMove = true;
                     fprintRobotMove(command->first, command->second);
-                }
+                // }
             }
             if (command->first == PUSH){
-                if(!checkLocAlreadyExists(newLocBox, false)){
+                // if(!checkLocAlreadyExists(newLocBox, false)){
                     makePushMove(command->second, idx_of_robot);
-                    couldMakeMove = true;
+                    // couldMakeMove = true;
                     fprintRobotMove(command->first, command->second);
-                }
+                // }
             }
             pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
-            pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
+            // pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
 
-            if(!thisRobotsMoves->empty() && couldMakeMove == true){
+            if(!thisRobotsMoves->empty() /*&& couldMakeMove == true*/){
                 // pair<Moves, Direction> *movePointer = &thisRobotsMoves[0];
                 thisRobotsMoves->erase(thisRobotsMoves->begin());
                 // delete movePointer;
@@ -268,7 +268,7 @@ namespace Robot{
         if (thisRobotsMoves->empty()){
             // pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
             delete(thisRobotsMoves);
-            pthread_mutex_unlock((*gridMutexVector[robotLoc[idx_of_robot]->first])[robotLoc[idx_of_robot]->second]);
+            // pthread_mutex_unlock((*gridMutexVector[robotLoc[idx_of_robot]->first])[robotLoc[idx_of_robot]->second]);
             robotLoc[idx_of_robot]->first = -1;
             robotLoc[idx_of_robot]->second = -1;
         }

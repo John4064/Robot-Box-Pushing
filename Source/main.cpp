@@ -171,20 +171,20 @@ void displayGridPane(void)
 	{using namespace Robot;
 		for (uint i=0; i<numBoxes; i++) {	//	here I would test if the robot thread is still live
 			if(RThread::RTinfo[i].stillAlive == true){
-				pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
-				RThread::robotLocReaderCountVec[i]++;			
-				if (RThread::robotLocReaderCountVec[i] == 1){
-					pthread_mutex_lock(RThread::robotLocWritingMutexVec[i]);
-				}
-				pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
+				// pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
+				// RThread::robotLocReaderCountVec[i]++;			
+				// if (RThread::robotLocReaderCountVec[i] == 1){
+				 	pthread_mutex_lock(RThread::robotLocWritingMutexVec[i]);
+				// }
+				// pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
 				drawRobotAndBox(i,Robot::robotLoc[i]->first, Robot::robotLoc[i]->second, 
 				boxLoc[i]->first, boxLoc[i]->second, doorAssign[i]);
-				pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
-				RThread::robotLocReaderCountVec[i]--;
-				if (RThread::robotLocReaderCountVec[i] == 0){
+				// pthread_mutex_lock(RThread::robotLocProtectReaderCountMutexVec[i]);
+				// RThread::robotLocReaderCountVec[i]--;
+				// if (RThread::robotLocReaderCountVec[i] == 0){
 					pthread_mutex_unlock(RThread::robotLocWritingMutexVec[i]);
-				}
-				pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
+				// }
+				// pthread_mutex_unlock(RThread::robotLocProtectReaderCountMutexVec[i]);
 			}
 		}
 	}
