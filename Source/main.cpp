@@ -339,12 +339,28 @@ int main(int argc, char** argv)
 	//	Free allocated resource before leaving (not absolutely needed, but
 	//	just nicer.  Also, if you crash there, you know something is wrong
 	//	in your code.
+
+	for(int i=0; i< Robot::robotLoc.size();i++){
+		delete(Robot::robotLoc[i]);
+	}
+
+	for(int i=0; i< doorLoc.size();i++){
+		delete(doorLoc[i]);
+	}
+
+	for(int i=0; i < boxLoc.size();i++){
+		delete(boxLoc[i]);
+	}
+
+
 	for (uint i=0; i< numRows; i++)
 		delete []grid[i];
 	delete []grid;
 	for (int k=0; k<MAX_NUM_MESSAGES; k++)
 		free(message[k]);
 	free(message);
+
+
 
 	
 	//	This will probably never be executed (the exit point will be in one of the

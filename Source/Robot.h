@@ -55,8 +55,8 @@ namespace Robot{
         static vector<uint> robotLocReaderCountVec;
         static RThread* RTinfo;
         pthread_t TID;
-        static vector<vector<pair<Moves, Direction>>> commandsListHolder;
-        vector<pair<Moves, Direction>> thisRobotsMoves;
+        // static vector<vector<pair<Moves, Direction>>> commandsListHolder;
+        vector<pair<Moves, Direction>*>* thisRobotsMoves;
         vector<pair<Moves, Direction>*> copy_of_robot_moves;
         uint idx_of_robot;  
         void genRobotsCommandsList(RThread* RTinfo);
@@ -67,9 +67,9 @@ namespace Robot{
         tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo);
         void fprintRobotMove(Moves move, Direction direction);
         void robotMakeMovesnPrint();
-        vector<pair<Moves, Direction> > genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis);
+        vector<pair<Moves, Direction>* >* genCommGetBehindBox(RThread* RTinfo, tuple <int, int, axis>& startingPushPositionAxis);
         bool recordYfirst(tuple <int, int, axis> startingPushPositionAxis);
-           vector<pair<Moves, Direction>> recordMovesToBehindBox(tuple <int, int, axis> startingPushPositionAxis, RThread* RTinfo);
+        vector<pair<Moves, Direction>*>* recordMovesToBehindBox(tuple <int, int, axis> startingPushPositionAxis, RThread* RTinfo);
         void freeThreadMemory();
     } RThread;
 
@@ -86,7 +86,7 @@ namespace Robot{
 
     vector<pair<Moves, Direction> > genCommPushBoxtoDoor(RThread* RTinfo);
 
-    vector<pair<Moves, Direction> > recordMovesPushToDoor(RThread* RTinfo, tuple <int, int ,axis> startingPushPositionAxis);
+    vector<pair<Moves, Direction>* >* recordMovesPushToDoor(RThread* RTinfo, tuple <int, int ,axis> startingPushPositionAxis);
     
     string convertMoveEnumToWord(Moves move);
     string convertDirEnumToWord(Direction dir);
@@ -94,9 +94,9 @@ namespace Robot{
     void printRobotsCommandsList(RThread* RTInfo);
     void destroyRobotsCommandsList(RThread* RTinfo);
     
-    void recordMovesX(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, legStatus leg_status);
-    void recordMovesY(vector<pair<Moves, Direction>>& RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, legStatus leg_status);
-    pair<uint, uint> recordRotationToSecondPushPos(vector<pair<Moves, Direction> >& RCList, tuple <int, int, axis> 
+    void recordMovesX(vector<pair<Moves, Direction>*>* RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, legStatus leg_status);
+    void recordMovesY(vector<pair<Moves, Direction>*>* RCList, pair<int, int> startingPoint, pair<int, int> destination, Moves argmove, legStatus leg_status);
+    pair<uint, uint> recordRotationToSecondPushPos(vector<pair<Moves, Direction> *>* RCList, tuple <int, int, axis> 
         startingPushPositionAxis, int idx);
     // bool collisionWithBoxAvoider(tuple <int, int, bool> targetStartingPushPositionAxis, int idx, NeedToGoAround& goAround);
     void makeRegMove(Direction dir, int idx);
