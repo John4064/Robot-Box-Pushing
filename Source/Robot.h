@@ -69,6 +69,9 @@ namespace Robot{
      */
     typedef struct RThread {
         
+        /** @brief a 2d vector that holds the commands for all robots */
+        static vector<vector<pair<Moves, Direction>*>*> commandsListHolder;
+
         /** @brief a variable that tells if the thread has not yet been joined */
         bool stillAlive;
         /** @brief a mutex used in GUI initialization process */
@@ -91,8 +94,6 @@ namespace Robot{
         static RThread* RTinfo;
         /** @brief obviously just the thread ID data member */
         pthread_t TID;
-         /** @brief this is used in prior versions 1 of the program, we didn't need it for the multithreaded versions */
-        // static vector<vector<pair<Moves, Direction>>> commandsListHolder;
         vector<pair<Moves, Direction>*>* thisRobotsMoves;
         /** @brief this a copy of the robot moves vector that can be used to save each robot's planned command list if you wanted to 
          * print it after the robot has made some of the moves.  We don't use it in the multithreaded versions.

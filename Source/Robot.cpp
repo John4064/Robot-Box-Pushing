@@ -46,16 +46,23 @@ namespace Robot{
     void* robotThreadFunc(void * arg){
         
         // for each thread this number goes up until the thread completes
-        numLiveThreads++;
+        // numLiveThreads++;
 
         // block until the GUI sets up.
-        pthread_mutex_lock(&RThread::mutex);
+
         // unlock after GUI sets up... lock no longer needed
-        pthread_mutex_unlock(&RThread::mutex);
+        // pthread_mutex_lock(&RThread::mutex);
+        // pthread_mutex_unlock(&RThread::mutex);
         RThread* RTinfo = (RThread*) arg;
+   
         RTinfo->genRobotsCommandsList(RTinfo);
+
+        RThread::commandsListHolder.push_back(&RTinfo->copy_of_robot_moves);
+        RTinfo->printARobotsCommandList();
         RTinfo->robotMakeMovesnPrint();
-        RTinfo->freeThreadMemory();
+        // RTinfo->freeThreadMemory();
+
+        // numLiveThreads--;
 
         return (NULL);
     }
@@ -64,12 +71,12 @@ namespace Robot{
      * @brief A function that frees the dynamic memory used by the Thread
      * 
      */
-    void RThread::freeThreadMemory(){
-
-        for (int i=0; i < copy_of_robot_moves.size();i++){
-            delete(copy_of_robot_moves[i]);
-        }
-    }
+    // void RThread::freeThreadMemory(){
+    //     cout << "this should nto be printing" << endl;
+    //     for (int i=0; i < copy_of_robot_moves.size();i++){
+    //         delete((copy_of_robot_moves)[i]);
+    //     }
+    // }
 
     void RThread::fprintRobotMove(Moves move, Direction direction){
         pthread_mutex_lock(&file_mutex);
@@ -86,9 +93,11 @@ namespace Robot{
 
         pthread_mutex_lock(&file_mutex);
         ofstream myfile;
-        myfile.open("robotSimulOut.txt", ios_base::app);
+        myfile.open("robotSimulOut2.txt", ios_base::app);
 
         myfile << "Robot Program: Robot" << idx_of_robot << "\n";
+
+        myfile << copy_of_robot_moves.size() << "\n";
 
         for(int i=0; i < copy_of_robot_moves.size(); i++){
             string moveString = convertMoveEnumToWord( copy_of_robot_moves[i]->first);    
@@ -201,33 +210,33 @@ namespace Robot{
      */
     void RThread::robotMakeMovesnPrint(){
 
-        while(!(thisRobotsMoves->empty()) && this->stillAlive == true){
-   
+
+        while(!(thisRobotsMoves->empty()) /**&& this->stillAlive == true*/){
             pair<Moves, Direction>* command = thisRobotsMoves->front();
      
             if (command->first == END){
                 fprintRobotMove(command->first, command->second);
-                this->stillAlive = false;
-                thisRobotsMoves->clear();
+                // this->stillAlive = false;
+                thisRobotsMoves->erase(thisRobotsMoves->begin());
                 break;
             }
 
-            if (thisRobotsMoves->size() == 2){
-                // pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
-                boxLoc[idx_of_robot]->first = -1;
-                boxLoc[idx_of_robot]->second = -1;
-            }
+            // if (thisRobotsMoves->size() == 2){
+            //     // pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
+            //     boxLoc[idx_of_robot]->first = -1;
+            //     boxLoc[idx_of_robot]->second = -1;
+            // }
 
             // bool couldMakeMove = false;
-            pair<uint, uint> newLocBox;
-            pair<uint, uint> newLocRobot = determineLocCommBringsUsToMOVE(command->second);
+            // pair<uint, uint> newLocBox;
+            // pair<uint, uint> newLocRobot = determineLocCommBringsUsToMOVE(command->second);
 
             // int oldLocRobotY = robotLoc[idx_of_robot]->first;
             // int oldLocRobotX = robotLoc[idx_of_robot]->second;
 
-            if(command->first == PUSH){
-                newLocBox = determineLocCommBringsUsToPUSH(command->second);
-            }
+            // if(command->first == PUSH){
+            //     newLocBox = determineLocCommBringsUsToPUSH(command->second);
+            // }
 
             // if (command->first == MOVE){
             //     // while (checkLocAlreadyExists(newLocRobot, true)){};
@@ -238,23 +247,23 @@ namespace Robot{
             //     pthread_mutex_lock((*gridMutexVector[newLocBox.first])[newLocBox.second]);
             // }
 
-            pthread_mutex_lock(robotLocWritingMutexVec[idx_of_robot]);
+            // pthread_mutex_lock(robotLocWritingMutexVec[idx_of_robot]);
 
-            if (command->first == MOVE){
-                // if(!checkLocAlreadyExists(newLocRobot, false)){
-                    makeRegMove(command->second, idx_of_robot);
-                    // couldMakeMove = true;
-                    fprintRobotMove(command->first, command->second);
-                // }
-            }
-            if (command->first == PUSH){
+            // if (command->first == MOVE){
+            //     // if(!checkLocAlreadyExists(newLocRobot, false)){
+            //         // makeRegMove(command->second, idx_of_robot);
+            //         // couldMakeMove = true;
+            //         fprintRobotMove(command->first, command->second);
+            //     // }
+            // }
+            // if (command->first == PUSH){
                 // if(!checkLocAlreadyExists(newLocBox, false)){
-                    makePushMove(command->second, idx_of_robot);
+                    // makePushMove(command->second, idx_of_robot);
                     // couldMakeMove = true;
                     fprintRobotMove(command->first, command->second);
                 // }
-            }
-            pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
+            // }
+            // pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);
             // pthread_mutex_unlock((*gridMutexVector[oldLocRobotY])[oldLocRobotX]);
 
             if(!thisRobotsMoves->empty() /*&& couldMakeMove == true*/){
@@ -262,16 +271,16 @@ namespace Robot{
                 thisRobotsMoves->erase(thisRobotsMoves->begin());
                 // delete movePointer;
             }
-            usleep(robotSleepTime);
+            // usleep(robotSleepTime);
         }
 
-        if (thisRobotsMoves->empty()){
-            // pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
-            delete(thisRobotsMoves);
-            // pthread_mutex_unlock((*gridMutexVector[robotLoc[idx_of_robot]->first])[robotLoc[idx_of_robot]->second]);
-            robotLoc[idx_of_robot]->first = -1;
-            robotLoc[idx_of_robot]->second = -1;
-        }
+        // if (thisRobotsMoves->empty()){
+        //     // pthread_mutex_unlock((*gridMutexVector[boxLoc[idx_of_robot]->first])[boxLoc[idx_of_robot]->second]);
+        //     delete(thisRobotsMoves);
+        //     // pthread_mutex_unlock((*gridMutexVector[robotLoc[idx_of_robot]->first])[robotLoc[idx_of_robot]->second]);
+        //     // robotLoc[idx_of_robot]->first = -1;
+        //     // robotLoc[idx_of_robot]->second = -1;
+        // }
     }
 
 /**
@@ -303,6 +312,8 @@ namespace Robot{
 
     thisRobotsMoves->push_back(lastCommand);
 
+     copy_of_robot_moves = *(new vector<pair<Moves, Direction>*>());
+
     // we make a copy of the moves array just in case we need it since we are 
     // going to 
     for (uint i=0; i < thisRobotsMoves->size(); i++){
@@ -311,6 +322,7 @@ namespace Robot{
         pairP->second = (*thisRobotsMoves)[i]->second;
         copy_of_robot_moves.push_back(pairP);
     }
+   
 }
 
     vector<pair<Moves, Direction>*>* recordMovesPushToDoor(RThread* RTinfo, tuple <int, int, axis> startingPushPositionAxis){
