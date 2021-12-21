@@ -355,9 +355,6 @@ int main(int argc, char** argv)
 		delete(Robot::RThread::gridMutexVector[i]);
 	}
 
-	//finish this later
-
-
 	for(int i=0; i< Robot::robotLoc.size();i++){
 		delete(Robot::robotLoc[i]);
 	}
