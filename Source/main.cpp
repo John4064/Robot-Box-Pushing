@@ -462,7 +462,7 @@ void Robot::initializeMutexes(){
 	
 	// declare and initialize two mutex arrays for each box loc
 	// robot loc arrays ... one for reading one for writing
-	cout << "still inside intialize mutexes" << endl;
+
 
 	for (int j = 0; j < robotLoc.size(); j++){
 		pthread_mutex_t *mutexP = new pthread_mutex_t();
@@ -506,9 +506,9 @@ void Robot::initializeMutexes(){
 			}
 		}
 	}
-	for (int i = 0; i < mutex_mimic_vec.size(); i++){
-		printVector(mutex_mimic_vec[i]);
-	}
+	// for (int i = 0; i < mutex_mimic_vec.size(); i++){
+	// 	printVector(mutex_mimic_vec[i]);
+	// }
 }
 
 /**
@@ -675,8 +675,8 @@ void assignDoors(uniform_int_distribution<int> randDoorDist, default_random_engi
 			break;
 		}
 	}	
-	cout << "assigned doors:\n";
-	printVector<vector<uint> >(doorAssign);
+	// cout << ":\n";
+	// printVector<vector<uint> >(doorAssign);
 }
 
 

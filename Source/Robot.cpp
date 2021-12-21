@@ -13,20 +13,26 @@
 #include <fstream>
 #include <unistd.h>
 
+/** @brief global variable where the user can set the sleeping time */
 extern int robotSleepTime;
+/** @brief global array that holds the display grid */
 extern uint** grid;
+/** @brief global variable that holds number of rows in the simulation */
 extern uint numRows;	//	height of the grid
+/** @brief global variable that holds number of cols in the simulation */
 extern uint numCols;
+/** @brief global variable that holds number of boxes in the simulation */
 extern uint numBoxes;
+/** @brief global variable that holds number of doors in the simulation */
 extern uint numDoors;
+/** @brief global variable that holds number of live threads still active */
 extern uint numLiveThreads;
-	//	width
-// extern uint numBoxes;	//	also the number of robots
-// extern uint numDoors;	//	The number of doors.
-// extern uint& numRobots;
 
+/** @brief global variable that holds the locations of the boxes */
 extern vector<pair<uint, uint>*> boxLoc;
+/** @brief global variable that holds the doors that are assigned to each box */
 extern vector<uint> doorAssign;
+/** @brief global variable that holds the locations of the doors */
 extern vector<pair<uint, uint>*> doorLoc;
 
 typedef unsigned int uint;
@@ -37,12 +43,6 @@ namespace Robot{
 
     extern vector<pair<uint, uint>*> robotLoc;
 
-    /**
-     * @brief A function that 
-     * 
-     * @param arg 
-     * @return void* 
-     */
     void* robotThreadFunc(void * arg){
         
         // for each thread this number goes up until the thread completes
@@ -139,7 +139,6 @@ namespace Robot{
         // if bool is true, will need to write in the next function call
         // now that you are going to be writing, will need to place lock on and check everything again
         // while the lock still on.
-        cout << "returning " << exists << endl;
         return exists;
     }
 
@@ -148,8 +147,6 @@ namespace Robot{
       
         int locY = robotLoc[idx_of_robot]->first;
         int locX = robotLoc[idx_of_robot]->second;
-
-        cout << "original robotLoc " << locY << " " << locX << endl;
 
             switch (direction){
                     case NORTH:
@@ -174,9 +171,6 @@ namespace Robot{
         uint locY = boxLoc[idx_of_robot]->first;
         uint locX = boxLoc[idx_of_robot]->second;
 
-         cout << "original boxLoc " << locY << " " << locX << endl;
-        
-
         switch (direction){
             case NORTH:
                 locY = boxLoc[idx_of_robot]->first - 1;
@@ -198,7 +192,7 @@ namespace Robot{
 
 
     /**
-     * @brief The synchronization here is basically a reader writer problem.
+     *         The synchronization here is basically a reader writer problem.
      *         the worker threads are writing to the robot and box arrays 
      *         the gui is reading them. but the worker threads also act
      *         as readers as well, when they have to iterate through 
@@ -815,8 +809,8 @@ namespace Robot{
             }
         }
 
-        if (distanceFromRobToDestinationY == 0){
-            cout << "no distance to travel Y axis" << endl;
-        }
+        // if (distanceFromRobToDestinationY == 0){
+        //     cout << "no distance to travel Y axis" << endl;
+        // }
     }
 };
