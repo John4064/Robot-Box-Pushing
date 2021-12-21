@@ -377,8 +377,9 @@ int main(int argc, char** argv)
 		free(message[k]);
 	free(message);
 
-
-
+	for (int i=0; i < numRobots; i++){
+		delete (Robot::RThread::RTinfo + i);
+	}
 
 	
 	//	This will probably never be executed (the exit point will be in one of the
@@ -392,7 +393,6 @@ void* Robot::joinThreads(void*){
 	for (int i=0; i < numRobots; i++){
 		int * status;
 		pthread_join(Robot::RThread::RTinfo[i].TID, NULL);	
-		delete (RThread::RTinfo + i);
 		numLiveThreads--;
 		printf("Thread %d returned");
 		}

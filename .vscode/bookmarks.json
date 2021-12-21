@@ -39,26 +39,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "Source/Robot.cpp",
-			"bookmarks": [
-				{
-					"line": 45,
-					"column": 2,
-					"label": ""
-				},
-				{
-					"line": 201,
-					"column": 3,
-					"label": ""
-				},
-				{
-					"line": 315,
-					"column": 3,
-					"label": "Moves to Door!1"
-				}
-			]
 		}
 	]
 }
