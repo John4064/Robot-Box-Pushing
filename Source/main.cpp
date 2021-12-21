@@ -340,6 +340,19 @@ int main(int argc, char** argv)
 	//	just nicer.  Also, if you crash there, you know something is wrong
 	//	in your code.
 
+	for (int i=0; i < Robot::RThread::robotLocProtectReaderCountMutexVec.size();i++){
+		delete(Robot::RThread::robotLocProtectReaderCountMutexVec[i]);
+	}
+
+	for (int i=0; i < Robot::RThread::robotLocWritingMutexVec.size();i++){
+		delete(Robot::RThread::robotLocWritingMutexVec[i]);
+	}
+
+
+	//finish this later
+
+
+
 	for(int i=0; i< Robot::robotLoc.size();i++){
 		delete(Robot::robotLoc[i]);
 	}
@@ -351,6 +364,8 @@ int main(int argc, char** argv)
 	for(int i=0; i < boxLoc.size();i++){
 		delete(boxLoc[i]);
 	}
+
+	for(int i=0; i < )
 
 
 	for (uint i=0; i< numRows; i++)
@@ -428,8 +443,6 @@ void Robot::printBeginningPartOfOutputFile(){
  * 
  */
 void Robot::initializeMutexes(){
-	cout << "inside initialize mutexes" << endl;
-	fflush(stdout);
 	
 	// an all purpose mutex used as a mutex gate when initializing gui 
 	// and for reading data in single-threaded version
