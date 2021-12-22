@@ -7,4 +7,4 @@ g++-11 -Wall ../Source/main.cpp ../Source/gl_frontEnd.cpp ../Source/Robot.cpp -l
 #MacOS
 #g++ -Wall ../Source/main.cpp ../Source/gl_frontEnd.cpp ../Source/Robot.cpp -lm -framework OpenGL -framework GLUT -o robotsv1 -std=c++11
 
-./robotsv1 15 15 10 3
+./robotsv1 15 10 10 3

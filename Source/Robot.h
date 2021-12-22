@@ -116,7 +116,7 @@ namespace Robot{
           * for the robot and also records the "axis" down which the robot will begin the PUSH portion of its path*/
         tuple<int, int, axis> determineStartingPushPositionAxis(RThread * RTinfo);
         /** @brief this thread-safe function is used in the multithreaded version to print/record each move by each robot as it is done to file.*/
-        void fprintRobotMove(Moves move, Direction direction);
+        void fprintRobotMove(Moves move, Direction direction, ofstream& fout);
         /** @brief top-level routine that runs each multithreaded robot through its making moves process and printing routines.*/
         void robotMakeMovesnPrint();
         /** @brief path-planning function uses determineStartingPushPositionAxis to generate list of moves to get behind box in PUSH position.*/
@@ -139,7 +139,6 @@ namespace Robot{
     void printBeginningPartOfOutputFile();
     /**  @brief a function that determines random locations for robots and adds them to the robot location vector */
     void placeRobots();
-
 
     /** @brief  a path-planning function that generates a list of push commmands to get from the box to the door */
     vector<pair<Moves, Direction> > genCommPushBoxtoDoor(RThread* RTinfo);

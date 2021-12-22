@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
+#include <sstream>
 
 /** @brief global variable where the user can set the sleeping time */
 extern int robotSleepTime;
@@ -58,7 +59,6 @@ namespace Robot{
         RTinfo->genRobotsCommandsList(RTinfo);
 
         RThread::commandsListHolder.push_back(&RTinfo->copy_of_robot_moves);
-        RTinfo->printARobotsCommandList();
         RTinfo->robotMakeMovesnPrint();
         // RTinfo->freeThreadMemory();
 
@@ -78,36 +78,36 @@ namespace Robot{
     //     }
     // }
 
-    void RThread::fprintRobotMove(Moves move, Direction direction){
-        pthread_mutex_lock(&file_mutex);
-        ofstream myfile;
-        myfile.open("robotSimulOut.txt", ios_base::app);
-        string moveString = convertMoveEnumToWord(move);    
+    void RThread::fprintRobotMove(Moves move, Direction direction, ofstream& fout){
+        // pthread_mutex_lock(&file_mutex);
+        string moveString = convertMoveEnumToWord(move);
         string directionString = convertDirEnumToWord(direction);
-        myfile << "robot " << idx_of_robot << "   \t"<< moveString << "   \t" << directionString << "\n";
-        myfile.close();
-        pthread_mutex_unlock(&file_mutex);
+        fout << "robot " << idx_of_robot << "   \t"<< moveString << "   \t" << directionString << "\n";
+        // pthread_mutex_unlock(&file_mutex);
     }
 
-    void RThread::printARobotsCommandList(){
+    // void RThread::printARobotsCommandList(){
 
-        pthread_mutex_lock(&file_mutex);
-        ofstream myfile;
-        myfile.open("robotSimulOut2.txt", ios_base::app);
+    //     // pthread_mutex_lock(&file_mutex);
+    //     ofstream myfile("robotSimulOut2.txt", std::ios_base::app);
+    //     if (!myfile){
+    //         cout << "Error Opening File" << endl;
+    //         return;
+    //     }
 
-        myfile << "Robot Program: Robot" << idx_of_robot << "\n";
+    //     myfile << "Robot Program: Robot" << idx_of_robot << "\n";
 
-        myfile << copy_of_robot_moves.size() << "\n";
+    //     myfile << copy_of_robot_moves.size() << "\n";
 
-        for(int i=0; i < copy_of_robot_moves.size(); i++){
-            string moveString = convertMoveEnumToWord( copy_of_robot_moves[i]->first);    
-            string directionString = convertDirEnumToWord(copy_of_robot_moves[i]->second);
-            myfile << "\t" << moveString << "\t" << directionString << endl;
-            myfile << "\n";
-        }
-        myfile.close();
-        pthread_mutex_unlock(&file_mutex);
-    }
+    //     for(int i=0; i < copy_of_robot_moves.size(); i++){
+    //         string moveString = convertMoveEnumToWord( copy_of_robot_moves[i]->first);    
+    //         string directionString = convertDirEnumToWord(copy_of_robot_moves[i]->second);
+    //         myfile << "\t" << moveString << "\t" << directionString << endl;
+    //         myfile << "\n";
+    //     }
+    //     myfile.close();
+    //     // pthread_mutex_unlock(&file_mutex);
+    // }
 
     // Check if the cell you want to move 
     bool RThread::checkLocAlreadyExists(pair<uint, uint> locMovingTo, bool isReader){
@@ -210,12 +210,16 @@ namespace Robot{
      */
     void RThread::robotMakeMovesnPrint(){
 
+        //open file
+
+        const char* fname = "robotSimulOut.txt";
+        ofstream fout(fname, ofstream::app);
 
         while(!(thisRobotsMoves->empty()) /**&& this->stillAlive == true*/){
             pair<Moves, Direction>* command = thisRobotsMoves->front();
      
             if (command->first == END){
-                fprintRobotMove(command->first, command->second);
+                fprintRobotMove(command->first, command->second, fout);
                 // this->stillAlive = false;
                 thisRobotsMoves->erase(thisRobotsMoves->begin());
                 break;
@@ -260,7 +264,7 @@ namespace Robot{
                 // if(!checkLocAlreadyExists(newLocBox, false)){
                     // makePushMove(command->second, idx_of_robot);
                     // couldMakeMove = true;
-                    fprintRobotMove(command->first, command->second);
+                    fprintRobotMove(command->first, command->second, fout);
                 // }
             // }
             // pthread_mutex_unlock(robotLocWritingMutexVec[idx_of_robot]);

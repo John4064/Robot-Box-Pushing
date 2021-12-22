@@ -410,8 +410,9 @@ void* Robot::joinThreads(void*){
  */
 void Robot::printBeginningPartOfOutputFile(){
 
-	ofstream myfile;
-	myfile.open("robotSimulOut.txt");
+	const char* fname = "robotSimulOut.txt";
+
+	ofstream myfile(fname);
 
 	myfile << "num of rows = " << numRows << "; num of cols = " << numCols << "; num of boxes = " 
 	<< numBoxes << "; num of doors = " << numDoors << endl;
@@ -547,14 +548,12 @@ void initializeApplication(){
 
 	RThread::RTinfo = new RThread[numRobots];
 
-
+		printBeginningPartOfOutputFile();
 
 	for (uint i =0; i < numRobots; i++){
 		(RThread::RTinfo+i)->idx_of_robot = i;
 		// (RThread::RTinfo+i)->stillAlive = true;
-		printBeginningPartOfOutputFile();
 		robotThreadFunc(RThread::RTinfo+i);
-
 		// int errCode = pthread_create(&RThread::RTinfo->TID, NULL, robotThreadFunc, RThread::RTinfo+i);
 		// if (errCode != 0){
 		// 	printf ("could not pthread_create thread %d. %d/%s\n",
