@@ -1,0 +1,187 @@
+\hypertarget{_robot_8cpp}{}\doxysection{/\+Users/john4064/\+Desktop/\+Final Project/\+Source/\+Version3/\+Robot.cpp File Reference}
+\label{_robot_8cpp}\index{/Users/john4064/Desktop/Final Project/Source/Version3/Robot.cpp@{/Users/john4064/Desktop/Final Project/Source/Version3/Robot.cpp}}
+{\ttfamily \#include \char`\"{}Robot.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$tuple$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$set$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_robot}{Robot}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef unsigned int \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{namespace_robot_a6e7b2ea4ec97bef1c8c1fe0262ea8b8b}{Robot\+::robot\+Thread\+Func}} (void $\ast$arg)
+\begin{DoxyCompactList}\small\item\em the function that is run by each robot thread. \end{DoxyCompactList}\item 
+vector$<$ pair$<$ Moves, Direction $>$ $\ast$ $>$ $\ast$ \mbox{\hyperlink{namespace_robot_adfa00b11fea0cc20bca7b9f6b5b3ab1d}{Robot\+::record\+Moves\+Push\+To\+Door}} (RThread $\ast$RTinfo, tuple$<$ int, int,axis $>$ starting\+Push\+Position\+Axis)
+\begin{DoxyCompactList}\small\item\em a lower-\/level path-\/planning function that generates a list of push commmands to get from the box to the door \end{DoxyCompactList}\item 
+pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ \mbox{\hyperlink{namespace_robot_a2852ae82e562a2bab8f60f2b63d5919e}{Robot\+::record\+Rotation\+To\+Second\+Push\+Pos}} (vector$<$ pair$<$ Moves, Direction $>$ $\ast$ $>$ $\ast$RCList, tuple$<$ int, int, axis $>$ starting\+Push\+Position\+Axis, int idx)
+\begin{DoxyCompactList}\small\item\em function to plan the rotation of robot about its initial push position. \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{namespace_robot_ad0856be6f33fd2a464154588c985cbf5}{Robot\+::convert\+Move\+Enum\+To\+Word}} (Moves move)
+\begin{DoxyCompactList}\small\item\em used in printing and std output of command lists \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{namespace_robot_a9880978dcf74c2f6ad03bc1bac3f1a93}{Robot\+::convert\+Dir\+Enum\+To\+Word}} (Direction dir)
+\begin{DoxyCompactList}\small\item\em used in printing and std output of command lists \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_abeeac8f9eb93315619a43da214e00804}{Robot\+::make\+Reg\+Move}} (Direction dir, int idx)
+\begin{DoxyCompactList}\small\item\em utility to compute new coordinates when certain MOVES are made. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_a8fa976673c2d2c010cc16a61d624b956}{Robot\+::make\+Push\+Move}} (Direction dir, int idx)
+\begin{DoxyCompactList}\small\item\em utility to compute new coordinates when certain PUSHES are made. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_a51045e74d06453ef59417fead6c81d3d}{Robot\+::destroy\+Robots\+Commands\+List}} (RThread $\ast$RTinfo)
+\item 
+void \mbox{\hyperlink{namespace_robot_a36c9cd5fa36e3d670d026463b64a5f33}{Robot\+::record\+MovesX}} (vector$<$ pair$<$ Moves, Direction $>$ $\ast$ $>$ $\ast$RCList, pair$<$ int, int $>$ starting\+Point, pair$<$ int, int $>$ destination, Moves argmove, leg\+Status leg\+\_\+status)
+\begin{DoxyCompactList}\small\item\em low level path-\/planning functions that plan a path from a starting point to a finish point modulated by a couple of variables . \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_a6291192ad0b9f77bc8c426fba2d183ae}{Robot\+::record\+MovesY}} (vector$<$ pair$<$ Moves, Direction $>$ $\ast$ $>$ $\ast$RCList, pair$<$ int, int $>$ starting\+Point, pair$<$ int, int $>$ destination, Moves argmove, leg\+Status leg\+\_\+status)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{_robot_8cpp_acebb58d05380b05dcd9e99b5f69f5991}{robot\+Sleep\+Time}}
+\begin{DoxyCompactList}\small\item\em global variable where the user can set the sleeping time \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $\ast$$\ast$ \mbox{\hyperlink{_robot_8cpp_a584df907ce9d3744ffd35efa36eb8e95}{grid}}
+\begin{DoxyCompactList}\small\item\em global array that holds the display grid \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} \mbox{\hyperlink{_robot_8cpp_a9e370db56937e31b64e44e0b45791f23}{num\+Rows}}
+\begin{DoxyCompactList}\small\item\em global variable that holds number of rows in the simulation \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} \mbox{\hyperlink{_robot_8cpp_afd135f604bdb6f6f0e315a414e35c97d}{num\+Cols}}
+\begin{DoxyCompactList}\small\item\em global variable that holds number of cols in the simulation \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} \mbox{\hyperlink{_robot_8cpp_aaa3eb51778328d538b04d0792f3c1d06}{num\+Boxes}}
+\begin{DoxyCompactList}\small\item\em global variable that holds number of boxes in the simulation \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} \mbox{\hyperlink{_robot_8cpp_aee593db5df13627195c9aced2cda4519}{num\+Doors}}
+\begin{DoxyCompactList}\small\item\em global variable that holds number of doors in the simulation \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} \mbox{\hyperlink{_robot_8cpp_a38f59057c1c2afdbeec7fce23b2510d3}{num\+Live\+Threads}}
+\begin{DoxyCompactList}\small\item\em global variable that holds number of live threads still active \end{DoxyCompactList}\item 
+vector$<$ pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ $\ast$ $>$ \mbox{\hyperlink{_robot_8cpp_ae1448e9a6ec7318383bbb251ca66ab7d}{box\+Loc}}
+\begin{DoxyCompactList}\small\item\em global variable that holds the locations of the boxes \end{DoxyCompactList}\item 
+vector$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ \mbox{\hyperlink{_robot_8cpp_a1cfd6ff03cb378f4c88635b048e88f34}{door\+Assign}}
+\begin{DoxyCompactList}\small\item\em global variable that holds the doors that are assigned to each box \end{DoxyCompactList}\item 
+vector$<$ pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ $\ast$ $>$ \mbox{\hyperlink{_robot_8cpp_a6a00b152b6f7d5da0065bbdf9a6e8e0a}{door\+Loc}}
+\begin{DoxyCompactList}\small\item\em global variable that holds the locations of the doors \end{DoxyCompactList}\item 
+const int \mbox{\hyperlink{namespace_robot_a27fea528e1dac6b42a659263b903bd25}{Robot\+::\+NORTHSOUTH}} = 0
+\item 
+const int \mbox{\hyperlink{namespace_robot_a4c61d56e53310beca3e25048bf46c852}{Robot\+::\+EASTWEST}} = 1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}\label{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}} 
+\index{Robot.cpp@{Robot.cpp}!uint@{uint}}
+\index{uint@{uint}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{uint}{uint}}
+{\footnotesize\ttfamily typedef unsigned int \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{_robot_8cpp_ae1448e9a6ec7318383bbb251ca66ab7d}\label{_robot_8cpp_ae1448e9a6ec7318383bbb251ca66ab7d}} 
+\index{Robot.cpp@{Robot.cpp}!boxLoc@{boxLoc}}
+\index{boxLoc@{boxLoc}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{boxLoc}{boxLoc}}
+{\footnotesize\ttfamily vector$<$pair$<$\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}$>$$\ast$$>$ box\+Loc\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable that holds the locations of the boxes 
+
+\mbox{\Hypertarget{_robot_8cpp_a1cfd6ff03cb378f4c88635b048e88f34}\label{_robot_8cpp_a1cfd6ff03cb378f4c88635b048e88f34}} 
+\index{Robot.cpp@{Robot.cpp}!doorAssign@{doorAssign}}
+\index{doorAssign@{doorAssign}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{doorAssign}{doorAssign}}
+{\footnotesize\ttfamily vector$<$\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}$>$ door\+Assign\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable that holds the doors that are assigned to each box 
+
+\mbox{\Hypertarget{_robot_8cpp_a6a00b152b6f7d5da0065bbdf9a6e8e0a}\label{_robot_8cpp_a6a00b152b6f7d5da0065bbdf9a6e8e0a}} 
+\index{Robot.cpp@{Robot.cpp}!doorLoc@{doorLoc}}
+\index{doorLoc@{doorLoc}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{doorLoc}{doorLoc}}
+{\footnotesize\ttfamily vector$<$pair$<$\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}$>$$\ast$$>$ door\+Loc\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable that holds the locations of the doors 
+
+\mbox{\Hypertarget{_robot_8cpp_a584df907ce9d3744ffd35efa36eb8e95}\label{_robot_8cpp_a584df907ce9d3744ffd35efa36eb8e95}} 
+\index{Robot.cpp@{Robot.cpp}!grid@{grid}}
+\index{grid@{grid}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{grid}{grid}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}$\ast$$\ast$ grid\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global array that holds the display grid 
+
+\mbox{\Hypertarget{_robot_8cpp_aaa3eb51778328d538b04d0792f3c1d06}\label{_robot_8cpp_aaa3eb51778328d538b04d0792f3c1d06}} 
+\index{Robot.cpp@{Robot.cpp}!numBoxes@{numBoxes}}
+\index{numBoxes@{numBoxes}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{numBoxes}{numBoxes}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} num\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable that holds number of boxes in the simulation 
+
+\mbox{\Hypertarget{_robot_8cpp_afd135f604bdb6f6f0e315a414e35c97d}\label{_robot_8cpp_afd135f604bdb6f6f0e315a414e35c97d}} 
+\index{Robot.cpp@{Robot.cpp}!numCols@{numCols}}
+\index{numCols@{numCols}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{numCols}{numCols}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} num\+Cols\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable that holds number of cols in the simulation 
+
+\mbox{\Hypertarget{_robot_8cpp_aee593db5df13627195c9aced2cda4519}\label{_robot_8cpp_aee593db5df13627195c9aced2cda4519}} 
+\index{Robot.cpp@{Robot.cpp}!numDoors@{numDoors}}
+\index{numDoors@{numDoors}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{numDoors}{numDoors}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} num\+Doors\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable that holds number of doors in the simulation 
+
+\mbox{\Hypertarget{_robot_8cpp_a38f59057c1c2afdbeec7fce23b2510d3}\label{_robot_8cpp_a38f59057c1c2afdbeec7fce23b2510d3}} 
+\index{Robot.cpp@{Robot.cpp}!numLiveThreads@{numLiveThreads}}
+\index{numLiveThreads@{numLiveThreads}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{numLiveThreads}{numLiveThreads}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} num\+Live\+Threads\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable that holds number of live threads still active 
+
+\mbox{\Hypertarget{_robot_8cpp_a9e370db56937e31b64e44e0b45791f23}\label{_robot_8cpp_a9e370db56937e31b64e44e0b45791f23}} 
+\index{Robot.cpp@{Robot.cpp}!numRows@{numRows}}
+\index{numRows@{numRows}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{numRows}{numRows}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} num\+Rows\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable that holds number of rows in the simulation 
+
+\mbox{\Hypertarget{_robot_8cpp_acebb58d05380b05dcd9e99b5f69f5991}\label{_robot_8cpp_acebb58d05380b05dcd9e99b5f69f5991}} 
+\index{Robot.cpp@{Robot.cpp}!robotSleepTime@{robotSleepTime}}
+\index{robotSleepTime@{robotSleepTime}!Robot.cpp@{Robot.cpp}}
+\doxysubsubsection{\texorpdfstring{robotSleepTime}{robotSleepTime}}
+{\footnotesize\ttfamily int robot\+Sleep\+Time\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+global variable where the user can set the sleeping time 
+

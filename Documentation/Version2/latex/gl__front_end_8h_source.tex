@@ -1,0 +1,73 @@
+\hypertarget{gl__front_end_8h_source}{}\doxysection{gl\+\_\+front\+End.\+h}
+\label{gl__front_end_8h_source}\index{/Users/john4064/Desktop/Final Project/Source/Version2/gl\_frontEnd.h@{/Users/john4064/Desktop/Final Project/Source/Version2/gl\_frontEnd.h}}
+\mbox{\hyperlink{gl__front_end_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{//}}
+\DoxyCodeLine{2 \textcolor{comment}{//  gl\_frontEnd.h}}
+\DoxyCodeLine{3 \textcolor{comment}{//  GL threads}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{//  Created by Jean-\/Yves Hervé on 2018-\/12-\/08}}
+\DoxyCodeLine{6 \textcolor{comment}{//}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#ifndef GL\_FRONT\_END\_H}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#define GL\_FRONT\_END\_H}}
+\DoxyCodeLine{10 \textcolor{comment}{//}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{gui_choice_8h}{guiChoice.h}}"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#if CSC412\_FP\_USE\_GUI}}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{16 \textcolor{comment}{//  Find out whether we are on Linux or macOS (sorry, Windows people)}}
+\DoxyCodeLine{17 \textcolor{comment}{//  and load the OpenGL \& glut headers.}}
+\DoxyCodeLine{18 \textcolor{comment}{//  For the macOS, lets us choose which glut to use}}
+\DoxyCodeLine{19 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#if (defined(\_\_dest\_os) \&\& (\_\_dest\_os == \_\_mac\_os )) || \(\backslash\)}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{    defined(\_\_APPLE\_CPP\_\_) || defined(\_\_APPLE\_CC\_\_)}}
+\DoxyCodeLine{22     \textcolor{comment}{//  Either use the Apple-\/provided-\/-\/-\/but deprecated-\/-\/-\/glut}}
+\DoxyCodeLine{23     \textcolor{comment}{//  or the third-\/party freeglut install}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{    \#if 1}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{        \#include <GLUT/GLUT.h>}}
+\DoxyCodeLine{26 \textcolor{preprocessor}{    \#else}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{        \#include <GL/freeglut.h>}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{        \#include <GL/gl.h>}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{    \#endif}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#elif defined(linux)}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{    \#include <GL/glut.h>}}
+\DoxyCodeLine{32 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{33 \textcolor{preprocessor}{    \#error unknown OS}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{38 \textcolor{comment}{//  Function prototypes}}
+\DoxyCodeLine{39 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{comment}{//  I don't want to impose how you store the information about your robots,}}
+\DoxyCodeLine{42 \textcolor{comment}{//  boxes and doors, so the two functions below will have to be called once for}}
+\DoxyCodeLine{43 \textcolor{comment}{//  each pair robot/box and once for each door.}}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45 \textcolor{comment}{//  This function draws together a robot and the box it is supposed to move}}
+\DoxyCodeLine{46 \textcolor{comment}{//  Since a robot corresponds to a box, they should have the same index in their}}
+\DoxyCodeLine{47 \textcolor{comment}{//  respective array, so only one id needs to be passed.}}
+\DoxyCodeLine{48 \textcolor{comment}{//  We also pass the number of the door assigned to the robot/box pair, so that}}
+\DoxyCodeLine{49 \textcolor{comment}{//  can display them all with a matching color}}
+\DoxyCodeLine{50 \textcolor{keywordtype}{void} \mbox{\hyperlink{gl__front_end_8h_ad097f9212a297bc063a717977e023225}{drawRobotAndBox}}(\textcolor{keywordtype}{int} \textcolor{keywordtype}{id},}
+\DoxyCodeLine{51                      \textcolor{keywordtype}{int} robotRow, \textcolor{keywordtype}{int} robotCol,}
+\DoxyCodeLine{52                      \textcolor{keywordtype}{int} boxRow, \textcolor{keywordtype}{int} boxCol,}
+\DoxyCodeLine{53                      \textcolor{keywordtype}{int} doorNumber);}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55 \textcolor{comment}{//  This function assigns a color to the door based on its number}}
+\DoxyCodeLine{56 \textcolor{keywordtype}{void} \mbox{\hyperlink{gl__front_end_8h_af66cd4bf0d03865ec456e03646f91b88}{drawDoor}}(\textcolor{keywordtype}{int} doorNumber, \textcolor{keywordtype}{int} doorRow, \textcolor{keywordtype}{int} doorCol);}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59 \textcolor{keywordtype}{void} \mbox{\hyperlink{gl__front_end_8h_a02744c30572ec118c5ed163dd571acd8}{drawGrid}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{60 \textcolor{keywordtype}{void} \mbox{\hyperlink{gl__front_end_8h_a1e5920d55216dbb96ce9782c7ffc42b4}{drawState}}(\textcolor{keywordtype}{int} numMessages, \textcolor{keywordtype}{char}** \mbox{\hyperlink{main_8cpp_a5a71782ebcbf35c821859558761c76f7}{message}});}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62 \textcolor{keywordtype}{void} \mbox{\hyperlink{gl__front_end_8h_a4ddfe4e03fbb7f71b9cf52a3c3efc2d9}{initializeFrontEnd}}(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}** argv,}
+\DoxyCodeLine{63                         \textcolor{keywordtype}{void} (*gridCB)(\textcolor{keywordtype}{void}), \textcolor{keywordtype}{void} (*stateCB)(\textcolor{keywordtype}{void}));}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// GL\_FRONT\_END\_H}}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//   CSC412\_FP\_USE\_GUI}}
+
+\end{DoxyCode}

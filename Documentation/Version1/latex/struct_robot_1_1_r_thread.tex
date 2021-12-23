@@ -1,0 +1,331 @@
+\hypertarget{struct_robot_1_1_r_thread}{}\doxysection{Robot\+::RThread Struct Reference}
+\label{struct_robot_1_1_r_thread}\index{Robot::RThread@{Robot::RThread}}
+
+
+A single structure that holds all of the important information used by the threads.  
+
+
+
+
+{\ttfamily \#include $<$Robot.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{struct_robot_1_1_r_thread_a4b5a92713f8264c8ffe90c94a676043f}{gen\+Robots\+Commands\+List}} (\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$\mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}})
+\begin{DoxyCompactList}\small\item\em the top-\/level function for the robot path planning \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_robot_1_1_r_thread_a8bb66ffb027f8696ef9e06e51ee8ae20}{print\+ARobots\+Command\+List}} ()
+\begin{DoxyCompactList}\small\item\em this is not used in the mutlithreaded versions, but can be used to print the robot\textquotesingle{}s planned list \end{DoxyCompactList}\item 
+pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ \mbox{\hyperlink{struct_robot_1_1_r_thread_a7cd646e4139522fa8d6c1aa50e3014d7}{determine\+Loc\+Comm\+Brings\+Us\+To\+PUSH}} (\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} command)
+\begin{DoxyCompactList}\small\item\em a function used for the making moves logic. it tells where any MOVE move will bring us to after we make it \end{DoxyCompactList}\item 
+pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ \mbox{\hyperlink{struct_robot_1_1_r_thread_a17bdd2ae477a3fb20d757da09e03b9b1}{determine\+Loc\+Comm\+Brings\+Us\+To\+MOVE}} (\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} command)
+\begin{DoxyCompactList}\small\item\em a function used for the making moves logic. it tells where any PUSH move will bring us to after we make it \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{struct_robot_1_1_r_thread_a2c1c6c9f6cd1aceb61987bd7a417afbc}{check\+Loc\+Already\+Exists}} (pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ loc\+Moving\+To, bool is\+Reader)
+\begin{DoxyCompactList}\small\item\em this function is used in the making moves logic. it tells whether a potential move already exists in the global position arrays \end{DoxyCompactList}\item 
+tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$ \mbox{\hyperlink{struct_robot_1_1_r_thread_acdc47d7e982d2d248809e743403419dc}{determine\+Starting\+Push\+Position\+Axis}} (\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$\mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}})
+\begin{DoxyCompactList}\small\item\em this function is used in robot path planning. it determines the an appropriate original starting push position for the robot and also records the \char`\"{}axis\char`\"{} down which the robot will begin the PUSH portion of its path \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_robot_1_1_r_thread_aa796b1946680e4ed70bcd26d8bd4da60}{fprint\+Robot\+Move}} (\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} move, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} direction)
+\begin{DoxyCompactList}\small\item\em this thread-\/safe function is used in the multithreaded version to print/record each move by each robot as it is done to file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_robot_1_1_r_thread_a3689bc3714de0e18e860c9d3526700ee}{robot\+Make\+Movesn\+Print}} ()
+\begin{DoxyCompactList}\small\item\em top-\/level routine that runs each multithreaded robot through its making moves process and printing routines. \end{DoxyCompactList}\item 
+vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$ \mbox{\hyperlink{struct_robot_1_1_r_thread_ab7e9d4d417c9af33e568d1a334563896}{gen\+Comm\+Get\+Behind\+Box}} (\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$\mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}}, tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$ \&starting\+Push\+Position\+Axis)
+\begin{DoxyCompactList}\small\item\em path-\/planning function uses determine\+Starting\+Push\+Position\+Axis to generate list of moves to get behind box in PUSH position. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{struct_robot_1_1_r_thread_a024eb86fc6cb587df1de0bf49009bab3}{record\+Yfirst}} (tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$ starting\+Push\+Position\+Axis)
+\begin{DoxyCompactList}\small\item\em function that determines which initial path to (dog-\/leg and) initial push position (Y-\/first or X-\/first) should be used to prevent a collision with the box . \end{DoxyCompactList}\item 
+vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$ \mbox{\hyperlink{struct_robot_1_1_r_thread_a34bfe6f7a9c126f91c2218bf2429e522}{record\+Moves\+To\+Behind\+Box}} (tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$ starting\+Push\+Position\+Axis, \mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$\mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}})
+\begin{DoxyCompactList}\small\item\em function that determines the correct moves to get behind the box . \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{struct_robot_1_1_r_thread_a349548fb1277eb95806275cae8e34764}{free\+Thread\+Memory}} ()
+\begin{DoxyCompactList}\small\item\em A function that frees the dynamic memory used by the Thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{struct_robot_1_1_r_thread_a661cd93d38a9835a4c89106724814f7d}{still\+Alive}}
+\begin{DoxyCompactList}\small\item\em a variable that tells if the thread has not yet been joined \end{DoxyCompactList}\item 
+pthread\+\_\+t \mbox{\hyperlink{struct_robot_1_1_r_thread_a287667c00f6ebfc3e36b248c82dde091}{TID}}
+\begin{DoxyCompactList}\small\item\em obviously just the thread ID data member \end{DoxyCompactList}\item 
+vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$ \mbox{\hyperlink{struct_robot_1_1_r_thread_aa8982a551a00ce987e5243d8a231bfc5}{this\+Robots\+Moves}}
+\begin{DoxyCompactList}\small\item\em this is used in prior versions 1 of the program, we didn\textquotesingle{}t need it for the multithreaded versions \end{DoxyCompactList}\item 
+vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ \mbox{\hyperlink{struct_robot_1_1_r_thread_ae7306c138c0d46787b76a496e4938ce9}{copy\+\_\+of\+\_\+robot\+\_\+moves}}
+\begin{DoxyCompactList}\small\item\em this a copy of the robot moves vector that can be used to save each robot\textquotesingle{}s planned command list if you wanted to print it after the robot has made some of the moves. We don\textquotesingle{}t use it in the multithreaded versions. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} \mbox{\hyperlink{struct_robot_1_1_r_thread_aace9b973f1cd8a50d8b8af92eea1d583}{idx\+\_\+of\+\_\+robot}}
+\begin{DoxyCompactList}\small\item\em each robot has an index number which is used in the threads to write to and pull info out of the global arrays \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static pthread\+\_\+mutex\+\_\+t \mbox{\hyperlink{struct_robot_1_1_r_thread_aa206003064b363a820cf225bf87b571b}{mutex}}
+\begin{DoxyCompactList}\small\item\em a mutex used in GUI initialization process \end{DoxyCompactList}\item 
+static pthread\+\_\+mutex\+\_\+t \mbox{\hyperlink{struct_robot_1_1_r_thread_a6410fa76d961ed2ee3b3454a7b1b945e}{file\+\_\+mutex}}
+\begin{DoxyCompactList}\small\item\em the mutex used for writing to the file \end{DoxyCompactList}\item 
+static vector$<$ pthread\+\_\+mutex\+\_\+t $\ast$ $>$ \mbox{\hyperlink{struct_robot_1_1_r_thread_a2a1610422fd21631177400a208e12971}{robot\+Loc\+Writing\+Mutex\+Vec}}
+\begin{DoxyCompactList}\small\item\em the mutex used for writing to the robot\+Loc and box\+Loc position vectors \end{DoxyCompactList}\item 
+static vector$<$ pthread\+\_\+mutex\+\_\+t $\ast$ $>$ \mbox{\hyperlink{struct_robot_1_1_r_thread_a5dee4bc08baf6181656ba6c0a826c573}{robot\+Loc\+Protect\+Reader\+Count\+Mutex\+Vec}}
+\begin{DoxyCompactList}\small\item\em a mutex used for protecting the reader count vectors for the reader writers solution pattern \end{DoxyCompactList}\item 
+static vector$<$ vector$<$ pthread\+\_\+mutex\+\_\+t $\ast$ $>$ $\ast$ $>$ \mbox{\hyperlink{struct_robot_1_1_r_thread_a4d8cf6a93fc85e4dbb90980718a191db}{grid\+Mutex\+Vector}}
+\begin{DoxyCompactList}\small\item\em a vector of mutexes that locks each position in the display grid when a robot wants to move there \end{DoxyCompactList}\item 
+static vector$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ \mbox{\hyperlink{struct_robot_1_1_r_thread_ab10b18f7df5b654c7432e9ffe720b306}{robot\+Loc\+Reader\+Count\+Vec}}
+\begin{DoxyCompactList}\small\item\em a vector of unsigned ints that counts how many readers there currently are. while there are more than one the mutex is locked against being written on \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$ \mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}}
+\begin{DoxyCompactList}\small\item\em a pointer to the main thread structs array.. this is generally not useed by the threads themselves, but we just put it here... \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A single structure that holds all of the important information used by the threads. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a2c1c6c9f6cd1aceb61987bd7a417afbc}\label{struct_robot_1_1_r_thread_a2c1c6c9f6cd1aceb61987bd7a417afbc}} 
+\index{Robot::RThread@{Robot::RThread}!checkLocAlreadyExists@{checkLocAlreadyExists}}
+\index{checkLocAlreadyExists@{checkLocAlreadyExists}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{checkLocAlreadyExists()}{checkLocAlreadyExists()}}
+{\footnotesize\ttfamily bool Robot\+::\+RThread\+::check\+Loc\+Already\+Exists (\begin{DoxyParamCaption}\item[{pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$}]{loc\+Moving\+To,  }\item[{bool}]{is\+Reader }\end{DoxyParamCaption})}
+
+
+
+this function is used in the making moves logic. it tells whether a potential move already exists in the global position arrays 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a17bdd2ae477a3fb20d757da09e03b9b1}\label{struct_robot_1_1_r_thread_a17bdd2ae477a3fb20d757da09e03b9b1}} 
+\index{Robot::RThread@{Robot::RThread}!determineLocCommBringsUsToMOVE@{determineLocCommBringsUsToMOVE}}
+\index{determineLocCommBringsUsToMOVE@{determineLocCommBringsUsToMOVE}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{determineLocCommBringsUsToMOVE()}{determineLocCommBringsUsToMOVE()}}
+{\footnotesize\ttfamily pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ Robot\+::\+RThread\+::determine\+Loc\+Comm\+Brings\+Us\+To\+MOVE (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}}}]{command }\end{DoxyParamCaption})}
+
+
+
+a function used for the making moves logic. it tells where any PUSH move will bring us to after we make it 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a7cd646e4139522fa8d6c1aa50e3014d7}\label{struct_robot_1_1_r_thread_a7cd646e4139522fa8d6c1aa50e3014d7}} 
+\index{Robot::RThread@{Robot::RThread}!determineLocCommBringsUsToPUSH@{determineLocCommBringsUsToPUSH}}
+\index{determineLocCommBringsUsToPUSH@{determineLocCommBringsUsToPUSH}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{determineLocCommBringsUsToPUSH()}{determineLocCommBringsUsToPUSH()}}
+{\footnotesize\ttfamily pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ Robot\+::\+RThread\+::determine\+Loc\+Comm\+Brings\+Us\+To\+PUSH (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}}}]{command }\end{DoxyParamCaption})}
+
+
+
+a function used for the making moves logic. it tells where any MOVE move will bring us to after we make it 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_acdc47d7e982d2d248809e743403419dc}\label{struct_robot_1_1_r_thread_acdc47d7e982d2d248809e743403419dc}} 
+\index{Robot::RThread@{Robot::RThread}!determineStartingPushPositionAxis@{determineStartingPushPositionAxis}}
+\index{determineStartingPushPositionAxis@{determineStartingPushPositionAxis}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{determineStartingPushPositionAxis()}{determineStartingPushPositionAxis()}}
+{\footnotesize\ttfamily tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$ Robot\+::\+RThread\+::determine\+Starting\+Push\+Position\+Axis (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$}]{RTinfo }\end{DoxyParamCaption})}
+
+
+
+this function is used in robot path planning. it determines the an appropriate original starting push position for the robot and also records the \char`\"{}axis\char`\"{} down which the robot will begin the PUSH portion of its path 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_aa796b1946680e4ed70bcd26d8bd4da60}\label{struct_robot_1_1_r_thread_aa796b1946680e4ed70bcd26d8bd4da60}} 
+\index{Robot::RThread@{Robot::RThread}!fprintRobotMove@{fprintRobotMove}}
+\index{fprintRobotMove@{fprintRobotMove}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{fprintRobotMove()}{fprintRobotMove()}}
+{\footnotesize\ttfamily void Robot\+::\+RThread\+::fprint\+Robot\+Move (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}}]{move,  }\item[{\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}}}]{direction }\end{DoxyParamCaption})}
+
+
+
+this thread-\/safe function is used in the multithreaded version to print/record each move by each robot as it is done to file. 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a349548fb1277eb95806275cae8e34764}\label{struct_robot_1_1_r_thread_a349548fb1277eb95806275cae8e34764}} 
+\index{Robot::RThread@{Robot::RThread}!freeThreadMemory@{freeThreadMemory}}
+\index{freeThreadMemory@{freeThreadMemory}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{freeThreadMemory()}{freeThreadMemory()}}
+{\footnotesize\ttfamily void Robot\+::\+RThread\+::free\+Thread\+Memory (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+A function that frees the dynamic memory used by the Thread. 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_ab7e9d4d417c9af33e568d1a334563896}\label{struct_robot_1_1_r_thread_ab7e9d4d417c9af33e568d1a334563896}} 
+\index{Robot::RThread@{Robot::RThread}!genCommGetBehindBox@{genCommGetBehindBox}}
+\index{genCommGetBehindBox@{genCommGetBehindBox}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{genCommGetBehindBox()}{genCommGetBehindBox()}}
+{\footnotesize\ttfamily vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$ Robot\+::\+RThread\+::gen\+Comm\+Get\+Behind\+Box (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$}]{RTinfo,  }\item[{tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$ \&}]{starting\+Push\+Position\+Axis }\end{DoxyParamCaption})}
+
+
+
+path-\/planning function uses determine\+Starting\+Push\+Position\+Axis to generate list of moves to get behind box in PUSH position. 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a4b5a92713f8264c8ffe90c94a676043f}\label{struct_robot_1_1_r_thread_a4b5a92713f8264c8ffe90c94a676043f}} 
+\index{Robot::RThread@{Robot::RThread}!genRobotsCommandsList@{genRobotsCommandsList}}
+\index{genRobotsCommandsList@{genRobotsCommandsList}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{genRobotsCommandsList()}{genRobotsCommandsList()}}
+{\footnotesize\ttfamily void Robot\+::\+RThread\+::gen\+Robots\+Commands\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$}]{RTinfo }\end{DoxyParamCaption})}
+
+
+
+the top-\/level function for the robot path planning 
+
+The main function that generates the list of commands that are executed by each robot.
+
+
+\begin{DoxyParams}{Parameters}
+{\em RTinfo} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a8bb66ffb027f8696ef9e06e51ee8ae20}\label{struct_robot_1_1_r_thread_a8bb66ffb027f8696ef9e06e51ee8ae20}} 
+\index{Robot::RThread@{Robot::RThread}!printARobotsCommandList@{printARobotsCommandList}}
+\index{printARobotsCommandList@{printARobotsCommandList}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{printARobotsCommandList()}{printARobotsCommandList()}}
+{\footnotesize\ttfamily void Robot\+::\+RThread\+::print\+ARobots\+Command\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+this is not used in the mutlithreaded versions, but can be used to print the robot\textquotesingle{}s planned list 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a34bfe6f7a9c126f91c2218bf2429e522}\label{struct_robot_1_1_r_thread_a34bfe6f7a9c126f91c2218bf2429e522}} 
+\index{Robot::RThread@{Robot::RThread}!recordMovesToBehindBox@{recordMovesToBehindBox}}
+\index{recordMovesToBehindBox@{recordMovesToBehindBox}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{recordMovesToBehindBox()}{recordMovesToBehindBox()}}
+{\footnotesize\ttfamily vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$ Robot\+::\+RThread\+::record\+Moves\+To\+Behind\+Box (\begin{DoxyParamCaption}\item[{tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$}]{starting\+Push\+Position\+Axis,  }\item[{\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$}]{RTinfo }\end{DoxyParamCaption})}
+
+
+
+function that determines the correct moves to get behind the box . 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a024eb86fc6cb587df1de0bf49009bab3}\label{struct_robot_1_1_r_thread_a024eb86fc6cb587df1de0bf49009bab3}} 
+\index{Robot::RThread@{Robot::RThread}!recordYfirst@{recordYfirst}}
+\index{recordYfirst@{recordYfirst}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{recordYfirst()}{recordYfirst()}}
+{\footnotesize\ttfamily bool Robot\+::\+RThread\+::record\+Yfirst (\begin{DoxyParamCaption}\item[{tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$}]{starting\+Push\+Position\+Axis }\end{DoxyParamCaption})}
+
+
+
+function that determines which initial path to (dog-\/leg and) initial push position (Y-\/first or X-\/first) should be used to prevent a collision with the box . 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a3689bc3714de0e18e860c9d3526700ee}\label{struct_robot_1_1_r_thread_a3689bc3714de0e18e860c9d3526700ee}} 
+\index{Robot::RThread@{Robot::RThread}!robotMakeMovesnPrint@{robotMakeMovesnPrint}}
+\index{robotMakeMovesnPrint@{robotMakeMovesnPrint}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{robotMakeMovesnPrint()}{robotMakeMovesnPrint()}}
+{\footnotesize\ttfamily void Robot\+::\+RThread\+::robot\+Make\+Movesn\+Print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+top-\/level routine that runs each multithreaded robot through its making moves process and printing routines. 
+
+The synchronization here is basically a reader writer problem. the worker threads are writing to the robot and box arrays the gui is reading them. but the worker threads also act as readers as well, when they have to iterate through every other location and test if a cell is occupied. 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_ae7306c138c0d46787b76a496e4938ce9}\label{struct_robot_1_1_r_thread_ae7306c138c0d46787b76a496e4938ce9}} 
+\index{Robot::RThread@{Robot::RThread}!copy\_of\_robot\_moves@{copy\_of\_robot\_moves}}
+\index{copy\_of\_robot\_moves@{copy\_of\_robot\_moves}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{copy\_of\_robot\_moves}{copy\_of\_robot\_moves}}
+{\footnotesize\ttfamily vector$<$pair$<$\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}}$>$$\ast$$>$ Robot\+::\+RThread\+::copy\+\_\+of\+\_\+robot\+\_\+moves}
+
+
+
+this a copy of the robot moves vector that can be used to save each robot\textquotesingle{}s planned command list if you wanted to print it after the robot has made some of the moves. We don\textquotesingle{}t use it in the multithreaded versions. 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a6410fa76d961ed2ee3b3454a7b1b945e}\label{struct_robot_1_1_r_thread_a6410fa76d961ed2ee3b3454a7b1b945e}} 
+\index{Robot::RThread@{Robot::RThread}!file\_mutex@{file\_mutex}}
+\index{file\_mutex@{file\_mutex}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{file\_mutex}{file\_mutex}}
+{\footnotesize\ttfamily pthread\+\_\+mutex\+\_\+t Robot\+::\+RThread\+::file\+\_\+mutex\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+the mutex used for writing to the file 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a4d8cf6a93fc85e4dbb90980718a191db}\label{struct_robot_1_1_r_thread_a4d8cf6a93fc85e4dbb90980718a191db}} 
+\index{Robot::RThread@{Robot::RThread}!gridMutexVector@{gridMutexVector}}
+\index{gridMutexVector@{gridMutexVector}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{gridMutexVector}{gridMutexVector}}
+{\footnotesize\ttfamily vector$<$ vector$<$ pthread\+\_\+mutex\+\_\+t $\ast$ $>$ $\ast$ $>$ Robot\+::\+RThread\+::grid\+Mutex\+Vector\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+a vector of mutexes that locks each position in the display grid when a robot wants to move there 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_aace9b973f1cd8a50d8b8af92eea1d583}\label{struct_robot_1_1_r_thread_aace9b973f1cd8a50d8b8af92eea1d583}} 
+\index{Robot::RThread@{Robot::RThread}!idx\_of\_robot@{idx\_of\_robot}}
+\index{idx\_of\_robot@{idx\_of\_robot}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{idx\_of\_robot}{idx\_of\_robot}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} Robot\+::\+RThread\+::idx\+\_\+of\+\_\+robot}
+
+
+
+each robot has an index number which is used in the threads to write to and pull info out of the global arrays 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_aa206003064b363a820cf225bf87b571b}\label{struct_robot_1_1_r_thread_aa206003064b363a820cf225bf87b571b}} 
+\index{Robot::RThread@{Robot::RThread}!mutex@{mutex}}
+\index{mutex@{mutex}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{mutex}{mutex}}
+{\footnotesize\ttfamily pthread\+\_\+mutex\+\_\+t Robot\+::\+RThread\+::mutex\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+a mutex used in GUI initialization process 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a5dee4bc08baf6181656ba6c0a826c573}\label{struct_robot_1_1_r_thread_a5dee4bc08baf6181656ba6c0a826c573}} 
+\index{Robot::RThread@{Robot::RThread}!robotLocProtectReaderCountMutexVec@{robotLocProtectReaderCountMutexVec}}
+\index{robotLocProtectReaderCountMutexVec@{robotLocProtectReaderCountMutexVec}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{robotLocProtectReaderCountMutexVec}{robotLocProtectReaderCountMutexVec}}
+{\footnotesize\ttfamily vector$<$ pthread\+\_\+mutex\+\_\+t $\ast$ $>$ Robot\+::\+RThread\+::robot\+Loc\+Protect\+Reader\+Count\+Mutex\+Vec\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+a mutex used for protecting the reader count vectors for the reader writers solution pattern 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_ab10b18f7df5b654c7432e9ffe720b306}\label{struct_robot_1_1_r_thread_ab10b18f7df5b654c7432e9ffe720b306}} 
+\index{Robot::RThread@{Robot::RThread}!robotLocReaderCountVec@{robotLocReaderCountVec}}
+\index{robotLocReaderCountVec@{robotLocReaderCountVec}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{robotLocReaderCountVec}{robotLocReaderCountVec}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ Robot\+::\+RThread\+::robot\+Loc\+Reader\+Count\+Vec\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+a vector of unsigned ints that counts how many readers there currently are. while there are more than one the mutex is locked against being written on 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a2a1610422fd21631177400a208e12971}\label{struct_robot_1_1_r_thread_a2a1610422fd21631177400a208e12971}} 
+\index{Robot::RThread@{Robot::RThread}!robotLocWritingMutexVec@{robotLocWritingMutexVec}}
+\index{robotLocWritingMutexVec@{robotLocWritingMutexVec}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{robotLocWritingMutexVec}{robotLocWritingMutexVec}}
+{\footnotesize\ttfamily vector$<$ pthread\+\_\+mutex\+\_\+t $\ast$ $>$ Robot\+::\+RThread\+::robot\+Loc\+Writing\+Mutex\+Vec\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+the mutex used for writing to the robot\+Loc and box\+Loc position vectors 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}\label{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}} 
+\index{Robot::RThread@{Robot::RThread}!RTinfo@{RTinfo}}
+\index{RTinfo@{RTinfo}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{RTinfo}{RTinfo}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_robot_1_1_r_thread}{Robot\+::\+RThread}} $\ast$ Robot\+::\+RThread\+::\+RTinfo\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+a pointer to the main thread structs array.. this is generally not useed by the threads themselves, but we just put it here... 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a661cd93d38a9835a4c89106724814f7d}\label{struct_robot_1_1_r_thread_a661cd93d38a9835a4c89106724814f7d}} 
+\index{Robot::RThread@{Robot::RThread}!stillAlive@{stillAlive}}
+\index{stillAlive@{stillAlive}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{stillAlive}{stillAlive}}
+{\footnotesize\ttfamily bool Robot\+::\+RThread\+::still\+Alive}
+
+
+
+a variable that tells if the thread has not yet been joined 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_aa8982a551a00ce987e5243d8a231bfc5}\label{struct_robot_1_1_r_thread_aa8982a551a00ce987e5243d8a231bfc5}} 
+\index{Robot::RThread@{Robot::RThread}!thisRobotsMoves@{thisRobotsMoves}}
+\index{thisRobotsMoves@{thisRobotsMoves}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{thisRobotsMoves}{thisRobotsMoves}}
+{\footnotesize\ttfamily vector$<$pair$<$\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}}$>$$\ast$$>$$\ast$ Robot\+::\+RThread\+::this\+Robots\+Moves}
+
+
+
+this is used in prior versions 1 of the program, we didn\textquotesingle{}t need it for the multithreaded versions 
+
+\mbox{\Hypertarget{struct_robot_1_1_r_thread_a287667c00f6ebfc3e36b248c82dde091}\label{struct_robot_1_1_r_thread_a287667c00f6ebfc3e36b248c82dde091}} 
+\index{Robot::RThread@{Robot::RThread}!TID@{TID}}
+\index{TID@{TID}!Robot::RThread@{Robot::RThread}}
+\doxysubsubsection{\texorpdfstring{TID}{TID}}
+{\footnotesize\ttfamily pthread\+\_\+t Robot\+::\+RThread\+::\+TID}
+
+
+
+obviously just the thread ID data member 
+
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/john4064/\+Desktop/\+Final Project/\+Source/\+Version1/\mbox{\hyperlink{_robot_8h}{Robot.\+h}}\item 
+/\+Users/john4064/\+Desktop/\+Final Project/\+Source/\+Version1/\mbox{\hyperlink{main_8cpp}{main.\+cpp}}\item 
+/\+Users/john4064/\+Desktop/\+Final Project/\+Source/\+Version1/\mbox{\hyperlink{_robot_8cpp}{Robot.\+cpp}}\end{DoxyCompactItemize}

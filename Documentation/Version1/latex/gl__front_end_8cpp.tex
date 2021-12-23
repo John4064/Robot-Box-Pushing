@@ -1,0 +1,453 @@
+\hypertarget{gl__front_end_8cpp}{}\doxysection{/\+Users/john4064/\+Desktop/\+Final Project/\+Source/\+Version1/gl\+\_\+front\+End.cpp File Reference}
+\label{gl__front_end_8cpp}\index{/Users/john4064/Desktop/Final Project/Source/Version1/gl\_frontEnd.cpp@{/Users/john4064/Desktop/Final Project/Source/Version1/gl\_frontEnd.cpp}}
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}gui\+Choice.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}gl\+\_\+front\+End.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{gl__front_end_8cpp_aa9b441ff9ca29d5020fdfcc22f8595dc}{SMALL\+\_\+\+DISPLAY\+\_\+\+FONT}}~GLUT\+\_\+\+BITMAP\+\_\+\+HELVETICA\+\_\+10
+\item 
+\#define \mbox{\hyperlink{gl__front_end_8cpp_a473f57380795b80ea8da33edc6e0ba62}{MEDIUM\+\_\+\+DISPLAY\+\_\+\+FONT}}~GLUT\+\_\+\+BITMAP\+\_\+\+HELVETICA\+\_\+12
+\item 
+\#define \mbox{\hyperlink{gl__front_end_8cpp_a2e5e3e5763e65dcac7a6cea69a2da98a}{LARGE\+\_\+\+DISPLAY\+\_\+\+FONT}}~GLUT\+\_\+\+BITMAP\+\_\+\+HELVETICA\+\_\+18
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a77a821b78874c1f03c26b4bf6fdb93cf}{speedup\+Robots}} (void)
+\begin{DoxyCompactList}\small\item\em The function speeds up robots after hitting the \char`\"{}.\char`\"{} and slows down after hitting the \char`\"{},\char`\"{} keys. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_aee1476932dbcc88e62576a8a3773e128}{slowdown\+Robots}} (void)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a0947ed72d13d8d4968e071e2c0e89754}{my\+Resize}} (int w, int h)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a3f5167b081f599ba9bf4f5606271382c}{drawn\+Tank\+Frame}} (int LEVEL\+\_\+\+WIDTH, int LEVEL\+\_\+\+HEIGHT)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a448f49095b35611401f276ffe35c8cc7}{fill\+Tank}} (int y, int LEVEL\+\_\+\+WIDTH)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_ace08711446903c92d19a6e270b3fe851}{display\+Textual\+Info}} (const char $\ast$info\+Str, int x, int y, int is\+Large)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a9c75b5f83b4ff1c0a64daeddccd142d8}{my\+Mouse}} (int b, int s, int x, int y)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_aacffe5fe13625e015dafbeea4cdecb75}{my\+Grid\+Pane\+Mouse}} (int b, int s, int x, int y)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_ad85261e826a074c1d3a0722b551d3dfd}{my\+State\+Pane\+Mouse}} (int b, int s, int x, int y)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a2380242ef771b5a0d59cce4a680dc9df}{my\+Keyboard}} (unsigned char c, int x, int y)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_afc6ab2ff569502e9c7bf8355e0bdff10}{my\+Timer\+Func}} (void)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a4ed5147184960402bf2745845c4c50a9}{create\+Door\+Colors}} (void)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a4fa34d36e8fb4e8e352d87517c4a295a}{free\+Door\+Colors}} (void)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_ad097f9212a297bc063a717977e023225}{draw\+Robot\+And\+Box}} (int id, int robot\+Row, int robot\+Col, int box\+Row, int box\+Col, int door\+Number)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_af66cd4bf0d03865ec456e03646f91b88}{draw\+Door}} (int door\+Number, int door\+Row, int door\+Col)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a02744c30572ec118c5ed163dd571acd8}{draw\+Grid}} (void)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a1e5920d55216dbb96ce9782c7ffc42b4}{draw\+State}} (int num\+Messages, char $\ast$$\ast$\mbox{\hyperlink{main_8cpp_a5a71782ebcbf35c821859558761c76f7}{message}})
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_ac158bfc1571fb83c31d7035c8497a5a3}{my\+Display}} (void)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a42b4ac80159a9b2ab5b2111abb5bb8c8}{my\+Timer\+Func}} (int val)
+\item 
+void \mbox{\hyperlink{gl__front_end_8cpp_a1e551559dca58a8b2ab97ff60cd3c4e0}{initialize\+Front\+End}} (int argc, char $\ast$$\ast$argv, void($\ast$grid\+Display\+CB)(void), void($\ast$state\+Display\+CB)(void))
+\begin{DoxyCompactList}\small\item\em A function that initializes the front end display. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_a6f4acdbb98c3308e1e755cf5e01a4fe7}{MAX\+\_\+\+NUM\+\_\+\+MESSAGES}}
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_a4427879eb43005a709988ec34c6d0536}{MAX\+\_\+\+LENGTH\+\_\+\+MESSAGE}}
+\item 
+int $\ast$$\ast$ \mbox{\hyperlink{gl__front_end_8cpp_ab606568155f8f7394dc974c312584fe4}{grid}}
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_a0801460eb7eb6812bd4e0ce52ab29024}{num\+Rows}}
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_a2d4acb52d99b57b5b524aaa557ab91eb}{num\+Cols}}
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_ac5572642dba17f4529ab7e4fb4ab9226}{num\+Boxes}}
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_a4371c327f4dfbf81caccee737ea94209}{num\+Doors}}
+\item 
+unsigned int \mbox{\hyperlink{gl__front_end_8cpp_aa178ec9d3045a1d472d87c2451d91dff}{num\+Live\+Threads}}
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_afb394fa4876e386e3a9d6c11fdeb2288}{SMALL\+\_\+\+FONT\+\_\+\+HEIGHT}} = 12
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_ac03fc5e12a4186ad58e1d8a3af419d91}{LARGE\+\_\+\+FONT\+\_\+\+HEIGHT}} = 18
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_a6be3f6e0b402b2a9d218cb8511cddf56}{TEXT\+\_\+\+PADDING}} = 0
+\item 
+const float \mbox{\hyperlink{gl__front_end_8cpp_a247e7aabc84f2f0a57503793e80911c7}{k\+Text\+Color}} \mbox{[}4\mbox{]} = \{1.f, 1.f, 1.f, 1.f\}
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_a58d70cc27f60800061585a70028c89d9}{INIT\+\_\+\+WIN\+\_\+X}} = 100
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_ac71a9396e94827b195b0156530f793f0}{INIT\+\_\+\+WIN\+\_\+Y}} = 40
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_a572443dcbdbd4aa6be03c924c77d54d9}{GRID\+\_\+\+PANE\+\_\+\+WIDTH}} = 800
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_ad13cd012598816ef6d2cedc3e77da819}{GRID\+\_\+\+PANE\+\_\+\+HEIGHT}} = 800
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_ac3f41a6c2dbbb137b97d19bb99b96a26}{STATE\+\_\+\+PANE\+\_\+\+WIDTH}} = 400
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_a9b0eed2f92a4235c297c8c56aa9fc7d3}{STATE\+\_\+\+PANE\+\_\+\+HEIGHT}} = 800
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_a5841546616aaf8b77c1a477b38e73b3b}{H\+\_\+\+PADDING}} = 0
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_a5e6ce0dd58078611570510dc4b8d81f3}{WINDOW\+\_\+\+WIDTH}} = 1200
+\item 
+const int \mbox{\hyperlink{gl__front_end_8cpp_ab76d138fa589df9a65fc05eb3bd56073}{WINDOW\+\_\+\+HEIGHT}} = 800
+\item 
+void($\ast$ \mbox{\hyperlink{gl__front_end_8cpp_a1d5e844cdb234d977ab941dd45f82ab2}{grid\+Display\+Func}} )(void)
+\item 
+void($\ast$ \mbox{\hyperlink{gl__front_end_8cpp_aaf71aa387f75e29d47a9367eebeb52f0}{state\+Display\+Func}} )(void)
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_a38cb7677248ffc347c6948b8de8d4676}{GRID\+\_\+\+PANE}} = 0
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_a9ea85942640c14c1808cebf18e270e0a}{STATE\+\_\+\+PANE}} = 1
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_a57448c606d448281e8bc23a38ecbf7d8}{g\+Main\+Window}}
+\item 
+int \mbox{\hyperlink{gl__front_end_8cpp_acad84a992b0db46d4cdb6afe6aff1281}{g\+Subwindow}} \mbox{[}2\mbox{]}
+\item 
+float $\ast$$\ast$ \mbox{\hyperlink{gl__front_end_8cpp_a1f057d22c2b0b6f49bcb16e6acbf957f}{door\+Color}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{gl__front_end_8cpp_a2e5e3e5763e65dcac7a6cea69a2da98a}\label{gl__front_end_8cpp_a2e5e3e5763e65dcac7a6cea69a2da98a}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!LARGE\_DISPLAY\_FONT@{LARGE\_DISPLAY\_FONT}}
+\index{LARGE\_DISPLAY\_FONT@{LARGE\_DISPLAY\_FONT}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{LARGE\_DISPLAY\_FONT}{LARGE\_DISPLAY\_FONT}}
+{\footnotesize\ttfamily \#define LARGE\+\_\+\+DISPLAY\+\_\+\+FONT~GLUT\+\_\+\+BITMAP\+\_\+\+HELVETICA\+\_\+18}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a473f57380795b80ea8da33edc6e0ba62}\label{gl__front_end_8cpp_a473f57380795b80ea8da33edc6e0ba62}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!MEDIUM\_DISPLAY\_FONT@{MEDIUM\_DISPLAY\_FONT}}
+\index{MEDIUM\_DISPLAY\_FONT@{MEDIUM\_DISPLAY\_FONT}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{MEDIUM\_DISPLAY\_FONT}{MEDIUM\_DISPLAY\_FONT}}
+{\footnotesize\ttfamily \#define MEDIUM\+\_\+\+DISPLAY\+\_\+\+FONT~GLUT\+\_\+\+BITMAP\+\_\+\+HELVETICA\+\_\+12}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_aa9b441ff9ca29d5020fdfcc22f8595dc}\label{gl__front_end_8cpp_aa9b441ff9ca29d5020fdfcc22f8595dc}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!SMALL\_DISPLAY\_FONT@{SMALL\_DISPLAY\_FONT}}
+\index{SMALL\_DISPLAY\_FONT@{SMALL\_DISPLAY\_FONT}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{SMALL\_DISPLAY\_FONT}{SMALL\_DISPLAY\_FONT}}
+{\footnotesize\ttfamily \#define SMALL\+\_\+\+DISPLAY\+\_\+\+FONT~GLUT\+\_\+\+BITMAP\+\_\+\+HELVETICA\+\_\+10}
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{gl__front_end_8cpp_a4ed5147184960402bf2745845c4c50a9}\label{gl__front_end_8cpp_a4ed5147184960402bf2745845c4c50a9}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!createDoorColors@{createDoorColors}}
+\index{createDoorColors@{createDoorColors}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{createDoorColors()}{createDoorColors()}}
+{\footnotesize\ttfamily void create\+Door\+Colors (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ace08711446903c92d19a6e270b3fe851}\label{gl__front_end_8cpp_ace08711446903c92d19a6e270b3fe851}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!displayTextualInfo@{displayTextualInfo}}
+\index{displayTextualInfo@{displayTextualInfo}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{displayTextualInfo()}{displayTextualInfo()}}
+{\footnotesize\ttfamily void display\+Textual\+Info (\begin{DoxyParamCaption}\item[{const char $\ast$}]{info\+Str,  }\item[{int}]{x,  }\item[{int}]{y,  }\item[{int}]{is\+Large }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_af66cd4bf0d03865ec456e03646f91b88}\label{gl__front_end_8cpp_af66cd4bf0d03865ec456e03646f91b88}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!drawDoor@{drawDoor}}
+\index{drawDoor@{drawDoor}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{drawDoor()}{drawDoor()}}
+{\footnotesize\ttfamily void draw\+Door (\begin{DoxyParamCaption}\item[{int}]{door\+Number,  }\item[{int}]{door\+Row,  }\item[{int}]{door\+Col }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a02744c30572ec118c5ed163dd571acd8}\label{gl__front_end_8cpp_a02744c30572ec118c5ed163dd571acd8}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!drawGrid@{drawGrid}}
+\index{drawGrid@{drawGrid}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{drawGrid()}{drawGrid()}}
+{\footnotesize\ttfamily void draw\+Grid (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a3f5167b081f599ba9bf4f5606271382c}\label{gl__front_end_8cpp_a3f5167b081f599ba9bf4f5606271382c}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!drawnTankFrame@{drawnTankFrame}}
+\index{drawnTankFrame@{drawnTankFrame}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{drawnTankFrame()}{drawnTankFrame()}}
+{\footnotesize\ttfamily void drawn\+Tank\+Frame (\begin{DoxyParamCaption}\item[{int}]{LEVEL\+\_\+\+WIDTH,  }\item[{int}]{LEVEL\+\_\+\+HEIGHT }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ad097f9212a297bc063a717977e023225}\label{gl__front_end_8cpp_ad097f9212a297bc063a717977e023225}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!drawRobotAndBox@{drawRobotAndBox}}
+\index{drawRobotAndBox@{drawRobotAndBox}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{drawRobotAndBox()}{drawRobotAndBox()}}
+{\footnotesize\ttfamily void draw\+Robot\+And\+Box (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{int}]{robot\+Row,  }\item[{int}]{robot\+Col,  }\item[{int}]{box\+Row,  }\item[{int}]{box\+Col,  }\item[{int}]{door\+Number }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a1e5920d55216dbb96ce9782c7ffc42b4}\label{gl__front_end_8cpp_a1e5920d55216dbb96ce9782c7ffc42b4}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!drawState@{drawState}}
+\index{drawState@{drawState}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{drawState()}{drawState()}}
+{\footnotesize\ttfamily void draw\+State (\begin{DoxyParamCaption}\item[{int}]{num\+Messages,  }\item[{char $\ast$$\ast$}]{message }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a448f49095b35611401f276ffe35c8cc7}\label{gl__front_end_8cpp_a448f49095b35611401f276ffe35c8cc7}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!fillTank@{fillTank}}
+\index{fillTank@{fillTank}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{fillTank()}{fillTank()}}
+{\footnotesize\ttfamily void fill\+Tank (\begin{DoxyParamCaption}\item[{int}]{y,  }\item[{int}]{LEVEL\+\_\+\+WIDTH }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a4fa34d36e8fb4e8e352d87517c4a295a}\label{gl__front_end_8cpp_a4fa34d36e8fb4e8e352d87517c4a295a}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!freeDoorColors@{freeDoorColors}}
+\index{freeDoorColors@{freeDoorColors}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{freeDoorColors()}{freeDoorColors()}}
+{\footnotesize\ttfamily void free\+Door\+Colors (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a1e551559dca58a8b2ab97ff60cd3c4e0}\label{gl__front_end_8cpp_a1e551559dca58a8b2ab97ff60cd3c4e0}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!initializeFrontEnd@{initializeFrontEnd}}
+\index{initializeFrontEnd@{initializeFrontEnd}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{initializeFrontEnd()}{initializeFrontEnd()}}
+{\footnotesize\ttfamily void initialize\+Front\+End (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv,  }\item[{void($\ast$)(void)}]{grid\+Display\+CB,  }\item[{void($\ast$)(void)}]{state\+Display\+CB }\end{DoxyParamCaption})}
+
+
+
+A function that initializes the front end display. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & \\
+\hline
+{\em argv} & \\
+\hline
+{\em grid\+Display\+CB} & \\
+\hline
+{\em state\+Display\+CB} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{gl__front_end_8cpp_ac158bfc1571fb83c31d7035c8497a5a3}\label{gl__front_end_8cpp_ac158bfc1571fb83c31d7035c8497a5a3}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!myDisplay@{myDisplay}}
+\index{myDisplay@{myDisplay}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{myDisplay()}{myDisplay()}}
+{\footnotesize\ttfamily void my\+Display (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_aacffe5fe13625e015dafbeea4cdecb75}\label{gl__front_end_8cpp_aacffe5fe13625e015dafbeea4cdecb75}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!myGridPaneMouse@{myGridPaneMouse}}
+\index{myGridPaneMouse@{myGridPaneMouse}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{myGridPaneMouse()}{myGridPaneMouse()}}
+{\footnotesize\ttfamily void my\+Grid\+Pane\+Mouse (\begin{DoxyParamCaption}\item[{int}]{b,  }\item[{int}]{s,  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a2380242ef771b5a0d59cce4a680dc9df}\label{gl__front_end_8cpp_a2380242ef771b5a0d59cce4a680dc9df}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!myKeyboard@{myKeyboard}}
+\index{myKeyboard@{myKeyboard}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{myKeyboard()}{myKeyboard()}}
+{\footnotesize\ttfamily void my\+Keyboard (\begin{DoxyParamCaption}\item[{unsigned char}]{c,  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a9c75b5f83b4ff1c0a64daeddccd142d8}\label{gl__front_end_8cpp_a9c75b5f83b4ff1c0a64daeddccd142d8}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!myMouse@{myMouse}}
+\index{myMouse@{myMouse}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{myMouse()}{myMouse()}}
+{\footnotesize\ttfamily void my\+Mouse (\begin{DoxyParamCaption}\item[{int}]{b,  }\item[{int}]{s,  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a0947ed72d13d8d4968e071e2c0e89754}\label{gl__front_end_8cpp_a0947ed72d13d8d4968e071e2c0e89754}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!myResize@{myResize}}
+\index{myResize@{myResize}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{myResize()}{myResize()}}
+{\footnotesize\ttfamily void my\+Resize (\begin{DoxyParamCaption}\item[{int}]{w,  }\item[{int}]{h }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ad85261e826a074c1d3a0722b551d3dfd}\label{gl__front_end_8cpp_ad85261e826a074c1d3a0722b551d3dfd}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!myStatePaneMouse@{myStatePaneMouse}}
+\index{myStatePaneMouse@{myStatePaneMouse}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{myStatePaneMouse()}{myStatePaneMouse()}}
+{\footnotesize\ttfamily void my\+State\+Pane\+Mouse (\begin{DoxyParamCaption}\item[{int}]{b,  }\item[{int}]{s,  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a42b4ac80159a9b2ab5b2111abb5bb8c8}\label{gl__front_end_8cpp_a42b4ac80159a9b2ab5b2111abb5bb8c8}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!myTimerFunc@{myTimerFunc}}
+\index{myTimerFunc@{myTimerFunc}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{myTimerFunc()}{myTimerFunc()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void my\+Timer\+Func (\begin{DoxyParamCaption}\item[{int}]{val }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_afc6ab2ff569502e9c7bf8355e0bdff10}\label{gl__front_end_8cpp_afc6ab2ff569502e9c7bf8355e0bdff10}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!myTimerFunc@{myTimerFunc}}
+\index{myTimerFunc@{myTimerFunc}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{myTimerFunc()}{myTimerFunc()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void my\+Timer\+Func (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_aee1476932dbcc88e62576a8a3773e128}\label{gl__front_end_8cpp_aee1476932dbcc88e62576a8a3773e128}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!slowdownRobots@{slowdownRobots}}
+\index{slowdownRobots@{slowdownRobots}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{slowdownRobots()}{slowdownRobots()}}
+{\footnotesize\ttfamily void slowdown\+Robots (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a77a821b78874c1f03c26b4bf6fdb93cf}\label{gl__front_end_8cpp_a77a821b78874c1f03c26b4bf6fdb93cf}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!speedupRobots@{speedupRobots}}
+\index{speedupRobots@{speedupRobots}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{speedupRobots()}{speedupRobots()}}
+{\footnotesize\ttfamily void speedup\+Robots (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+The function speeds up robots after hitting the \char`\"{}.\char`\"{} and slows down after hitting the \char`\"{},\char`\"{} keys. 
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{gl__front_end_8cpp_a1f057d22c2b0b6f49bcb16e6acbf957f}\label{gl__front_end_8cpp_a1f057d22c2b0b6f49bcb16e6acbf957f}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!doorColor@{doorColor}}
+\index{doorColor@{doorColor}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{doorColor}{doorColor}}
+{\footnotesize\ttfamily float$\ast$$\ast$ door\+Color}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a57448c606d448281e8bc23a38ecbf7d8}\label{gl__front_end_8cpp_a57448c606d448281e8bc23a38ecbf7d8}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!gMainWindow@{gMainWindow}}
+\index{gMainWindow@{gMainWindow}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{gMainWindow}{gMainWindow}}
+{\footnotesize\ttfamily int g\+Main\+Window}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ab606568155f8f7394dc974c312584fe4}\label{gl__front_end_8cpp_ab606568155f8f7394dc974c312584fe4}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!grid@{grid}}
+\index{grid@{grid}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{grid}{grid}}
+{\footnotesize\ttfamily int$\ast$$\ast$ grid\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a38cb7677248ffc347c6948b8de8d4676}\label{gl__front_end_8cpp_a38cb7677248ffc347c6948b8de8d4676}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!GRID\_PANE@{GRID\_PANE}}
+\index{GRID\_PANE@{GRID\_PANE}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{GRID\_PANE}{GRID\_PANE}}
+{\footnotesize\ttfamily int GRID\+\_\+\+PANE = 0}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ad13cd012598816ef6d2cedc3e77da819}\label{gl__front_end_8cpp_ad13cd012598816ef6d2cedc3e77da819}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!GRID\_PANE\_HEIGHT@{GRID\_PANE\_HEIGHT}}
+\index{GRID\_PANE\_HEIGHT@{GRID\_PANE\_HEIGHT}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{GRID\_PANE\_HEIGHT}{GRID\_PANE\_HEIGHT}}
+{\footnotesize\ttfamily int GRID\+\_\+\+PANE\+\_\+\+HEIGHT = 800}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a572443dcbdbd4aa6be03c924c77d54d9}\label{gl__front_end_8cpp_a572443dcbdbd4aa6be03c924c77d54d9}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!GRID\_PANE\_WIDTH@{GRID\_PANE\_WIDTH}}
+\index{GRID\_PANE\_WIDTH@{GRID\_PANE\_WIDTH}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{GRID\_PANE\_WIDTH}{GRID\_PANE\_WIDTH}}
+{\footnotesize\ttfamily int GRID\+\_\+\+PANE\+\_\+\+WIDTH = 800}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a1d5e844cdb234d977ab941dd45f82ab2}\label{gl__front_end_8cpp_a1d5e844cdb234d977ab941dd45f82ab2}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!gridDisplayFunc@{gridDisplayFunc}}
+\index{gridDisplayFunc@{gridDisplayFunc}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{gridDisplayFunc}{gridDisplayFunc}}
+{\footnotesize\ttfamily void($\ast$ grid\+Display\+Func) (void) (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_acad84a992b0db46d4cdb6afe6aff1281}\label{gl__front_end_8cpp_acad84a992b0db46d4cdb6afe6aff1281}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!gSubwindow@{gSubwindow}}
+\index{gSubwindow@{gSubwindow}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{gSubwindow}{gSubwindow}}
+{\footnotesize\ttfamily int g\+Subwindow\mbox{[}2\mbox{]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a5841546616aaf8b77c1a477b38e73b3b}\label{gl__front_end_8cpp_a5841546616aaf8b77c1a477b38e73b3b}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!H\_PADDING@{H\_PADDING}}
+\index{H\_PADDING@{H\_PADDING}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{H\_PADDING}{H\_PADDING}}
+{\footnotesize\ttfamily const int H\+\_\+\+PADDING = 0}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a58d70cc27f60800061585a70028c89d9}\label{gl__front_end_8cpp_a58d70cc27f60800061585a70028c89d9}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!INIT\_WIN\_X@{INIT\_WIN\_X}}
+\index{INIT\_WIN\_X@{INIT\_WIN\_X}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{INIT\_WIN\_X}{INIT\_WIN\_X}}
+{\footnotesize\ttfamily const int INIT\+\_\+\+WIN\+\_\+X = 100}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ac71a9396e94827b195b0156530f793f0}\label{gl__front_end_8cpp_ac71a9396e94827b195b0156530f793f0}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!INIT\_WIN\_Y@{INIT\_WIN\_Y}}
+\index{INIT\_WIN\_Y@{INIT\_WIN\_Y}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{INIT\_WIN\_Y}{INIT\_WIN\_Y}}
+{\footnotesize\ttfamily const int INIT\+\_\+\+WIN\+\_\+Y = 40}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a247e7aabc84f2f0a57503793e80911c7}\label{gl__front_end_8cpp_a247e7aabc84f2f0a57503793e80911c7}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!kTextColor@{kTextColor}}
+\index{kTextColor@{kTextColor}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{kTextColor}{kTextColor}}
+{\footnotesize\ttfamily const float k\+Text\+Color\mbox{[}4\mbox{]} = \{1.f, 1.f, 1.f, 1.f\}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ac03fc5e12a4186ad58e1d8a3af419d91}\label{gl__front_end_8cpp_ac03fc5e12a4186ad58e1d8a3af419d91}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!LARGE\_FONT\_HEIGHT@{LARGE\_FONT\_HEIGHT}}
+\index{LARGE\_FONT\_HEIGHT@{LARGE\_FONT\_HEIGHT}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{LARGE\_FONT\_HEIGHT}{LARGE\_FONT\_HEIGHT}}
+{\footnotesize\ttfamily const int LARGE\+\_\+\+FONT\+\_\+\+HEIGHT = 18}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a4427879eb43005a709988ec34c6d0536}\label{gl__front_end_8cpp_a4427879eb43005a709988ec34c6d0536}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!MAX\_LENGTH\_MESSAGE@{MAX\_LENGTH\_MESSAGE}}
+\index{MAX\_LENGTH\_MESSAGE@{MAX\_LENGTH\_MESSAGE}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{MAX\_LENGTH\_MESSAGE}{MAX\_LENGTH\_MESSAGE}}
+{\footnotesize\ttfamily const int MAX\+\_\+\+LENGTH\+\_\+\+MESSAGE\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a6f4acdbb98c3308e1e755cf5e01a4fe7}\label{gl__front_end_8cpp_a6f4acdbb98c3308e1e755cf5e01a4fe7}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!MAX\_NUM\_MESSAGES@{MAX\_NUM\_MESSAGES}}
+\index{MAX\_NUM\_MESSAGES@{MAX\_NUM\_MESSAGES}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{MAX\_NUM\_MESSAGES}{MAX\_NUM\_MESSAGES}}
+{\footnotesize\ttfamily const int MAX\+\_\+\+NUM\+\_\+\+MESSAGES\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ac5572642dba17f4529ab7e4fb4ab9226}\label{gl__front_end_8cpp_ac5572642dba17f4529ab7e4fb4ab9226}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!numBoxes@{numBoxes}}
+\index{numBoxes@{numBoxes}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{numBoxes}{numBoxes}}
+{\footnotesize\ttfamily int num\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a2d4acb52d99b57b5b524aaa557ab91eb}\label{gl__front_end_8cpp_a2d4acb52d99b57b5b524aaa557ab91eb}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!numCols@{numCols}}
+\index{numCols@{numCols}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{numCols}{numCols}}
+{\footnotesize\ttfamily int num\+Cols\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a4371c327f4dfbf81caccee737ea94209}\label{gl__front_end_8cpp_a4371c327f4dfbf81caccee737ea94209}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!numDoors@{numDoors}}
+\index{numDoors@{numDoors}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{numDoors}{numDoors}}
+{\footnotesize\ttfamily int num\+Doors\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_aa178ec9d3045a1d472d87c2451d91dff}\label{gl__front_end_8cpp_aa178ec9d3045a1d472d87c2451d91dff}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!numLiveThreads@{numLiveThreads}}
+\index{numLiveThreads@{numLiveThreads}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{numLiveThreads}{numLiveThreads}}
+{\footnotesize\ttfamily unsigned int num\+Live\+Threads\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a0801460eb7eb6812bd4e0ce52ab29024}\label{gl__front_end_8cpp_a0801460eb7eb6812bd4e0ce52ab29024}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!numRows@{numRows}}
+\index{numRows@{numRows}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{numRows}{numRows}}
+{\footnotesize\ttfamily int num\+Rows\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_afb394fa4876e386e3a9d6c11fdeb2288}\label{gl__front_end_8cpp_afb394fa4876e386e3a9d6c11fdeb2288}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!SMALL\_FONT\_HEIGHT@{SMALL\_FONT\_HEIGHT}}
+\index{SMALL\_FONT\_HEIGHT@{SMALL\_FONT\_HEIGHT}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{SMALL\_FONT\_HEIGHT}{SMALL\_FONT\_HEIGHT}}
+{\footnotesize\ttfamily const int SMALL\+\_\+\+FONT\+\_\+\+HEIGHT = 12}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a9ea85942640c14c1808cebf18e270e0a}\label{gl__front_end_8cpp_a9ea85942640c14c1808cebf18e270e0a}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!STATE\_PANE@{STATE\_PANE}}
+\index{STATE\_PANE@{STATE\_PANE}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{STATE\_PANE}{STATE\_PANE}}
+{\footnotesize\ttfamily int STATE\+\_\+\+PANE = 1}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a9b0eed2f92a4235c297c8c56aa9fc7d3}\label{gl__front_end_8cpp_a9b0eed2f92a4235c297c8c56aa9fc7d3}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!STATE\_PANE\_HEIGHT@{STATE\_PANE\_HEIGHT}}
+\index{STATE\_PANE\_HEIGHT@{STATE\_PANE\_HEIGHT}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{STATE\_PANE\_HEIGHT}{STATE\_PANE\_HEIGHT}}
+{\footnotesize\ttfamily int STATE\+\_\+\+PANE\+\_\+\+HEIGHT = 800}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ac3f41a6c2dbbb137b97d19bb99b96a26}\label{gl__front_end_8cpp_ac3f41a6c2dbbb137b97d19bb99b96a26}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!STATE\_PANE\_WIDTH@{STATE\_PANE\_WIDTH}}
+\index{STATE\_PANE\_WIDTH@{STATE\_PANE\_WIDTH}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{STATE\_PANE\_WIDTH}{STATE\_PANE\_WIDTH}}
+{\footnotesize\ttfamily int STATE\+\_\+\+PANE\+\_\+\+WIDTH = 400}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_aaf71aa387f75e29d47a9367eebeb52f0}\label{gl__front_end_8cpp_aaf71aa387f75e29d47a9367eebeb52f0}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!stateDisplayFunc@{stateDisplayFunc}}
+\index{stateDisplayFunc@{stateDisplayFunc}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{stateDisplayFunc}{stateDisplayFunc}}
+{\footnotesize\ttfamily void($\ast$ state\+Display\+Func) (void) (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a6be3f6e0b402b2a9d218cb8511cddf56}\label{gl__front_end_8cpp_a6be3f6e0b402b2a9d218cb8511cddf56}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!TEXT\_PADDING@{TEXT\_PADDING}}
+\index{TEXT\_PADDING@{TEXT\_PADDING}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{TEXT\_PADDING}{TEXT\_PADDING}}
+{\footnotesize\ttfamily const int TEXT\+\_\+\+PADDING = 0}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_ab76d138fa589df9a65fc05eb3bd56073}\label{gl__front_end_8cpp_ab76d138fa589df9a65fc05eb3bd56073}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!WINDOW\_HEIGHT@{WINDOW\_HEIGHT}}
+\index{WINDOW\_HEIGHT@{WINDOW\_HEIGHT}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{WINDOW\_HEIGHT}{WINDOW\_HEIGHT}}
+{\footnotesize\ttfamily const int WINDOW\+\_\+\+HEIGHT = 800}
+
+\mbox{\Hypertarget{gl__front_end_8cpp_a5e6ce0dd58078611570510dc4b8d81f3}\label{gl__front_end_8cpp_a5e6ce0dd58078611570510dc4b8d81f3}} 
+\index{gl\_frontEnd.cpp@{gl\_frontEnd.cpp}!WINDOW\_WIDTH@{WINDOW\_WIDTH}}
+\index{WINDOW\_WIDTH@{WINDOW\_WIDTH}!gl\_frontEnd.cpp@{gl\_frontEnd.cpp}}
+\doxysubsubsection{\texorpdfstring{WINDOW\_WIDTH}{WINDOW\_WIDTH}}
+{\footnotesize\ttfamily const int WINDOW\+\_\+\+WIDTH = 1200}
+

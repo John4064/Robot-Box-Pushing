@@ -1,0 +1,103 @@
+\hypertarget{_robot_8h_source}{}\doxysection{Robot.\+h}
+\label{_robot_8h_source}\index{/Users/john4064/Desktop/Final Project/Source/Version1/Robot.h@{/Users/john4064/Desktop/Final Project/Source/Version1/Robot.h}}
+\mbox{\hyperlink{_robot_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#include <pthread.h>}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#include <cstdlib>}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <utility>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <deque>}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#ifndef ROBOT\_H}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#define ROBOT\_H}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{keyword}{using namespace }std;}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{_robot_8h_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}};}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_robot}{Robot}}\{}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17    }
+\DoxyCodeLine{22     \textcolor{keyword}{typedef} \textcolor{keyword}{enum} \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} \{}
+\DoxyCodeLine{23                                 \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca24cb273fc45c8c5a8b6f2a3fc5f4acf8}{NORTH}} = 0,}
+\DoxyCodeLine{24                                 \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca1c74c86629d8d1fa23bc777e59c64c42}{WEST}} = 1,}
+\DoxyCodeLine{25                                 \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca813b9485feefc89cf8df8be8640e9360}{EAST}} = 3,}
+\DoxyCodeLine{26                                 \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca53d02985e08c824f90e078d90e643b4d}{SOUTH}} = 4,}
+\DoxyCodeLine{27                                 \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca861718df6f752f9394184dff276a62f7}{NOMOVEMENT}} = -\/1}
+\DoxyCodeLine{28     \} \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}};}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{34     \textcolor{keyword}{typedef} \textcolor{keyword}{enum} \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} \{}
+\DoxyCodeLine{35                                 \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4aa99594518bd62abee43c142b979b7257}{PUSH}},}
+\DoxyCodeLine{36                                 \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4ad386eea27f80525f4a7fba75a7bdb2ee}{MOVE}}, }
+\DoxyCodeLine{37                                 \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4aaaee904a601a45f497b5e4e8c93fd803}{END}} }
+\DoxyCodeLine{38     \} \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}};}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{44     \textcolor{keyword}{typedef} \textcolor{keyword}{enum} \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}}\{}
+\DoxyCodeLine{45                                 \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872ba1d241b009d35675ad16250f6c5027c37}{VERTICAL}},}
+\DoxyCodeLine{46                                 \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872bacf0054c0e039e8bbbc6194246db729c9}{HORIZONTAL}}}
+\DoxyCodeLine{47     \} \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}};}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{59     \textcolor{keyword}{typedef} \textcolor{keyword}{enum} \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{legStatus}}\{}
+\DoxyCodeLine{60                                 \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833a9ce9f5faa46e4330ddeaef85cd6c1e7a}{ON\_MOVE\_OR\_FIRST\_LEG\_PUSH}},}
+\DoxyCodeLine{61                                 \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833a2a14d7427289698007fde3a076cd11f1}{ON\_SECOND\_LEG}},}
+\DoxyCodeLine{62                                 \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833a52924ee05a5e76601efd995bb5bbadc6}{NO\_SECOND\_LEG}}}
+\DoxyCodeLine{63     \} \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{legStatus}};}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65 }
+\DoxyCodeLine{70     \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} \{}
+\DoxyCodeLine{71         }
+\DoxyCodeLine{73         \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_robot_1_1_r_thread_a661cd93d38a9835a4c89106724814f7d}{stillAlive}};}
+\DoxyCodeLine{75         \textcolor{keyword}{static} pthread\_mutex\_t \mbox{\hyperlink{struct_robot_1_1_r_thread_aa206003064b363a820cf225bf87b571b}{mutex}}; }
+\DoxyCodeLine{77         \textcolor{keyword}{static} pthread\_mutex\_t \mbox{\hyperlink{struct_robot_1_1_r_thread_a6410fa76d961ed2ee3b3454a7b1b945e}{file\_mutex}};}
+\DoxyCodeLine{79         \textcolor{keyword}{static} vector<pthread\_mutex\_t*> \mbox{\hyperlink{struct_robot_1_1_r_thread_a2a1610422fd21631177400a208e12971}{robotLocWritingMutexVec}};}
+\DoxyCodeLine{81         \textcolor{keyword}{static} vector<pthread\_mutex\_t*> \mbox{\hyperlink{struct_robot_1_1_r_thread_a5dee4bc08baf6181656ba6c0a826c573}{robotLocProtectReaderCountMutexVec}};}
+\DoxyCodeLine{83         \textcolor{keyword}{static} vector<vector<pthread\_mutex\_t*>*> \mbox{\hyperlink{struct_robot_1_1_r_thread_a4d8cf6a93fc85e4dbb90980718a191db}{gridMutexVector}};}
+\DoxyCodeLine{87         \textcolor{keyword}{static} vector<uint> \mbox{\hyperlink{struct_robot_1_1_r_thread_ab10b18f7df5b654c7432e9ffe720b306}{robotLocReaderCountVec}};}
+\DoxyCodeLine{91         \textcolor{keyword}{static} \mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}}* \mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}};}
+\DoxyCodeLine{93         pthread\_t \mbox{\hyperlink{struct_robot_1_1_r_thread_a287667c00f6ebfc3e36b248c82dde091}{TID}};}
+\DoxyCodeLine{95         \textcolor{comment}{// static vector<vector<pair<Moves, Direction>>> commandsListHolder;}}
+\DoxyCodeLine{96         vector<pair<Moves, Direction>*>* \mbox{\hyperlink{struct_robot_1_1_r_thread_aa8982a551a00ce987e5243d8a231bfc5}{thisRobotsMoves}};}
+\DoxyCodeLine{100         vector<pair<Moves, Direction>*> \mbox{\hyperlink{struct_robot_1_1_r_thread_ae7306c138c0d46787b76a496e4938ce9}{copy\_of\_robot\_moves}};}
+\DoxyCodeLine{102         \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} \mbox{\hyperlink{struct_robot_1_1_r_thread_aace9b973f1cd8a50d8b8af92eea1d583}{idx\_of\_robot}};  }
+\DoxyCodeLine{104         \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_robot_1_1_r_thread_a4b5a92713f8264c8ffe90c94a676043f}{genRobotsCommandsList}}(\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}}* \mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}});}
+\DoxyCodeLine{106         \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_robot_1_1_r_thread_a8bb66ffb027f8696ef9e06e51ee8ae20}{printARobotsCommandList}}();}
+\DoxyCodeLine{108         pair<uint, uint> \mbox{\hyperlink{struct_robot_1_1_r_thread_a7cd646e4139522fa8d6c1aa50e3014d7}{determineLocCommBringsUsToPUSH}}(\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} command);}
+\DoxyCodeLine{110         pair<uint, uint> \mbox{\hyperlink{struct_robot_1_1_r_thread_a17bdd2ae477a3fb20d757da09e03b9b1}{determineLocCommBringsUsToMOVE}}(\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} command);}
+\DoxyCodeLine{113         \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_robot_1_1_r_thread_a2c1c6c9f6cd1aceb61987bd7a417afbc}{checkLocAlreadyExists}}(pair<uint, uint> locMovingTo, \textcolor{keywordtype}{bool} isReader);}
+\DoxyCodeLine{116         tuple<int, int, axis> \mbox{\hyperlink{struct_robot_1_1_r_thread_acdc47d7e982d2d248809e743403419dc}{determineStartingPushPositionAxis}}(\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} * \mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}});}
+\DoxyCodeLine{118         \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_robot_1_1_r_thread_aa796b1946680e4ed70bcd26d8bd4da60}{fprintRobotMove}}(\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} move, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} direction);}
+\DoxyCodeLine{120         \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_robot_1_1_r_thread_a3689bc3714de0e18e860c9d3526700ee}{robotMakeMovesnPrint}}();}
+\DoxyCodeLine{122         vector<pair<Moves, Direction>* >* \mbox{\hyperlink{struct_robot_1_1_r_thread_ab7e9d4d417c9af33e568d1a334563896}{genCommGetBehindBox}}(\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}}* \mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}}, tuple <int, int, axis>\& startingPushPositionAxis);}
+\DoxyCodeLine{125         \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_robot_1_1_r_thread_a024eb86fc6cb587df1de0bf49009bab3}{recordYfirst}}(tuple <int, int, axis> startingPushPositionAxis);}
+\DoxyCodeLine{127         vector<pair<Moves, Direction>*>* \mbox{\hyperlink{struct_robot_1_1_r_thread_a34bfe6f7a9c126f91c2218bf2429e522}{recordMovesToBehindBox}}(tuple <int, int, axis> startingPushPositionAxis, \mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}}* \mbox{\hyperlink{struct_robot_1_1_r_thread_a0e883e4c171640d6f24f93a2cf2c4b84}{RTinfo}});}
+\DoxyCodeLine{128         \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_robot_1_1_r_thread_a349548fb1277eb95806275cae8e34764}{freeThreadMemory}}();}
+\DoxyCodeLine{129     \} \mbox{\hyperlink{namespace_robot_a83ab994454e5b8f56d90919efad6322f}{RThread}};}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{132     \textcolor{keywordtype}{void}* \mbox{\hyperlink{namespace_robot_aad4c4a8c93e0ccb87fbaae7432268da3}{joinThreads}}(\textcolor{keywordtype}{void}*);}
+\DoxyCodeLine{134     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_robot_a3373469d6452e679b202392134c1afc6}{initializeMutexes}}();}
+\DoxyCodeLine{136     \textcolor{keywordtype}{void} * \mbox{\hyperlink{namespace_robot_a6e7b2ea4ec97bef1c8c1fe0262ea8b8b}{robotThreadFunc}}(\textcolor{keywordtype}{void} * arg);}
+\DoxyCodeLine{138     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_robot_a4e0fd16f45208674452c45fbf0b1eb5a}{printBeginningPartOfOutputFile}}();}
+\DoxyCodeLine{140     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_robot_ab2adedb7d76831b404f62f6922a2640a}{placeRobots}}();}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142 }
+\DoxyCodeLine{144     vector<pair<Moves, Direction> > \mbox{\hyperlink{namespace_robot_adc58bbf2dbbfdebc6e31d52c0aff8911}{genCommPushBoxtoDoor}}(\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}}* RTinfo);}
+\DoxyCodeLine{146     vector<pair<Moves, Direction>* >* \mbox{\hyperlink{namespace_robot_adfa00b11fea0cc20bca7b9f6b5b3ab1d}{recordMovesPushToDoor}}(\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}}* RTinfo, tuple <int, int ,axis> startingPushPositionAxis);}
+\DoxyCodeLine{147     }
+\DoxyCodeLine{149     \textcolor{keywordtype}{string} \mbox{\hyperlink{namespace_robot_ad0856be6f33fd2a464154588c985cbf5}{convertMoveEnumToWord}}(\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} move);}
+\DoxyCodeLine{151     \textcolor{keywordtype}{string} \mbox{\hyperlink{namespace_robot_a9880978dcf74c2f6ad03bc1bac3f1a93}{convertDirEnumToWord}}(\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} dir);}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{154     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_robot_aaf70287cb80e07fcabac45af28a155d7}{printRobotsCommandsList}}(\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}}* RTInfo);}
+\DoxyCodeLine{155     }
+\DoxyCodeLine{157     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_robot_a36c9cd5fa36e3d670d026463b64a5f33}{recordMovesX}}(vector<pair<Moves, Direction>*>* RCList, pair<int, int> startingPoint, pair<int, int> destination, \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} argmove, \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{legStatus}} leg\_status);}
+\DoxyCodeLine{158     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_robot_a6291192ad0b9f77bc8c426fba2d183ae}{recordMovesY}}(vector<pair<Moves, Direction>*>* RCList, pair<int, int> startingPoint, pair<int, int> destination, \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} argmove, \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{legStatus}} leg\_status);}
+\DoxyCodeLine{160     pair<uint, uint> \mbox{\hyperlink{namespace_robot_a2852ae82e562a2bab8f60f2b63d5919e}{recordRotationToSecondPushPos}}(vector<pair<Moves, Direction> *>* RCList, tuple <int, int, axis> }
+\DoxyCodeLine{161         startingPushPositionAxis, \textcolor{keywordtype}{int} idx);}
+\DoxyCodeLine{163     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_robot_abeeac8f9eb93315619a43da214e00804}{makeRegMove}}(\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} dir, \textcolor{keywordtype}{int} idx);}
+\DoxyCodeLine{165     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_robot_a8fa976673c2d2c010cc16a61d624b956}{makePushMove}}(\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} dir, \textcolor{keywordtype}{int} idx);}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{167 \};}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

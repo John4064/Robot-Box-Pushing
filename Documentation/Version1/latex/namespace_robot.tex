@@ -1,0 +1,422 @@
+\hypertarget{namespace_robot}{}\doxysection{Robot Namespace Reference}
+\label{namespace_robot}\index{Robot@{Robot}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}}
+\begin{DoxyCompactList}\small\item\em A single structure that holds all of the important information used by the threads. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef enum \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Robot\+::\+Direction}} \mbox{\hyperlink{namespace_robot_ac76e22bb4391b49921d68e8f573a8794}{Direction}}
+\begin{DoxyCompactList}\small\item\em An enum to define directions as used in the program. \end{DoxyCompactList}\item 
+typedef enum \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Robot\+::\+Moves}} \mbox{\hyperlink{namespace_robot_a6824274a00d8e7093c376a88c339c0b5}{Moves}}
+\begin{DoxyCompactList}\small\item\em An enum to define MOVES as used in the program. \end{DoxyCompactList}\item 
+typedef enum \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{Robot\+::axis}} \mbox{\hyperlink{namespace_robot_ac89bd84c9fb21a023772f3fb241f2729}{axis}}
+\begin{DoxyCompactList}\small\item\em An enum to define the concept of AXIS as used in the program. Axes are used as parameters in the robot path planning functions. \end{DoxyCompactList}\item 
+typedef enum \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{Robot\+::leg\+Status}} \mbox{\hyperlink{namespace_robot_a3d68efccb7b73363859c0c3ccd8f9af7}{leg\+Status}}
+\begin{DoxyCompactList}\small\item\em An enum to define the concept of LEG STATUS in the program. A robot\textquotesingle{}s total path is divided into the first half of the trip where it MOVES and the second half where it PUSHES the box. THe PUSH half is further divided into two halves, the part in which the robot is pushing to the first \char`\"{}dog leg\char`\"{} or right angle waypoint, and the second half where it is simply pushing in a straight line to the door. The variable ON\+\_\+\+MOVE\+\_\+\+OR\+\_\+\+FIRST\+\_\+\+LEG\+\_\+\+PUSH describes just that, and ON\+\_\+\+SECOND\+\_\+\+LEG describes the final push to the door. Sometimes, A robot will already be in the push position to go straight to the door and will have NO\+\_\+\+SECOND\+\_\+\+LEG. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{struct_robot_1_1_r_thread}{Robot\+::\+RThread}} \mbox{\hyperlink{namespace_robot_a83ab994454e5b8f56d90919efad6322f}{RThread}}
+\begin{DoxyCompactList}\small\item\em A single structure that holds all of the important information used by the threads. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} \{ \newline
+\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca24cb273fc45c8c5a8b6f2a3fc5f4acf8}{NORTH}} = 0
+, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca1c74c86629d8d1fa23bc777e59c64c42}{WEST}} = 1
+, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca813b9485feefc89cf8df8be8640e9360}{EAST}} = 3
+, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca53d02985e08c824f90e078d90e643b4d}{SOUTH}} = 4
+, \newline
+\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca861718df6f752f9394184dff276a62f7}{NOMOVEMENT}} = -\/1
+ \}
+\begin{DoxyCompactList}\small\item\em An enum to define directions as used in the program. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} \{ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4aa99594518bd62abee43c142b979b7257}{PUSH}}
+, \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4ad386eea27f80525f4a7fba75a7bdb2ee}{MOVE}}
+, \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4aaaee904a601a45f497b5e4e8c93fd803}{END}}
+ \}
+\begin{DoxyCompactList}\small\item\em An enum to define MOVES as used in the program. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} \{ \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872ba1d241b009d35675ad16250f6c5027c37}{VERTICAL}}
+, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872bacf0054c0e039e8bbbc6194246db729c9}{HORIZONTAL}}
+ \}
+\begin{DoxyCompactList}\small\item\em An enum to define the concept of AXIS as used in the program. Axes are used as parameters in the robot path planning functions. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{leg\+Status}} \{ \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833a9ce9f5faa46e4330ddeaef85cd6c1e7a}{ON\+\_\+\+MOVE\+\_\+\+OR\+\_\+\+FIRST\+\_\+\+LEG\+\_\+\+PUSH}}
+, \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833a2a14d7427289698007fde3a076cd11f1}{ON\+\_\+\+SECOND\+\_\+\+LEG}}
+, \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833a52924ee05a5e76601efd995bb5bbadc6}{NO\+\_\+\+SECOND\+\_\+\+LEG}}
+ \}
+\begin{DoxyCompactList}\small\item\em An enum to define the concept of LEG STATUS in the program. A robot\textquotesingle{}s total path is divided into the first half of the trip where it MOVES and the second half where it PUSHES the box. THe PUSH half is further divided into two halves, the part in which the robot is pushing to the first \char`\"{}dog leg\char`\"{} or right angle waypoint, and the second half where it is simply pushing in a straight line to the door. The variable ON\+\_\+\+MOVE\+\_\+\+OR\+\_\+\+FIRST\+\_\+\+LEG\+\_\+\+PUSH describes just that, and ON\+\_\+\+SECOND\+\_\+\+LEG describes the final push to the door. Sometimes, A robot will already be in the push position to go straight to the door and will have NO\+\_\+\+SECOND\+\_\+\+LEG. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{namespace_robot_a6e7b2ea4ec97bef1c8c1fe0262ea8b8b}{robot\+Thread\+Func}} (void $\ast$arg)
+\begin{DoxyCompactList}\small\item\em the function that is run by each robot thread. \end{DoxyCompactList}\item 
+vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$ \mbox{\hyperlink{namespace_robot_adfa00b11fea0cc20bca7b9f6b5b3ab1d}{record\+Moves\+Push\+To\+Door}} (\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$RTinfo, tuple$<$ int, int,\mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$ starting\+Push\+Position\+Axis)
+\begin{DoxyCompactList}\small\item\em a lower-\/level path-\/planning function that generates a list of push commmands to get from the box to the door \end{DoxyCompactList}\item 
+pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ \mbox{\hyperlink{namespace_robot_a2852ae82e562a2bab8f60f2b63d5919e}{record\+Rotation\+To\+Second\+Push\+Pos}} (vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$RCList, tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$ starting\+Push\+Position\+Axis, int idx)
+\begin{DoxyCompactList}\small\item\em function to plan the rotation of robot about its initial push position. \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{namespace_robot_ad0856be6f33fd2a464154588c985cbf5}{convert\+Move\+Enum\+To\+Word}} (\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} move)
+\begin{DoxyCompactList}\small\item\em used in printing and std output of command lists \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{namespace_robot_a9880978dcf74c2f6ad03bc1bac3f1a93}{convert\+Dir\+Enum\+To\+Word}} (\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} dir)
+\begin{DoxyCompactList}\small\item\em used in printing and std output of command lists \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_abeeac8f9eb93315619a43da214e00804}{make\+Reg\+Move}} (\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} dir, int idx)
+\begin{DoxyCompactList}\small\item\em utility to compute new coordinates when certain MOVES are made. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_a8fa976673c2d2c010cc16a61d624b956}{make\+Push\+Move}} (\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} dir, int idx)
+\begin{DoxyCompactList}\small\item\em utility to compute new coordinates when certain PUSHES are made. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_a51045e74d06453ef59417fead6c81d3d}{destroy\+Robots\+Commands\+List}} (\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$RTinfo)
+\item 
+void \mbox{\hyperlink{namespace_robot_a36c9cd5fa36e3d670d026463b64a5f33}{record\+MovesX}} (vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$RCList, pair$<$ int, int $>$ starting\+Point, pair$<$ int, int $>$ destination, \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} argmove, \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{leg\+Status}} leg\+\_\+status)
+\begin{DoxyCompactList}\small\item\em low level path-\/planning functions that plan a path from a starting point to a finish point modulated by a couple of variables . \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_a6291192ad0b9f77bc8c426fba2d183ae}{record\+MovesY}} (vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$RCList, pair$<$ int, int $>$ starting\+Point, pair$<$ int, int $>$ destination, \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}} argmove, \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{leg\+Status}} leg\+\_\+status)
+\item 
+void $\ast$ \mbox{\hyperlink{namespace_robot_aad4c4a8c93e0ccb87fbaae7432268da3}{join\+Threads}} (void $\ast$)
+\begin{DoxyCompactList}\small\item\em a thread function that directs the single thread that collects all the other threads in a JOIN operation after the threads are complete. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_a3373469d6452e679b202392134c1afc6}{initialize\+Mutexes}} ()
+\begin{DoxyCompactList}\small\item\em a function that allocates and calls \char`\"{}init\char`\"{} on the mutexes used by the program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_a4e0fd16f45208674452c45fbf0b1eb5a}{print\+Beginning\+Part\+Of\+Output\+File}} ()
+\begin{DoxyCompactList}\small\item\em a function that prints the required information for printing to file not unique to each thread \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_ab2adedb7d76831b404f62f6922a2640a}{place\+Robots}} ()
+\begin{DoxyCompactList}\small\item\em a function that determines random locations for robots and adds them to the robot location vector \end{DoxyCompactList}\item 
+vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $>$ \mbox{\hyperlink{namespace_robot_adc58bbf2dbbfdebc6e31d52c0aff8911}{gen\+Comm\+Push\+Boxto\+Door}} (\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$RTinfo)
+\begin{DoxyCompactList}\small\item\em a path-\/planning function that generates a list of push commmands to get from the box to the door \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_robot_aaf70287cb80e07fcabac45af28a155d7}{print\+Robots\+Commands\+List}} (\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$RTInfo)
+\begin{DoxyCompactList}\small\item\em used in printing the robots commands copy of planned commands \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ $\ast$ $>$ \mbox{\hyperlink{namespace_robot_a927e8512b629367e37c0fa72f013010f}{robot\+Loc}}
+\item 
+const int \mbox{\hyperlink{namespace_robot_a27fea528e1dac6b42a659263b903bd25}{NORTHSOUTH}} = 0
+\item 
+const int \mbox{\hyperlink{namespace_robot_a4c61d56e53310beca3e25048bf46c852}{EASTWEST}} = 1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{namespace_robot_ac89bd84c9fb21a023772f3fb241f2729}\label{namespace_robot_ac89bd84c9fb21a023772f3fb241f2729}} 
+\index{Robot@{Robot}!axis@{axis}}
+\index{axis@{axis}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{axis}{axis}}
+{\footnotesize\ttfamily typedef enum \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{Robot\+::axis}} \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{Robot\+::axis}}}
+
+
+
+An enum to define the concept of AXIS as used in the program. Axes are used as parameters in the robot path planning functions. 
+
+\mbox{\Hypertarget{namespace_robot_ac76e22bb4391b49921d68e8f573a8794}\label{namespace_robot_ac76e22bb4391b49921d68e8f573a8794}} 
+\index{Robot@{Robot}!Direction@{Direction}}
+\index{Direction@{Direction}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{Direction}{Direction}}
+{\footnotesize\ttfamily typedef enum \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Robot\+::\+Direction}} \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Robot\+::\+Direction}}}
+
+
+
+An enum to define directions as used in the program. 
+
+\mbox{\Hypertarget{namespace_robot_a3d68efccb7b73363859c0c3ccd8f9af7}\label{namespace_robot_a3d68efccb7b73363859c0c3ccd8f9af7}} 
+\index{Robot@{Robot}!legStatus@{legStatus}}
+\index{legStatus@{legStatus}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{legStatus}{legStatus}}
+{\footnotesize\ttfamily typedef enum \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{Robot\+::leg\+Status}} \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{Robot\+::leg\+Status}}}
+
+
+
+An enum to define the concept of LEG STATUS in the program. A robot\textquotesingle{}s total path is divided into the first half of the trip where it MOVES and the second half where it PUSHES the box. THe PUSH half is further divided into two halves, the part in which the robot is pushing to the first \char`\"{}dog leg\char`\"{} or right angle waypoint, and the second half where it is simply pushing in a straight line to the door. The variable ON\+\_\+\+MOVE\+\_\+\+OR\+\_\+\+FIRST\+\_\+\+LEG\+\_\+\+PUSH describes just that, and ON\+\_\+\+SECOND\+\_\+\+LEG describes the final push to the door. Sometimes, A robot will already be in the push position to go straight to the door and will have NO\+\_\+\+SECOND\+\_\+\+LEG. 
+
+\mbox{\Hypertarget{namespace_robot_a6824274a00d8e7093c376a88c339c0b5}\label{namespace_robot_a6824274a00d8e7093c376a88c339c0b5}} 
+\index{Robot@{Robot}!Moves@{Moves}}
+\index{Moves@{Moves}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{Moves}{Moves}}
+{\footnotesize\ttfamily typedef enum \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Robot\+::\+Moves}} \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Robot\+::\+Moves}}}
+
+
+
+An enum to define MOVES as used in the program. 
+
+\mbox{\Hypertarget{namespace_robot_a83ab994454e5b8f56d90919efad6322f}\label{namespace_robot_a83ab994454e5b8f56d90919efad6322f}} 
+\index{Robot@{Robot}!RThread@{RThread}}
+\index{RThread@{RThread}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{RThread}{RThread}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_robot_1_1_r_thread}{Robot\+::\+RThread}} \mbox{\hyperlink{struct_robot_1_1_r_thread}{Robot\+::\+RThread}}}
+
+
+
+A single structure that holds all of the important information used by the threads. 
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_robot_ac67e34b6475e0812789940016ae3872b}\label{namespace_robot_ac67e34b6475e0812789940016ae3872b}} 
+\index{Robot@{Robot}!axis@{axis}}
+\index{axis@{axis}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{axis}{axis}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{Robot\+::axis}}}
+
+
+
+An enum to define the concept of AXIS as used in the program. Axes are used as parameters in the robot path planning functions. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{VERTICAL@{VERTICAL}!Robot@{Robot}}\index{Robot@{Robot}!VERTICAL@{VERTICAL}}}\mbox{\Hypertarget{namespace_robot_ac67e34b6475e0812789940016ae3872ba1d241b009d35675ad16250f6c5027c37}\label{namespace_robot_ac67e34b6475e0812789940016ae3872ba1d241b009d35675ad16250f6c5027c37}} 
+VERTICAL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{HORIZONTAL@{HORIZONTAL}!Robot@{Robot}}\index{Robot@{Robot}!HORIZONTAL@{HORIZONTAL}}}\mbox{\Hypertarget{namespace_robot_ac67e34b6475e0812789940016ae3872bacf0054c0e039e8bbbc6194246db729c9}\label{namespace_robot_ac67e34b6475e0812789940016ae3872bacf0054c0e039e8bbbc6194246db729c9}} 
+HORIZONTAL&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}\label{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}} 
+\index{Robot@{Robot}!Direction@{Direction}}
+\index{Direction@{Direction}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{Direction}{Direction}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Robot\+::\+Direction}}}
+
+
+
+An enum to define directions as used in the program. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NORTH@{NORTH}!Robot@{Robot}}\index{Robot@{Robot}!NORTH@{NORTH}}}\mbox{\Hypertarget{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca24cb273fc45c8c5a8b6f2a3fc5f4acf8}\label{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca24cb273fc45c8c5a8b6f2a3fc5f4acf8}} 
+NORTH&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WEST@{WEST}!Robot@{Robot}}\index{Robot@{Robot}!WEST@{WEST}}}\mbox{\Hypertarget{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca1c74c86629d8d1fa23bc777e59c64c42}\label{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca1c74c86629d8d1fa23bc777e59c64c42}} 
+WEST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EAST@{EAST}!Robot@{Robot}}\index{Robot@{Robot}!EAST@{EAST}}}\mbox{\Hypertarget{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca813b9485feefc89cf8df8be8640e9360}\label{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca813b9485feefc89cf8df8be8640e9360}} 
+EAST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SOUTH@{SOUTH}!Robot@{Robot}}\index{Robot@{Robot}!SOUTH@{SOUTH}}}\mbox{\Hypertarget{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca53d02985e08c824f90e078d90e643b4d}\label{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca53d02985e08c824f90e078d90e643b4d}} 
+SOUTH&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NOMOVEMENT@{NOMOVEMENT}!Robot@{Robot}}\index{Robot@{Robot}!NOMOVEMENT@{NOMOVEMENT}}}\mbox{\Hypertarget{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca861718df6f752f9394184dff276a62f7}\label{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5ca861718df6f752f9394184dff276a62f7}} 
+NOMOVEMENT&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespace_robot_a889b5c1b2dca7377fc076c842119c833}\label{namespace_robot_a889b5c1b2dca7377fc076c842119c833}} 
+\index{Robot@{Robot}!legStatus@{legStatus}}
+\index{legStatus@{legStatus}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{legStatus}{legStatus}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{Robot\+::leg\+Status}}}
+
+
+
+An enum to define the concept of LEG STATUS in the program. A robot\textquotesingle{}s total path is divided into the first half of the trip where it MOVES and the second half where it PUSHES the box. THe PUSH half is further divided into two halves, the part in which the robot is pushing to the first \char`\"{}dog leg\char`\"{} or right angle waypoint, and the second half where it is simply pushing in a straight line to the door. The variable ON\+\_\+\+MOVE\+\_\+\+OR\+\_\+\+FIRST\+\_\+\+LEG\+\_\+\+PUSH describes just that, and ON\+\_\+\+SECOND\+\_\+\+LEG describes the final push to the door. Sometimes, A robot will already be in the push position to go straight to the door and will have NO\+\_\+\+SECOND\+\_\+\+LEG. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ON\_MOVE\_OR\_FIRST\_LEG\_PUSH@{ON\_MOVE\_OR\_FIRST\_LEG\_PUSH}!Robot@{Robot}}\index{Robot@{Robot}!ON\_MOVE\_OR\_FIRST\_LEG\_PUSH@{ON\_MOVE\_OR\_FIRST\_LEG\_PUSH}}}\mbox{\Hypertarget{namespace_robot_a889b5c1b2dca7377fc076c842119c833a9ce9f5faa46e4330ddeaef85cd6c1e7a}\label{namespace_robot_a889b5c1b2dca7377fc076c842119c833a9ce9f5faa46e4330ddeaef85cd6c1e7a}} 
+ON\+\_\+\+MOVE\+\_\+\+OR\+\_\+\+FIRST\+\_\+\+LEG\+\_\+\+PUSH&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ON\_SECOND\_LEG@{ON\_SECOND\_LEG}!Robot@{Robot}}\index{Robot@{Robot}!ON\_SECOND\_LEG@{ON\_SECOND\_LEG}}}\mbox{\Hypertarget{namespace_robot_a889b5c1b2dca7377fc076c842119c833a2a14d7427289698007fde3a076cd11f1}\label{namespace_robot_a889b5c1b2dca7377fc076c842119c833a2a14d7427289698007fde3a076cd11f1}} 
+ON\+\_\+\+SECOND\+\_\+\+LEG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NO\_SECOND\_LEG@{NO\_SECOND\_LEG}!Robot@{Robot}}\index{Robot@{Robot}!NO\_SECOND\_LEG@{NO\_SECOND\_LEG}}}\mbox{\Hypertarget{namespace_robot_a889b5c1b2dca7377fc076c842119c833a52924ee05a5e76601efd995bb5bbadc6}\label{namespace_robot_a889b5c1b2dca7377fc076c842119c833a52924ee05a5e76601efd995bb5bbadc6}} 
+NO\+\_\+\+SECOND\+\_\+\+LEG&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}\label{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}} 
+\index{Robot@{Robot}!Moves@{Moves}}
+\index{Moves@{Moves}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{Moves}{Moves}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Robot\+::\+Moves}}}
+
+
+
+An enum to define MOVES as used in the program. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PUSH@{PUSH}!Robot@{Robot}}\index{Robot@{Robot}!PUSH@{PUSH}}}\mbox{\Hypertarget{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4aa99594518bd62abee43c142b979b7257}\label{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4aa99594518bd62abee43c142b979b7257}} 
+PUSH&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MOVE@{MOVE}!Robot@{Robot}}\index{Robot@{Robot}!MOVE@{MOVE}}}\mbox{\Hypertarget{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4ad386eea27f80525f4a7fba75a7bdb2ee}\label{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4ad386eea27f80525f4a7fba75a7bdb2ee}} 
+MOVE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{END@{END}!Robot@{Robot}}\index{Robot@{Robot}!END@{END}}}\mbox{\Hypertarget{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4aaaee904a601a45f497b5e4e8c93fd803}\label{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4aaaee904a601a45f497b5e4e8c93fd803}} 
+END&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_robot_a9880978dcf74c2f6ad03bc1bac3f1a93}\label{namespace_robot_a9880978dcf74c2f6ad03bc1bac3f1a93}} 
+\index{Robot@{Robot}!convertDirEnumToWord@{convertDirEnumToWord}}
+\index{convertDirEnumToWord@{convertDirEnumToWord}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{convertDirEnumToWord()}{convertDirEnumToWord()}}
+{\footnotesize\ttfamily string Robot\+::convert\+Dir\+Enum\+To\+Word (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}}}]{dir }\end{DoxyParamCaption})}
+
+
+
+used in printing and std output of command lists 
+
+\mbox{\Hypertarget{namespace_robot_ad0856be6f33fd2a464154588c985cbf5}\label{namespace_robot_ad0856be6f33fd2a464154588c985cbf5}} 
+\index{Robot@{Robot}!convertMoveEnumToWord@{convertMoveEnumToWord}}
+\index{convertMoveEnumToWord@{convertMoveEnumToWord}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{convertMoveEnumToWord()}{convertMoveEnumToWord()}}
+{\footnotesize\ttfamily string Robot\+::convert\+Move\+Enum\+To\+Word (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}}]{move }\end{DoxyParamCaption})}
+
+
+
+used in printing and std output of command lists 
+
+\mbox{\Hypertarget{namespace_robot_a51045e74d06453ef59417fead6c81d3d}\label{namespace_robot_a51045e74d06453ef59417fead6c81d3d}} 
+\index{Robot@{Robot}!destroyRobotsCommandsList@{destroyRobotsCommandsList}}
+\index{destroyRobotsCommandsList@{destroyRobotsCommandsList}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{destroyRobotsCommandsList()}{destroyRobotsCommandsList()}}
+{\footnotesize\ttfamily void Robot\+::destroy\+Robots\+Commands\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$}]{RTinfo }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_robot_adc58bbf2dbbfdebc6e31d52c0aff8911}\label{namespace_robot_adc58bbf2dbbfdebc6e31d52c0aff8911}} 
+\index{Robot@{Robot}!genCommPushBoxtoDoor@{genCommPushBoxtoDoor}}
+\index{genCommPushBoxtoDoor@{genCommPushBoxtoDoor}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{genCommPushBoxtoDoor()}{genCommPushBoxtoDoor()}}
+{\footnotesize\ttfamily vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $>$ Robot\+::gen\+Comm\+Push\+Boxto\+Door (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$}]{RTinfo }\end{DoxyParamCaption})}
+
+
+
+a path-\/planning function that generates a list of push commmands to get from the box to the door 
+
+\mbox{\Hypertarget{namespace_robot_a3373469d6452e679b202392134c1afc6}\label{namespace_robot_a3373469d6452e679b202392134c1afc6}} 
+\index{Robot@{Robot}!initializeMutexes@{initializeMutexes}}
+\index{initializeMutexes@{initializeMutexes}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{initializeMutexes()}{initializeMutexes()}}
+{\footnotesize\ttfamily void Robot\+::initialize\+Mutexes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+a function that allocates and calls \char`\"{}init\char`\"{} on the mutexes used by the program. 
+
+A functiont that creates and initializes mutexes used for synchronization of changes to the grid location data. \mbox{\Hypertarget{namespace_robot_aad4c4a8c93e0ccb87fbaae7432268da3}\label{namespace_robot_aad4c4a8c93e0ccb87fbaae7432268da3}} 
+\index{Robot@{Robot}!joinThreads@{joinThreads}}
+\index{joinThreads@{joinThreads}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{joinThreads()}{joinThreads()}}
+{\footnotesize\ttfamily void $\ast$ Robot\+::join\+Threads (\begin{DoxyParamCaption}\item[{void $\ast$}]{ }\end{DoxyParamCaption})}
+
+
+
+a thread function that directs the single thread that collects all the other threads in a JOIN operation after the threads are complete. 
+
+\mbox{\Hypertarget{namespace_robot_a8fa976673c2d2c010cc16a61d624b956}\label{namespace_robot_a8fa976673c2d2c010cc16a61d624b956}} 
+\index{Robot@{Robot}!makePushMove@{makePushMove}}
+\index{makePushMove@{makePushMove}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{makePushMove()}{makePushMove()}}
+{\footnotesize\ttfamily void Robot\+::make\+Push\+Move (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}}}]{dir,  }\item[{int}]{idx }\end{DoxyParamCaption})}
+
+
+
+utility to compute new coordinates when certain PUSHES are made. 
+
+\mbox{\Hypertarget{namespace_robot_abeeac8f9eb93315619a43da214e00804}\label{namespace_robot_abeeac8f9eb93315619a43da214e00804}} 
+\index{Robot@{Robot}!makeRegMove@{makeRegMove}}
+\index{makeRegMove@{makeRegMove}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{makeRegMove()}{makeRegMove()}}
+{\footnotesize\ttfamily void Robot\+::make\+Reg\+Move (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}}}]{dir,  }\item[{int}]{idx }\end{DoxyParamCaption})}
+
+
+
+utility to compute new coordinates when certain MOVES are made. 
+
+\mbox{\Hypertarget{namespace_robot_ab2adedb7d76831b404f62f6922a2640a}\label{namespace_robot_ab2adedb7d76831b404f62f6922a2640a}} 
+\index{Robot@{Robot}!placeRobots@{placeRobots}}
+\index{placeRobots@{placeRobots}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{placeRobots()}{placeRobots()}}
+{\footnotesize\ttfamily void Robot\+::place\+Robots (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+a function that determines random locations for robots and adds them to the robot location vector 
+
+A function that sets the locations for the robots in the robot\+Loc vector. \mbox{\Hypertarget{namespace_robot_a4e0fd16f45208674452c45fbf0b1eb5a}\label{namespace_robot_a4e0fd16f45208674452c45fbf0b1eb5a}} 
+\index{Robot@{Robot}!printBeginningPartOfOutputFile@{printBeginningPartOfOutputFile}}
+\index{printBeginningPartOfOutputFile@{printBeginningPartOfOutputFile}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{printBeginningPartOfOutputFile()}{printBeginningPartOfOutputFile()}}
+{\footnotesize\ttfamily void Robot\+::print\+Beginning\+Part\+Of\+Output\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+a function that prints the required information for printing to file not unique to each thread 
+
+A function that introduces the printing that each thread does. \mbox{\Hypertarget{namespace_robot_aaf70287cb80e07fcabac45af28a155d7}\label{namespace_robot_aaf70287cb80e07fcabac45af28a155d7}} 
+\index{Robot@{Robot}!printRobotsCommandsList@{printRobotsCommandsList}}
+\index{printRobotsCommandsList@{printRobotsCommandsList}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{printRobotsCommandsList()}{printRobotsCommandsList()}}
+{\footnotesize\ttfamily void Robot\+::print\+Robots\+Commands\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$}]{RTInfo }\end{DoxyParamCaption})}
+
+
+
+used in printing the robots commands copy of planned commands 
+
+\mbox{\Hypertarget{namespace_robot_adfa00b11fea0cc20bca7b9f6b5b3ab1d}\label{namespace_robot_adfa00b11fea0cc20bca7b9f6b5b3ab1d}} 
+\index{Robot@{Robot}!recordMovesPushToDoor@{recordMovesPushToDoor}}
+\index{recordMovesPushToDoor@{recordMovesPushToDoor}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{recordMovesPushToDoor()}{recordMovesPushToDoor()}}
+{\footnotesize\ttfamily vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$ Robot\+::record\+Moves\+Push\+To\+Door (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_robot_1_1_r_thread}{RThread}} $\ast$}]{RTinfo,  }\item[{tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$}]{starting\+Push\+Position\+Axis }\end{DoxyParamCaption})}
+
+
+
+a lower-\/level path-\/planning function that generates a list of push commmands to get from the box to the door 
+
+\mbox{\Hypertarget{namespace_robot_a36c9cd5fa36e3d670d026463b64a5f33}\label{namespace_robot_a36c9cd5fa36e3d670d026463b64a5f33}} 
+\index{Robot@{Robot}!recordMovesX@{recordMovesX}}
+\index{recordMovesX@{recordMovesX}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{recordMovesX()}{recordMovesX()}}
+{\footnotesize\ttfamily void Robot\+::record\+MovesX (\begin{DoxyParamCaption}\item[{vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$}]{RCList,  }\item[{pair$<$ int, int $>$}]{starting\+Point,  }\item[{pair$<$ int, int $>$}]{destination,  }\item[{\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}}]{argmove,  }\item[{\mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{leg\+Status}}}]{leg\+\_\+status }\end{DoxyParamCaption})}
+
+
+
+low level path-\/planning functions that plan a path from a starting point to a finish point modulated by a couple of variables . 
+
+\mbox{\Hypertarget{namespace_robot_a6291192ad0b9f77bc8c426fba2d183ae}\label{namespace_robot_a6291192ad0b9f77bc8c426fba2d183ae}} 
+\index{Robot@{Robot}!recordMovesY@{recordMovesY}}
+\index{recordMovesY@{recordMovesY}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{recordMovesY()}{recordMovesY()}}
+{\footnotesize\ttfamily void Robot\+::record\+MovesY (\begin{DoxyParamCaption}\item[{vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$}]{RCList,  }\item[{pair$<$ int, int $>$}]{starting\+Point,  }\item[{pair$<$ int, int $>$}]{destination,  }\item[{\mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}}]{argmove,  }\item[{\mbox{\hyperlink{namespace_robot_a889b5c1b2dca7377fc076c842119c833}{leg\+Status}}}]{leg\+\_\+status }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_robot_a2852ae82e562a2bab8f60f2b63d5919e}\label{namespace_robot_a2852ae82e562a2bab8f60f2b63d5919e}} 
+\index{Robot@{Robot}!recordRotationToSecondPushPos@{recordRotationToSecondPushPos}}
+\index{recordRotationToSecondPushPos@{recordRotationToSecondPushPos}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{recordRotationToSecondPushPos()}{recordRotationToSecondPushPos()}}
+{\footnotesize\ttfamily pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ Robot\+::record\+Rotation\+To\+Second\+Push\+Pos (\begin{DoxyParamCaption}\item[{vector$<$ pair$<$ \mbox{\hyperlink{namespace_robot_a5b4fc21dae08c7f2f84633fc1de2d8f4}{Moves}}, \mbox{\hyperlink{namespace_robot_aedb200fdd6e844883f0e4f2e35277e5c}{Direction}} $>$ $\ast$ $>$ $\ast$}]{RCList,  }\item[{tuple$<$ int, int, \mbox{\hyperlink{namespace_robot_ac67e34b6475e0812789940016ae3872b}{axis}} $>$}]{starting\+Push\+Position\+Axis,  }\item[{int}]{idx }\end{DoxyParamCaption})}
+
+
+
+function to plan the rotation of robot about its initial push position. 
+
+\mbox{\Hypertarget{namespace_robot_a6e7b2ea4ec97bef1c8c1fe0262ea8b8b}\label{namespace_robot_a6e7b2ea4ec97bef1c8c1fe0262ea8b8b}} 
+\index{Robot@{Robot}!robotThreadFunc@{robotThreadFunc}}
+\index{robotThreadFunc@{robotThreadFunc}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{robotThreadFunc()}{robotThreadFunc()}}
+{\footnotesize\ttfamily void $\ast$ Robot\+::robot\+Thread\+Func (\begin{DoxyParamCaption}\item[{void $\ast$}]{arg }\end{DoxyParamCaption})}
+
+
+
+the function that is run by each robot thread. 
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_robot_a4c61d56e53310beca3e25048bf46c852}\label{namespace_robot_a4c61d56e53310beca3e25048bf46c852}} 
+\index{Robot@{Robot}!EASTWEST@{EASTWEST}}
+\index{EASTWEST@{EASTWEST}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{EASTWEST}{EASTWEST}}
+{\footnotesize\ttfamily const int Robot\+::\+EASTWEST = 1}
+
+\mbox{\Hypertarget{namespace_robot_a27fea528e1dac6b42a659263b903bd25}\label{namespace_robot_a27fea528e1dac6b42a659263b903bd25}} 
+\index{Robot@{Robot}!NORTHSOUTH@{NORTHSOUTH}}
+\index{NORTHSOUTH@{NORTHSOUTH}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{NORTHSOUTH}{NORTHSOUTH}}
+{\footnotesize\ttfamily const int Robot\+::\+NORTHSOUTH = 0}
+
+\mbox{\Hypertarget{namespace_robot_a927e8512b629367e37c0fa72f013010f}\label{namespace_robot_a927e8512b629367e37c0fa72f013010f}} 
+\index{Robot@{Robot}!robotLoc@{robotLoc}}
+\index{robotLoc@{robotLoc}!Robot@{Robot}}
+\doxysubsubsection{\texorpdfstring{robotLoc}{robotLoc}}
+{\footnotesize\ttfamily vector$<$ pair$<$ \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}}, \mbox{\hyperlink{_robot_8cpp_a91ad9478d81a7aaf2593e8d9c3d06a14}{uint}} $>$ $\ast$ $>$ Robot\+::robot\+Loc}
+
